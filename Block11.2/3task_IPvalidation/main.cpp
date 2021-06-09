@@ -46,24 +46,45 @@ std::string getRest (std::string str)
     return strResult;
 }
 
-//Добавить проверку на две точки подряд, точку в конце и точку в начале
 int getDot (std::string str)
 {
     int count = 0;
-    //if ((str [0] = '.') ||
-    for (int i = 0; i < str.length(); i++)
+    int endPos = str.length() - 1;
+    if (str [0] == '.' || str [endPos] == '.') return 0;
+    for (int i = 1; i < str.length(); i++)
     {
-        if (str [i] == '.') count++;
-
+        if (str [i] == '.' && str [i - 1] == '.') return 0;
+        else if (str [i] == '.') count++;
     }
     return count;
 }
+
+bool check (std::string str)
+{
+    if (str.length() > 3) return false;
+    else
+    {
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (str [i] < '0' && str [i] > '9')
+                return false;
+            else if (str [0] > '2')
+                return false;
+            else if (str [0] > '1' && str [1] > '5')
+                return false;
+            else return true;
+        }
+
+    }
+}
+
+
+
 
 int main()
 {
     std::string ipAdress = "";
     bool correct = false;
-
 
     std::cout << "Enter IP adress\n=>";
     std::getline(std::cin, ipAdress);
@@ -71,12 +92,24 @@ int main()
     int dotCount = getDot (ipAdress);
     if (dotCount == 3)
     {
-        std::string strFirst = getFirst(ipAdress);
-        std::string strRest = getRest(ipAdress);
-        std::cout << strFirst << std::endl;
-        std::cout << strRest << std::endl;
-        correct = true;
+        for (int i = 0; i <= dotCount; i++)
+        {
+            std::string strFirst = getFirst(ipAdress);
+            std::string strRest = getRest(ipAdress);
+            bool cor = check(strFirst);
+            if (!cor) break;
+
+            std::cout << strFirst << std::endl;
+            std::cout << strRest << std::endl;
+            ipAdress = strRest;
+        }
     }
+
+       //std::string strSecond = getFirst(ipAdress);
+       //std::string strThird = getFirst(ipAdress);
+       //std::string strFourth = getFirst(ipAdress);
+       correct = true;
+
 
     //bool correct = (checkFirst(strFirst) && checkSecond(strSecond));
 

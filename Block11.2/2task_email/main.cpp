@@ -53,7 +53,7 @@ std::string secondPart (std::string str)
 bool checkSymbols (std::string str, std::string symbols)
 {
     bool sym = false;
-    for (int i = 0; i < str.length(); i++)
+    for (int i = 1; i < str.length(); i++)
     {
         if (str[i] == '.' && str[i - 1] == '.') return false;
 

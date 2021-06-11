@@ -59,56 +59,89 @@ int getDot (std::string str)
     return count;
 }
 
-bool check (std::string str)
+// обернуть в цикл
+int convert (std::string str)
 {
-    if (str.length() > 3) return false;
-    else
+    int strint = 0;
+    if (str.length() > 3) return -1;
+    else if (str.length() == 3)
     {
-        for (int i = 0; i < str.length(); i++)
+        if (str [0] == '0' || str [1] == '0')
+            return -1;
+        else
         {
-            if (str [i] < '0' && str [i] > '9')
-                return false;
-            else if (str [0] > '2')
-                return false;
-            else if (str [0] > '1' && str [1] > '5')
-                return false;
-            else return true;
+            strint = 100 * (str [0] - '0') +
+                     10 * (str [1] - '0') +
+                     (str [2] - '0');
         }
-
     }
-}
+    else if (str.length() == 2)
+    {
+        if (str [0] == '0') return -1;
+        else
+        {
+            strint = 10 * (str [0] - '0') +
+                     (str [1] - '0');
+        }
+    }
 
+    else if (str.length() == 1)
+    {
+        strint = (str [0] - '0');
+    }
+    return strint;
+}
 
 
 
 int main()
 {
     std::string ipAdress = "";
-    bool correct = false;
+    bool correct = true;
+
 
     std::cout << "Enter IP adress\n=>";
     std::getline(std::cin, ipAdress);
 
     int dotCount = getDot (ipAdress);
-    if (dotCount == 3)
+
+    std::cout << dotCount << std::endl;
+
+    if (dotCount != 3) correct = false;
+    else
     {
         for (int i = 0; i <= dotCount; i++)
         {
-            std::string strFirst = getFirst(ipAdress);
-            std::string strRest = getRest(ipAdress);
-            bool cor = check(strFirst);
-            if (!cor) break;
+            std::cout << "ipAdress - " << i << " " << ipAdress << std::endl;
 
-            std::cout << strFirst << std::endl;
-            std::cout << strRest << std::endl;
+            std::string strFirst = getFirst(ipAdress); // !!!! на последней итерации возвращает 0
+
+            std::cout << "strFirst - " << strFirst << std::endl;
+            int number = convert (strFirst);
+            std::cout << "num - "  << number << std::endl;
+
+            std::string strRest = getRest(ipAdress);
+            std::cout << "strRest - " << strRest << std::endl;
             ipAdress = strRest;
+
+            std::cout << "ipAdress - " << i << " " << ipAdress << std::endl;
+
+            std::cout << " ------- \n";
+
+            //correct = check(strFirst);
+            //if (!correct) break;
+
+            //std::cout << strFirst << std::endl;
+            //std::cout << strRest << std::endl;
+
         }
+
     }
 
        //std::string strSecond = getFirst(ipAdress);
        //std::string strThird = getFirst(ipAdress);
        //std::string strFourth = getFirst(ipAdress);
-       correct = true;
+      // correct = true;
 
 
     //bool correct = (checkFirst(strFirst) && checkSecond(strSecond));

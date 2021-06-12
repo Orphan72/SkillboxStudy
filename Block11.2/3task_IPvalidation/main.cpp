@@ -41,6 +41,7 @@ std::string getRest (std::string str)
     for (int i = dotPos; i < str.length(); i++)
     {
         strResult += str[i];
+        std::cout << str[i] << std::endl;
     }
 
     return strResult;
@@ -59,11 +60,16 @@ int getDot (std::string str)
     return count;
 }
 
+// Добавить проверку - цифры или символы
+
 // обернуть в цикл
 int convert (std::string str)
 {
     int strint = 0;
     if (str.length() > 3) return -1;
+
+
+
     else if (str.length() == 3)
     {
         if (str [0] == '0' || str [1] == '0')
@@ -92,12 +98,32 @@ int convert (std::string str)
     return strint;
 }
 
+bool check (int num)
+{
+
+    std::cout << "checknum: "  << num << std::endl;
+    if (num < 0 || num > 256)
+    {
+        std::cout << "BAD "  << std::endl;
+        return false;
+    }
+    else
+    {
+        std::cout << "GOOD "  << std::endl;
+        return true;
+    }
+
+
+}
+
 
 
 int main()
 {
     std::string ipAdress = "";
-    bool correct = true;
+
+    bool corFirst = true;
+    bool corRest = true;
 
 
     std::cout << "Enter IP adress\n=>";
@@ -107,20 +133,27 @@ int main()
 
     std::cout << dotCount << std::endl;
 
-    if (dotCount != 3) correct = false;
+    if (dotCount != 3) corFirst = false;
     else
     {
-        for (int i = 0; i <= dotCount; i++)
+        std::string strRest = "";
+        int number = 0;
+
+        for (int i = 0; i < dotCount; i++)
         {
             std::cout << "ipAdress - " << i << " " << ipAdress << std::endl;
 
-            std::string strFirst = getFirst(ipAdress); // !!!! на последней итерации возвращает 0
+            std::string strFirst = getFirst(ipAdress);
 
             std::cout << "strFirst - " << strFirst << std::endl;
-            int number = convert (strFirst);
-            std::cout << "num - "  << number << std::endl;
+            number = convert (strFirst);
+            corFirst = check(number);
+            std::cout << (corFirst ? "GOoooOD\n" : "BREAK\n");
+            if (!corFirst) break;
 
-            std::string strRest = getRest(ipAdress);
+            std::cout << "number - "  << number << std::endl;
+
+            strRest = getRest(ipAdress);
             std::cout << "strRest - " << strRest << std::endl;
             ipAdress = strRest;
 
@@ -136,6 +169,11 @@ int main()
 
         }
 
+        std::cout << "ipAdressNew - " << ipAdress << std::endl;
+        std::cout << "strRestNew - " << strRest << std::endl;
+        number = convert (strRest);
+        corRest = check(number);
+
     }
 
        //std::string strSecond = getFirst(ipAdress);
@@ -146,7 +184,7 @@ int main()
 
     //bool correct = (checkFirst(strFirst) && checkSecond(strSecond));
 
-    std::cout << (correct ? "Yes\n" : "No\n");
+    std::cout << ((corFirst && corRest) ? "Yes\n" : "No\n");
     return 0;
 }
 

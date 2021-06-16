@@ -41,25 +41,36 @@ std::string get_secondPart (std::string str) {
     return strResult;
 }
 
-bool check (std::string str, bool minus) {
+int check (std::string str, bool minus)
+{
     int start  = minus ? 1 : 0;
-    for (int i = start; i < str.length(); i++) {
-        if (str [i] < '0' || str [i] > '9'){
-            std::cout << "incorr symbols\n";
-            return false;
+    std::cout << "start " << start << "\n";
+    int length = str.length();
+    std::cout << "length " << length << "\n";
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout << i << " " << str [i] << "\n";
+        if (str [i] < '0' || str [i] > '9')
+        {
+            //std::cout << "incorr symbols: \n";
+            std::cout << i << " " << str [i] << "\n";
+            //return 10;
         }
+        //else return 78;
     }
-    return true;
+
 }
 
 
-bool find_dot (std::string str)
+int find_dot (std::string str)
 {
-    for (int i = 0; i < str.length(); i++) {
-        if (str [i] == '.') return true;
-        else return false;
+    int dot = -1;
+    for (int i = 0; dot == -1 && i < str.length(); i++)
+    {
+        if (str [i] == '.')
+        dot = i;
     }
-
+    return dot;
 }
 
 
@@ -72,19 +83,29 @@ int main() {
     std::cout << "Enter email\n=>";
     std::getline(std::cin, str);
 
-    bool correct = false;
+    int correct = 0;
     bool minus = (str.length() > 0 && str [0] == '-');
-    bool dot = find_dot(str);
+    int dot = find_dot(str);
+    //std::cout << "DOT - " << dot << "\n";
 
-    std::string strFirst = get_firstPart (str);
 
-    if (!dot) {
-        correct = check(strFirst, minus);
+    if (dot == -1) {
+        correct = check(str, minus);
+        std::cout << "correct83 - " << correct << "\n";
     }
     else {
-        std::string strSecond = get_secondPart (str);
+        std::string strFirst = get_firstPart (str, dot);
+        std::cout << "strFirst - " << strFirst << "\n";
+
+        std::string strSecond = get_secondPart (str, dot);
+        std::cout << "strSecond - " << strSecond << "\n";
+
         correct = (check(strFirst, minus) && check(strFirst, false));
+        std::cout << "correct88 - " << correct << "\n";
+
+
     }
+
 
     if (!correct) {
         std::cout << "Input incorrect!\n";

@@ -11,6 +11,8 @@ int find_dot (std::string str)
     return dt;
 }
 
+
+
 std::string get_intPart (std::string str) {
     std::string strResult = "";
     int dot = find_dot(str);
@@ -25,6 +27,7 @@ std::string get_intPart (std::string str) {
     return strResult;
 }
 
+
 std::string get_fracPart (std::string str) {
     std::string strResult = "";
     int dot = find_dot(str);
@@ -38,10 +41,9 @@ std::string get_fracPart (std::string str) {
     return strResult;
 }
 
-bool checkSymbol (std::string str)
+bool checkSymbol (std::string str, bool mns)
 {
-    bool minus = (str.length() > 0 && str [0] == '-');
-    int start  = minus ? 1 : 0;
+    int start  = mns ? 1 : 0;
     //std::cout << "start " << start << "\n";
     //int length = str.length();
     //std::cout << "length " << length << "\n";
@@ -86,46 +88,32 @@ bool correctEnter (std::string str)
 
 
 
-int convertInt (std::string str) {
+int convertInt (std::string str, bool mns) {
 
-    bool minus = (str.length() > 0 && str [0] == '-');
     int strInt = 0;
     int endPos = str.length() - 1;
     int factor = 1;
 
-    int start  = minus ? 1 : 0;
+    int start  = mns ? 1 : 0;
     for (int i = endPos; i >= start; i--) {
         strInt += (factor * (str [i] - '0'));
         factor *= 10;
     }
-    strInt  = minus ? -strInt : strInt;
+    strInt  = mns ? -strInt : strInt;
     return strInt;
 }
 
-
-int convertFrac (std::string str) {
-    int strFrac = 0;
+float convertFrac (std::string str) {
+    float strFrac = 0;
     int endPos = str.length() - 1;
-    float divider = 1.0;
-    for (int i = endPos;  i >= 0; i--) {
-        //std::cout  << "length [] = " << str.length() << std::endl;
-        //std::cout  << "i = " << i << std::endl;
+    int factor = 1;
 
-        strFrac += (divider * (str [i] - '0'));
-        divider *= 10;
-        std::cout  << "divider = " << divider << std::endl;
+    for (int i = endPos; i >= 0; i--) {
+        strFrac += (factor * (str [i] - '0'));
+        factor *= 10;
     }
-
-    strFrac /= divider;
-    /* for (int i = 0; i < str.length(); i++) {
-          divider *=10;
-     }*/
-
-    //strint  = mns ? -strint : strint;
     return strFrac;
 }
-
-
 
 // в предыдущем заданиии пподправить метод convert
 float convert (std::string str) {
@@ -138,13 +126,10 @@ float convert (std::string str) {
     int dot = find_dot(str);
     if (dot == -1)
     {
-        return convertInt (str);
-
+        //return convertInt (str);
     }
     else
     {
-
-
         //strInt_int = convertInt (strIntPart);
         std::cout << "strInt_int: " << strInt_int << "\n";
 
@@ -178,6 +163,9 @@ int main() {
     std::cout << "Enter second number\n=>";
     std::getline(std::cin, str_second);
 
+    bool minus_first = (str_first.length() > 0 && str_first [0] == '-');
+    bool minus_second = (str_second.length() > 0 && str_second [0] == '-');
+
     std::string strIntPart_first = get_intPart (str_first);
     std::string strFracPart_first = get_fracPart(str_first);
 
@@ -190,18 +178,18 @@ int main() {
     std::cout << "strIntPart_first: " << strIntPart_second << "\n";
     std::cout << "strFracPart_first: " << strFracPart_second << "\n";
 
-    bool correctEnter = (checkSymbol (strIntPart_first) &&
-                         checkSymbol (strFracPart_first) &&
-                         checkSymbol(strIntPart_second) &&
-                         checkSymbol(strFracPart_second));
+    bool correctEnter = (checkSymbol (strIntPart_first, minus_first) &&
+                         checkSymbol (strFracPart_first, false) &&
+                         checkSymbol(strIntPart_second, minus_second) &&
+                         checkSymbol(strFracPart_second, false));
 
     std::cout << "correctSymbol: " << correctEnter << "\n";
 
     if (!correctEnter) std::cout << "Input incorrect!\n";
     else {
-        int strIntToInt_first = convertInt (strIntPart_first);
+        int strIntToInt_first = convertInt (strIntPart_first, minus_first);
         float strFracToFloat_first = convertFrac(strFracPart_first);
-        int strIntToInt_second = convertInt (strIntPart_second);
+        int strIntToInt_second = convertInt (strIntPart_second, minus_second);
         float strFracToFloat_second = convertFrac(strFracPart_second);
 
         std::cout << "strIntToInt_first: " << strIntToInt_first << "\n";

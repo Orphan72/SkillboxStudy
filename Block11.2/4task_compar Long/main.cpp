@@ -52,7 +52,7 @@ bool checkSymbol (std::string str, bool mns)
     return true;
 }
 
-int convert (std::string str, bool mns) {
+int convertInt (std::string str, bool mns) {
 
     long long number = 0;
     int endPos = str.length() - 1;
@@ -70,6 +70,53 @@ int convert (std::string str, bool mns) {
     number  = mns ? -number : number;
     return number;
 }
+
+    float convertFloat (std::string str) {
+        float strFrac = 0;
+        int endPos = str.length() - 1;
+        float divider = 1.0;
+        for (int i = endPos;  i >= 0; i--) {
+
+            strFrac += (divider * (str [i] - '0'));
+            divider *= 10;
+            std::cout  << "divider = " << divider << std::endl;
+        }
+
+        strFrac /= divider;
+
+        return strFrac;
+    }
+
+//return
+// -1 if less,
+// 1 if more,
+// 0 if equal
+int compare (std::string str1, std::string str2)
+{
+    uint32_t length1 = str1.length();
+    uint32_t length2 = str2.length();
+    uint32_t endPos = (length1 < length2) ? length1 : length2;
+
+
+
+    for (int i = 0; i < endPos; i++)
+    {
+        std::cout << "str1 [i] - " << str1 [i] << "  str2 [i] - " << str2 [i] << "\n";
+        if (str1 [i] != str2 [i])
+        {
+            return (str1 [i] > str2 [i]) ? 1 : -1;
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
 
 int main() {
 
@@ -106,29 +153,37 @@ int main() {
 
     if (!correctEnter) std::cout << "Input incorrect!\n";
     else {
-        int strInt_first = convert (strIntPart_first, minus_first);
-        int strFrac_first = convert (strFracPart_first, false);
-        int strInt_second = convert (strIntPart_second, minus_second);
-        int strFrac_second = convert (strFracPart_second, false);
+        int strInt_first = convertInt(strIntPart_first, minus_first);
+        float strFrac_first = convertFloat(strFracPart_first);
+        int strInt_second = convertInt(strIntPart_second, minus_second);
+        float strFrac_second = convertFloat(strFracPart_second);
 
         std::cout << "strIntToInt_first: " << strInt_first << "\n";
         std::cout << "strFracToFloat_first: " << strFrac_first << "\n";
         std::cout << "strIntToInt_second: " << strInt_second << "\n";
         std::cout << "strFracToFloat_second: " << strFrac_second << "\n";
 
-       int compInt = (strInt_first - strInt_second);
+        //int compInt = (strInt_first - strInt_second);
 
-       if (compInt > 0) std::cout << "More!\n";
-       else if (compInt < 0) std::cout << "Less!\n";
-       else {
-           if (strFrac_first > strFrac_second)
-               std::cout << "More!\n";
-           else if (strFrac_first < strFrac_second)
-                std::cout << "Less!\n";
-                else std::cout << "Equal!\n";
-            }
-        }
 
+        /*
+
+         if (compInt > 0) std::cout << "More!\n";
+         else if (compInt < 0) std::cout << "Less!\n";
+         else {
+             if (strFrac_first > strFrac_second)
+                 std::cout << "More!\n";
+             else if (strFrac_first < strFrac_second)
+                  std::cout << "Less!\n";
+                  else std::cout << "Equal!\n";
+              }
+          }
+
+      s
+         */
+    }
+   //std::cout << "compare is ^^^ - ";
+    std::cout << compare (strFracPart_first, strFracPart_second);
     return 0;
 }
 

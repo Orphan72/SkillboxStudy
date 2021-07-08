@@ -54,7 +54,7 @@ char get_win (std::string str1, std::string str2, std::string str3) {
              get_elmnt(3, i, str1, str2, str3)))
         {
             element = get_elmnt(1, i, str1, str2, str3);
-            countWin++;
+            if (element != '.') countWin++;
         }
         else if ((get_elmnt(i, 1, str1, str2, str3) ==
                   get_elmnt(i, 2, str1, str2, str3)) &&
@@ -62,7 +62,7 @@ char get_win (std::string str1, std::string str2, std::string str3) {
                   get_elmnt(i, 3, str1, str2, str3)))
         {
             element = get_elmnt(i, 1, str1, str2, str3);
-            countWin++;
+            if (element != '.') countWin++;
         }
     }
     if ((get_elmnt(1, 1, str1, str2, str3) ==
@@ -71,7 +71,7 @@ char get_win (std::string str1, std::string str2, std::string str3) {
          get_elmnt(3, 3, str1, str2, str3)))
     {
         element = get_elmnt(1, 1, str1, str2, str3);
-        countWin++;
+        if (element != '.') countWin++;
     }
     else if ((get_elmnt(3, 1, str1, str2, str3) ==
               get_elmnt(2, 2, str1, str2, str3)) &&
@@ -79,7 +79,7 @@ char get_win (std::string str1, std::string str2, std::string str3) {
               get_elmnt(1, 3, str1, str2, str3)))
     {
         element = get_elmnt(3, 1, str1, str2, str3);
-        countWin++;
+        if (element != '.') countWin++;
     }
     if (countWin > 1) return 'N';
     return element;

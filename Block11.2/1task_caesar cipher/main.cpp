@@ -7,17 +7,17 @@ std::string encrypt_caesar (std::string txt, int n)
     {
         int pos = (int)txt [i];
 
-        if (pos >= 65 && pos <= 90)
+        if (pos >= 'A' && pos <= 'Z')
         {
             pos = pos + n;
-            while (pos > 90) pos -= NUMLET;
-            while (pos < 65) pos += NUMLET;
+            while (pos > 'Z') pos -= NUMLET;
+            while (pos < 'A') pos += NUMLET;
         }
-        else if (pos >= 97 && pos <= 122)
+        else if (pos >= 'a' && pos <= 'z')
         {
             pos = pos + n;
-            while (pos > 122) pos -= NUMLET;
-            while (pos < 97) pos += NUMLET;
+            while (pos > 'z') pos -= NUMLET;
+            while (pos < 'a') pos += NUMLET;
         }
         txt [i] = (char)pos;
     }

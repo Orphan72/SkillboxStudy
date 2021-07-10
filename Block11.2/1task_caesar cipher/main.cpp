@@ -1,6 +1,6 @@
 #include <iostream>
 
-std::string encrypt_caesar (std::string txt, int n)
+std::string encryptCaesar (std::string txt, int n)
 {
     int const NUMLET = 26;
     for (int i = 0; i < txt.length(); i++)
@@ -24,9 +24,9 @@ std::string encrypt_caesar (std::string txt, int n)
     return txt;
 }
 
-std::string decrypt_caesar (std::string txt, int n)
+std::string decryptCaesar (std::string txt, int n)
 {
-    return encrypt_caesar(txt, -n);
+    return encryptCaesar(txt, -n);
 }
 
 int main()
@@ -43,11 +43,11 @@ int main()
     std::cout << "Initial text: \n";
     std::cout << text << std::endl;
 
-    encryptText = encrypt_caesar (text, shift);
+    encryptText = encryptCaesar (text, shift);
     std::cout << "Encrypt text: \n";
     std::cout << encryptText << std::endl;
 
-    decryptText = decrypt_caesar (encryptText, shift);
+    decryptText = decryptCaesar (encryptText, shift);
     std::cout << "Decrypt text: \n";
     std::cout << decryptText << std::endl;
 

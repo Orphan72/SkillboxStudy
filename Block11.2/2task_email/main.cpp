@@ -1,6 +1,6 @@
 #include <iostream>
 
-int get_etPos (std::string str) {
+int getEtPos (std::string str) {
     for (int i = 0; i < str.length(); i++) {
         if (str [i] == '@') return i;
     }
@@ -76,7 +76,7 @@ int main()
     std::cout << "Enter email\n=>";
     std::getline(std::cin, str);
 
-    int etPos = get_etPos (str);
+    int etPos = getEtPos (str);
 
     std::string strFirst = firstPart (str, etPos);
     std::string strSecond = secondPart (str, etPos);

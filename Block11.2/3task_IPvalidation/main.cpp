@@ -1,43 +1,35 @@
 #include <iostream>
 
-std::string getFirst (std::string str)
-{
-    bool dot = false;
-    int dotPos = 0;
-    std::string strResult = "";
-    for (int i = 0; !dot && i < str.length(); i++) {
-        if (str [i] == '.') {
-            dot = true;
-            dotPos = i;
-        }
+int getDotPos (std::string str) {
+    for (int i = 0; i < str.length(); i++) {
+        if (str [i] == '.') return i;
     }
+    return 0;
+}
 
-    if (dot) {
-        for (int i = 0; i < dotPos; i++) {
+std::string getFirst (std::string str, int pos)
+{
+    std::string strResult = "";
+    if (pos > 0) {
+        for (int i = 0; i < pos; i++) {
             strResult += str[i];
         }
     }
     return strResult;
 }
 
-std::string getRest (std::string str)
-{
-    bool dot = false;
-    int dotPos = 0;
+std::string getRest (std::string str, int pos) {
     std::string strResult = "";
-    for (int i = 0; !dot && i < str.length(); i++) {
-        if (str [i] == '.') {
-            dot = true;
-            dotPos = i + 1;
+    if (pos > 0) {
+        pos++;
+        for (int i = pos; i < str.length(); i++) {
+            strResult += str[i];
         }
+        return strResult;
     }
-    for (int i = dotPos; i < str.length(); i++) {
-        strResult += str[i];
-    }
-    return strResult;
 }
 
-int getCount_dot (std::string str) {
+int getCountDot (std::string str) {
     int count = 0;
     int endPos = str.length() - 1;
     if (str [0] == '.' || str [endPos] == '.') return 0;
@@ -51,8 +43,8 @@ int getCount_dot (std::string str) {
 bool checkSymbol (std::string str) {
     for (int i = 0; i < str.length(); i++) {
         if (str [i] < '0' || str [i] > '9') return false;
-        else return true;
-    }
+     }
+    return true;
 }
 
 int convert (std::string str) {
@@ -69,34 +61,38 @@ int convert (std::string str) {
 }
 
 bool checkNum (int num) {
-    if (num < 0 || num > 255) return false;
-    else return true;
+    return (num >= 0 && num <= 255);
 }
 
-bool checkCorrect (std::string str){
-    int dotCount = getCount_dot (str);
+bool checkCorrect (std::string str)
+{
+    int dotCount = getCountDot (str);
     if (dotCount != 3) return false;
     else {
         std::string strRest = "";
         int number = 0;
         bool cor = false;
-
+        int dotPos = 0;
         for (int i = 0; i < dotCount; i++) {
-              std::string strFirst = getFirst(str);
-              cor = checkSymbol (strFirst);
+            dotPos = getDotPos (str);
+            std::string strFirst = getFirst(str, dotPos);
+            std::cout << "strFirst " << strFirst << std::endl;
+            cor = checkSymbol (strFirst);
             if (!cor) return false;
             else {
                 number = convert(strFirst);
                 cor = checkNum(number);
                 if (!cor) return false;
                 else {
-                    strRest = getRest(str);
+                    dotPos = getDotPos (str);
+                    strRest = getRest(str, dotPos);
                     str = strRest;
                 }
             }
         }
 
         cor = checkSymbol (strRest);
+        std::cout << "correrct Symbol = " << cor << std::endl;
         if (!cor) return false;
         else {
             number = convert(strRest);

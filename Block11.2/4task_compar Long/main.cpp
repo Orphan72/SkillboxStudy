@@ -1,22 +1,19 @@
 #include <iostream>
 #include <climits>
 
-int find_dot (std::string str)
-{
+int findDot (std::string str) {
     int dt = -1;
-    for (int i = 0; dt == -1 && i < str.length(); i++)
-    {
+    for (int i = 0; dt == -1 && i < str.length(); i++){
         if (str [i] == '.')
             dt = i;
     }
     return dt;
 }
 
-std::string get_intPart (std::string str, bool mns) {
+std::string getIntPart (std::string str, bool mns) {
     std::string strResult = "";
-    int dot = find_dot(str);
-    if (dot == -1)
-    {
+    int dot = findDot(str);
+    if (dot == -1) {
         return str;
     }
     int start = mns ? 1 : 0;
@@ -26,11 +23,10 @@ std::string get_intPart (std::string str, bool mns) {
     return strResult;
 }
 
-std::string get_fracPart (std::string str) {
+std::string getFracPart (std::string str) {
     std::string strResult = "";
-    int dot = find_dot(str);
-    if (dot == -1)
-    {
+    int dot = findDot(str);
+    if (dot == -1) {
         return "";
     }
     for (int i = dot + 1; i < str.length(); i++) {
@@ -40,10 +36,8 @@ std::string get_fracPart (std::string str) {
 }
 
 bool checkSymbol (std::string str) {
-    for (int i = 0; i < str.length(); i++)
-    {
-        if (str [i] < '0' || str [i] > '9')
-        {
+    for (int i = 0; i < str.length(); i++) {
+        if (str [i] < '0' || str [i] > '9') {
             return false;
         }
     }
@@ -57,13 +51,11 @@ int convertStrToUnsLong (std::string str) {
 
      for (int i = endPos; i >= 0; i--) {
         number += (factor * (str [i] - '0'));
-        if (number > INT_MAX)
-        {
+        if (number > INT_MAX) {
            return 0;
         }
         factor *= 10;
     }
-
     return (int)number;
 }
 
@@ -75,8 +67,7 @@ int convertStrToUnsLong (std::string str) {
         return false;
     } else {
         int nmb = convertStrToUnsLong (intStr);
-        if (nmb == 0 && intStr [0] != '0' && intStr.length() != 0)
-        {
+        if (nmb == 0 && intStr [0] != '0' && intStr.length() != 0){
             std::cout << "Int number should be between " << INT_MIN << " and " <<  INT_MAX  << std::endl;
             return false;
         }
@@ -88,16 +79,18 @@ int convertStrToUnsLong (std::string str) {
 // -1 if less,
 // 1 if more,
 // 0 if equal
-int compareFrac (std::string str1, std::string str2, bool mns1)
-{
-    size_t length1 = str1.length();
-    size_t length2 = str2.length();
-    size_t endPos = (length1 < length2) ? length1 : length2;
-
-    for (int i = 0; i < endPos; i++)
-    {
-        if (str1 [i] != str2 [i])
-        {
+int compareFrac (std::string str1, std::string str2, bool mns1) {
+    while (str1.length() != str2.length()) {
+        if (str1.length() > str2.length()) {
+            str2 += '0';
+        }
+        else if (str2.length() > str1.length()) {
+            str1 += '0';
+        }
+    }
+    size_t endPos = str1.length();
+    for (int i = 0; i < endPos; i++) {
+        if (str1 [i] != str2 [i]) {
             if (!mns1)
                 return (str1 [i] > str2 [i])  ? 1 : -1;
             else return (str1[i] < str2[i]) ? 1 : -1;
@@ -108,40 +101,39 @@ int compareFrac (std::string str1, std::string str2, bool mns1)
 
 int main() {
 
-    std::string str_first;
-    std::string str_second;
+    std::string strFirst;
+    std::string strSecond;
 
     std::cout << "Enter first number\n=>";
-    std::getline(std::cin, str_first);
+    std::getline(std::cin, strFirst);
 
     std::cout << "Enter second number\n=>";
-    std::getline(std::cin, str_second);
+    std::getline(std::cin, strSecond);
 
-    bool minus_first = (str_first.length() > 0 && str_first [0] == '-');
-    bool minus_second = (str_second.length() > 0 && str_second [0] == '-');
+    bool minusFirst = (strFirst.length() > 0 && strFirst [0] == '-');
+    bool minusSecond = (strSecond.length() > 0 && strSecond [0] == '-');
 
-    std::string strIntPart_first = get_intPart (str_first, minus_first);
-    std::string strFracPart_first = get_fracPart(str_first);
+    std::string strIntPartFirst = getIntPart (strFirst, minusFirst);
+    std::string strFracPartFirst = getFracPart(strFirst);
 
-    std::string strIntPart_second = get_intPart (str_second, minus_second);
-    std::string strFracPart_second = get_fracPart(str_second);
+    std::string strIntPartSecond = getIntPart (strSecond, minusSecond);
+    std::string strFracPartSecond = getFracPart(strSecond);
 
-    bool correctEnter = (checkCorrectEnter(strIntPart_first, strFracPart_first) &&
-                         checkCorrectEnter(strIntPart_second, strFracPart_second));
+    bool correctEnter = (checkCorrectEnter(strIntPartFirst, strFracPartFirst) &&
+                         checkCorrectEnter(strIntPartSecond, strFracPartSecond));
 
-    if (correctEnter)
-    {
-        int strInt_first =  convertStrToUnsLong (strIntPart_first);
-        int strInt_second =  convertStrToUnsLong (strIntPart_second);
+    if (correctEnter) {
+        int strIntFirst =  convertStrToUnsLong (strIntPartFirst);
+        int strIntSecond =  convertStrToUnsLong (strIntPartSecond);
 
-        strInt_first  = minus_first ? -strInt_first : strInt_first;
-        strInt_second  = minus_second ? -strInt_second : strInt_second;
+        strIntFirst  = minusFirst ? -strIntFirst : strIntFirst;
+        strIntSecond  = minusSecond ? -strIntSecond : strIntSecond;
 
-        int compInt = (strInt_first - strInt_second);
+        int compInt = (strIntFirst - strIntSecond);
         if (compInt > 0) std::cout << "More!\n";
         else if (compInt < 0) std::cout << "Less!\n";
         else {
-            int compFrac = compareFrac(strFracPart_first, strFracPart_second, minus_first);
+            int compFrac = compareFrac(strFracPartFirst, strFracPartSecond, minusFirst);
             if (compFrac > 0) std::cout << "More!\n";
             else if (compFrac < 0) std::cout << "Less!\n";
             else std::cout << "Equal!\n";
@@ -149,4 +141,3 @@ int main() {
     }
     return 0;
 }
-

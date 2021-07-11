@@ -1,7 +1,6 @@
 #include <iostream>
 
-char get_elmnt (int x, int y, std::string str1, std::string str2, std::string str3)
-{
+char getElmnt (int x, int y, std::string str1, std::string str2, std::string str3) {
     std::string line = "";
     if (y == 1)
         line = str1;
@@ -12,27 +11,27 @@ char get_elmnt (int x, int y, std::string str1, std::string str2, std::string st
     return line [x-1];
 }
 
-void draw_field (std::string str1, std::string str2, std::string str3){
+void drawField (std::string str1, std::string str2, std::string str3){
     for (int y = 1; y < 4; y++) {
         for (int x = 1; x < 4; x++) {
-            std::cout << "| " << get_elmnt (x, y, str1, str2, str3) << " ";
+            std::cout << "| " << getElmnt (x, y, str1, str2, str3) << " ";
         }
         std::cout << "|\n";
         std::cout << "-------------\n";
     }
 }
 
-int get_count (char ch, std::string str1, std::string str2, std::string str3) {
+int getCount (char ch, std::string str1, std::string str2, std::string str3) {
     int count = 0;
     for (int y = 1; y < 4; y++) {
         for (int x = 1; x < 4; x++) {
-            if (get_elmnt (x, y, str1, str2, str3) == ch) count++;
+            if (getElmnt (x, y, str1, str2, str3) == ch) count++;
         }
     }
     return count;
 }
 
-bool check_correct_symbol (std::string str) {
+bool checkCorrectSymbol (std::string str) {
     if (str.length() > 3)
         return false;
     else {
@@ -44,102 +43,96 @@ bool check_correct_symbol (std::string str) {
     return true;
 }
 
-char get_win (std::string str1, std::string str2, std::string str3) {
+char getWin (std::string str1, std::string str2, std::string str3) {
     char element = '-';
     int countWin = 0;
     for (int i = 1; i < 4; i++) {
-        if ((get_elmnt(1, i, str1, str2, str3) ==
-             get_elmnt(2, i, str1, str2, str3)) &&
-            (get_elmnt(2, i, str1, str2, str3) ==
-             get_elmnt(3, i, str1, str2, str3)))
-        {
-            element = get_elmnt(1, i, str1, str2, str3);
+        if ((getElmnt(1, i, str1, str2, str3) ==
+             getElmnt(2, i, str1, str2, str3)) &&
+            (getElmnt(2, i, str1, str2, str3) ==
+             getElmnt(3, i, str1, str2, str3))) {
+             element = getElmnt(1, i, str1, str2, str3);
             if (element != '.') countWin++;
         }
-        else if ((get_elmnt(i, 1, str1, str2, str3) ==
-                  get_elmnt(i, 2, str1, str2, str3)) &&
-                 (get_elmnt(i, 2, str1, str2, str3) ==
-                  get_elmnt(i, 3, str1, str2, str3)))
-        {
-            element = get_elmnt(i, 1, str1, str2, str3);
+        else if ((getElmnt(i, 1, str1, str2, str3) ==
+                  getElmnt(i, 2, str1, str2, str3)) &&
+                 (getElmnt(i, 2, str1, str2, str3) ==
+                  getElmnt(i, 3, str1, str2, str3))) {
+            element = getElmnt(i, 1, str1, str2, str3);
             if (element != '.') countWin++;
         }
     }
-    if ((get_elmnt(1, 1, str1, str2, str3) ==
-         get_elmnt(2, 2, str1, str2, str3)) &&
-        (get_elmnt(2, 2, str1, str2, str3) ==
-         get_elmnt(3, 3, str1, str2, str3)))
-    {
-        element = get_elmnt(1, 1, str1, str2, str3);
+    if ((getElmnt(1, 1, str1, str2, str3) ==
+         getElmnt(2, 2, str1, str2, str3)) &&
+        (getElmnt(2, 2, str1, str2, str3) ==
+         getElmnt(3, 3, str1, str2, str3))) {
+        element = getElmnt(1, 1, str1, str2, str3);
         if (element != '.') countWin++;
     }
-    else if ((get_elmnt(3, 1, str1, str2, str3) ==
-              get_elmnt(2, 2, str1, str2, str3)) &&
-             (get_elmnt(2, 2, str1, str2, str3) ==
-              get_elmnt(1, 3, str1, str2, str3)))
-    {
-        element = get_elmnt(3, 1, str1, str2, str3);
+    else if ((getElmnt(3, 1, str1, str2, str3) ==
+              getElmnt(2, 2, str1, str2, str3)) &&
+             (getElmnt(2, 2, str1, str2, str3) ==
+              getElmnt(1, 3, str1, str2, str3))) {
+        element = getElmnt(3, 1, str1, str2, str3);
         if (element != '.') countWin++;
     }
     if (countWin > 1) return 'N';
     return element;
 }
 
-bool check_correct_game (std::string str1, std::string str2, std::string str3) {
-        if (get_win (str1, str2, str3) == 'N')
+bool checkCorrectGame (std::string str1, std::string str2, std::string str3) {
+        if (getWin (str1, str2, str3) == 'N')
             return false;
-        else if (get_count ('O', str1, str2, str3) >
-             get_count ('X', str1, str2, str3))
+        else if (getCount ('O', str1, str2, str3) >
+             getCount ('X', str1, str2, str3))
             return false;
-        else if (get_count ('X', str1, str2, str3) >
-                 get_count ('O', str1, str2, str3) + 1)
+        else if (getCount ('X', str1, str2, str3) >
+                 getCount ('O', str1, str2, str3) + 1)
             return false;
-         else if (get_win (str1, str2, str3) == 'X' &&
-                 (get_count ('X', str1, str2, str3) ==
-                  get_count ('O', str1, str2, str3)))
+         else if (getWin (str1, str2, str3) == 'X' &&
+                 (getCount ('X', str1, str2, str3) ==
+                  getCount ('O', str1, str2, str3)))
              return false;
-         else if (get_win (str1, str2, str3) == 'O' &&
-                 (get_count ('X', str1, str2, str3) >
-                  get_count ('O', str1, str2, str3)))
+         else if (getWin (str1, str2, str3) == 'O' &&
+                 (getCount ('X', str1, str2, str3) >
+                  getCount ('O', str1, str2, str3)))
              return false;
          else return true;
 }
 
 int main() {
-   std::string str_first;
-   std::string str_secnd;
-   std::string str_third;
-   bool correct_input = false;
-   while (!correct_input) {
+   std::string strFirst;
+   std::string strSecnd;
+   std::string strThird;
+   bool correctInput = false;
+   while (!correctInput) {
        std::cout << "Enter the first line\n=>";
-       std::getline(std::cin, str_first);
+       std::getline(std::cin, strFirst);
 
        std::cout << "Enter the second line\n=>";
-       std::getline(std::cin, str_secnd);
+       std::getline(std::cin, strSecnd);
 
        std::cout << "Enter the third line\n=>";
-       std::getline(std::cin, str_third);
+       std::getline(std::cin, strThird);
 
-       correct_input = (check_correct_symbol (str_first) &&
-                        check_correct_symbol (str_secnd) &&
-                        check_correct_symbol (str_third));
-       if (!correct_input)
+       correctInput = (checkCorrectSymbol (strFirst) &&
+                        checkCorrectSymbol (strSecnd) &&
+                        checkCorrectSymbol (strThird));
+       if (!correctInput)
            std::cout << "Incorrect input, try again!\n";
    }
 
-   draw_field (str_first, str_secnd, str_third);
+   drawField (strFirst, strSecnd, strThird);
 
-   bool correct_game = check_correct_game (str_first, str_secnd, str_third);
-   if (!correct_game)
+   bool correctGame = checkCorrectGame (strFirst, strSecnd, strThird);
+   if (!correctGame)
         std::cout << "Incorrect\n";
-    else
-    {
-        char winner = get_win (str_first, str_secnd, str_third);
+    else {
+        char winner = getWin (strFirst, strSecnd, strThird);
 
         if (winner == 'O')  std::cout << "Vanya won\n";
         else if (winner == 'X')  std::cout << "Petya won\n";
-        else
-        {
+        else {
             std::cout << "Nobody\n";
         }
     }

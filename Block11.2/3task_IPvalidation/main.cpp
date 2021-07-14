@@ -25,8 +25,8 @@ std::string getRest (std::string str, int pos) {
         for (int i = pos; i < str.length(); i++) {
             strResult += str[i];
         }
-        return strResult;
     }
+    return strResult;
 }
 
 int getCountDot (std::string str) {
@@ -76,7 +76,6 @@ bool checkCorrect (std::string str)
         for (int i = 0; i < dotCount; i++) {
             dotPos = getDotPos (str);
             std::string strFirst = getFirst(str, dotPos);
-            std::cout << "strFirst " << strFirst << std::endl;
             cor = checkSymbol (strFirst);
             if (!cor) return false;
             else {

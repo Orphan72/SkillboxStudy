@@ -12,8 +12,8 @@ char getElmnt (int x, int y, std::string str1, std::string str2, std::string str
 }
 
 void drawField (std::string str1, std::string str2, std::string str3){
-    for (int y = 1; y < 4; y++) {
-        for (int x = 1; x < 4; x++) {
+    for (int y = 1; y <= 3; y++) {
+        for (int x = 1; x <= 3; x++) {
             std::cout << "| " << getElmnt (x, y, str1, str2, str3) << " ";
         }
         std::cout << "|\n";
@@ -23,8 +23,8 @@ void drawField (std::string str1, std::string str2, std::string str3){
 
 int getCount (char ch, std::string str1, std::string str2, std::string str3) {
     int count = 0;
-    for (int y = 1; y < 4; y++) {
-        for (int x = 1; x < 4; x++) {
+    for (int y = 1; y <= 3; y++) {
+        for (int x = 1; x <= 3; x++) {
             if (getElmnt (x, y, str1, str2, str3) == ch) count++;
         }
     }
@@ -46,7 +46,7 @@ bool checkCorrectSymbol (std::string str) {
 char getWin (std::string str1, std::string str2, std::string str3) {
     char element = '-';
     int countWin = 0;
-    for (int i = 1; i < 4; i++) {
+    for (int i = 1; i <= 3; i++) {
         if ((getElmnt(1, i, str1, str2, str3) ==
              getElmnt(2, i, str1, str2, str3)) &&
             (getElmnt(2, i, str1, str2, str3) ==

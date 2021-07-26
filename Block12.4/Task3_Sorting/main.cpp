@@ -2,7 +2,7 @@
 
 int main() {
 
-    int const N = 5;
+    int const N = 15;
     float number [N];
 
     std::cout << "Enter " << N << " numbers\n";
@@ -30,7 +30,6 @@ int main() {
            }
 
        }
-
        number[pos] = number[j];
        number[j] = min;
    }

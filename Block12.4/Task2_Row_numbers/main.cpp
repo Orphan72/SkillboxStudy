@@ -30,7 +30,7 @@ int getDouble (int min, int num [N]) {
 
 int main() {
 
-    int numbers[15] = {114,111, 106, 107, 108, 105, 115,  108, 110, 109, 112, 113, 116, 117, 118};
+    int numbers[N] = {114,111, 106, 107, 108, 105, 115,  108, 110, 109, 112, 113, 116, 117, 118};
     int minimum = getMin(numbers);
     int doubled = 0;
     std::cout << "min: " << minimum << std::endl;

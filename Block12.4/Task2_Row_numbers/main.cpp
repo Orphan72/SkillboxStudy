@@ -3,7 +3,7 @@
 const int N = 15;
 int getMin (int num [N]) {
     int min = num [0];
-    for (int i = 0; i < N; i++)
+    for (int i = 1; i < N; i++)
     {
         if (num [i] < min)
             min = num [i];

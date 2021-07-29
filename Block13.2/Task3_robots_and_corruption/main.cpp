@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-
 std::vector<int> add_to_position(std::vector <int> vec, int val, int position)
 {
     std::vector<int> newVec (vec.size() + 1);
@@ -41,11 +40,5 @@ int main() {
         std::cout << vec [i] << " ";
     }
 
-    //}
-
-    //for (int i = 0; i < vec.size(); i++) {
-      //  std::cout << vec [i] << " ";
-    //}
-
-    return 0;
+   return 0;
 }

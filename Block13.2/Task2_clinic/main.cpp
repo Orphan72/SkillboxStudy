@@ -28,5 +28,7 @@ int main() {
     average = sum/(vec.size() - 1);
 
     std::cout << "average is " << average;
+	std::cout << "\nCount of patient is " << (vec.size() - 1);
+	
     return 0;
 }

@@ -2,7 +2,7 @@
 #include <vector>
 
 int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
+    std::vector<int> vec;
     int num = 0;
     while (num != -1) {
         std::cout << "Enter number of robot\n=>";
@@ -11,16 +11,16 @@ int main() {
         for (int i = 0; i < vec.size(); i++) {
             while (num > vec[i]) {
                 int index = i;
-                vec.resize(vec.size() - 1);
-                for (int j = index; j < vec.size(); j++) {
+                for (int j = index; j < (vec.size() - 1); j++) {
                     vec[j] = vec[j + 1];
                 }
+                vec.resize(vec.size() - 1);
             }
         }
+    }
 
-        for (int i = 0; i < vec.size(); i++) {
-            std::cout << vec[i] << " ";
-        }
+    for (int i = 0; i < vec.size() - 1; i++) {
+        std::cout << vec[i] << " ";
     }
     return 0;
 }

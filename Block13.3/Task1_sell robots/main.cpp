@@ -28,11 +28,12 @@ int main() {
                 std::cout << "index incorrect! Try again\n";
             }
         }
-            vec.resize(vec.size() - 1);
-            for (int i = index - 1; i < vec.size(); i++) {
+            
+            for (int i = (index - 1); i < (vec.size() - 1); i++) {
                 vec[i] = vec[i + 1];
             }
-            for (int i = 0; i < vec.size(); i++) {
+            vec.resize(vec.size() - 1);
+			for (int i = 0; i < vec.size(); i++) {
                 std::cout << vec[i] << " ";
             }
     }

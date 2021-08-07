@@ -14,7 +14,7 @@ int main() {
                 for (int j = index; j < (vec.size() - 1); j++) {
                     vec[j] = vec[j + 1];
                 }
-                vec.resize(vec.size() - 1);
+                vec.pop_back();
             }
         }
     }

@@ -20,14 +20,14 @@ int main() {
     std::cout << "Enter number\n=>";
     std::cin >> num;
 
-    for (int i = vec.size() - 1 ; i >= 0; i--) {
-        if (vec [i] == num){
-            for (int j = i; j < vec.size(); j++) {
-                vec [j] = vec [j + 1];
-            }
-            vec.pop_back();
+    int n = -1;
+    for (int i = 0; i < vec.size(); i++) {
+        if (vec [i] != num) {
+            n++;
+            vec [n] = vec [i];
         }
     }
+    vec.resize(n + 1);
 
     std::cout << "Final vector:\n";
     if (vec.empty()) {
@@ -37,7 +37,7 @@ int main() {
         for (int i = 0; i < vec.size(); i++){
             std::cout << vec [i] << " ";
         }
-     }
+    }
 
     return 0;
 }

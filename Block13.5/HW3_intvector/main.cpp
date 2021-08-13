@@ -22,7 +22,8 @@ int main() {
             for (int j = 0; j < database.size(); j++){
                 database [j] = database [j + 1];
             }
-            database.pop_back();
+            database [SIZE] = number;
+            database.resize(SIZE + 1);
         }
 
         if (number == -1)

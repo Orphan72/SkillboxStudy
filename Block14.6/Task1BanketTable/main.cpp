@@ -19,15 +19,15 @@ std::vector <std::vector<std::string>> cultery {{"spoon", "fork", "knife"},
 std::vector <std::vector<std::string>> tableware {{"fDish", "secDish"},
                                                   {"fDish", "secDish"},
                                                   {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish"},
-                                                      {"fDish", "secDish", "desDish"},
-                                                      {"fDish", "secDish", "desDish"}};
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish"},
+                                                  {"fDish", "secDish", "desDish"},
+                                                  {"fDish", "secDish", "desDish"}};
 
 
 

@@ -30,6 +30,9 @@ std::vector <std::vector<std::string>> tableware {{"fDish", "secDish"},
                                                   {"fDish", "secDish", "desDish"}};
 
 
+std::vector <std::vector<bool>> chair {{true, true, true, true, true, true, true, true, true, true},
+                                       {true, true, true, true, true, true, true, true, true, true},
+                                       {true, true}};
 
 
 /*

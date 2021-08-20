@@ -38,13 +38,13 @@ int main() {
     const int ROW      = 2;
     const int ECONOM   = 5;
     const int VIP      = 2;
-    const int ECCULT   = 3;
+    const int CULTERY  = 3;
     const int VIPCULT  = 4;
-    const int ECPLATE  = 2;
+    const int PLATE    = 2;
     const int VIPPLATE = 3;
 
-    std::vector <std::vector<std::string>> econCultery (ECONOM*ROW, std::vector<std::string> (ECCULT));
-    std::vector <std::vector<std::string>> econPlate (ECONOM*ROW, std::vector<std::string> (ECPLATE));
+    std::vector <std::vector<std::string>> econCultery (ECONOM*ROW, std::vector<std::string> (CULTERY));
+    std::vector <std::vector<std::string>> econPlate (ECONOM*ROW, std::vector<std::string> (PLATE));
     std::vector <std::vector<std::string>> vipCultery (VIP, std::vector<std::string> (VIPCULT));
     std::vector <std::vector<std::string>> vipPlate (VIP, std::vector<std::string> (VIPPLATE));
 
@@ -56,7 +56,7 @@ int main() {
     }
 
     for (int i = 0; i < econPlate.size(); i++) {
-        econPlate [i] = {"plateOne", "plateSec"};
+        econPlate [i] = {"firstPlate", "sesPlate"};
     }
 
     for (int i = 0; i < vipCultery.size(); i++) {

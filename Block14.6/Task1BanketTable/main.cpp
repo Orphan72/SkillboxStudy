@@ -1,9 +1,7 @@
 #include <iostream>
 #include <vector>
 
-
-void display (std::vector<std::vector<std::string>> vec)
-{
+void display (std::vector<std::vector<std::string>> vec) {
     for (int i = 0; i < vec.size(); i++) {
         for (int j = 0; j < vec[i].size(); j++) {
             std::cout << vec [i][j] << " ";
@@ -12,8 +10,7 @@ void display (std::vector<std::vector<std::string>> vec)
     }
 }
 
-void displayChair (std::vector<std::vector<bool>> vec)
-{
+void displayChair (std::vector<std::vector<bool>> vec) {
     for (int i = 0; i < vec.size(); i++) {
         for (int j = 0; j < vec[i].size(); j++) {
             std::cout << vec [i][j] << " ";
@@ -22,30 +19,29 @@ void displayChair (std::vector<std::vector<bool>> vec)
     }
 }
 
-void displayVipChair (std::vector<bool> vec)
-{
+void displayVipChair (std::vector<bool> vec){
     for (int i = 0; i < vec.size(); i++) {
         std::cout << vec [i] << " ";
     }
         std::cout << std::endl;
 }
 
-
-
-
 int main() {
 
-    const int ROW      = 2;
-    const int ECONOM   = 5;
-    const int VIP      = 2;
-    const int CULTERY  = 3;
-    const int VIPCULT  = 4;
-    const int PLATE    = 2;
-    const int VIPPLATE = 3;
+    const int ROW         = 2;
+    const int ECONOM      = 5;
+    const int VIP         = 2;
+    const int CULTERY     = 3;
+    const int VIPCULTERY  = 4;
+    const int PLATE       = 2;
+    const int VIPPLATE    = 3;
+
+    const int PLACE = 3;
+    int place = ECONOM - 1 + PLACE;
 
     std::vector <std::vector<std::string>> econCultery (ECONOM*ROW, std::vector<std::string> (CULTERY));
     std::vector <std::vector<std::string>> econPlate (ECONOM*ROW, std::vector<std::string> (PLATE));
-    std::vector <std::vector<std::string>> vipCultery (VIP, std::vector<std::string> (VIPCULT));
+    std::vector <std::vector<std::string>> vipCultery (VIP, std::vector<std::string> (VIPCULTERY));
     std::vector <std::vector<std::string>> vipPlate (VIP, std::vector<std::string> (VIPPLATE));
 
     std::vector <std::vector<bool>> econChair (ROW, std::vector<bool> (ECONOM));
@@ -56,7 +52,7 @@ int main() {
     }
 
     for (int i = 0; i < econPlate.size(); i++) {
-        econPlate [i] = {"firstPlate", "sesPlate"};
+        econPlate [i] = {"firstPlate", "secPlate"};
     }
 
     for (int i = 0; i < vipCultery.size(); i++) {
@@ -84,25 +80,39 @@ int main() {
    displayChair (econChair);
    displayVipChair (vipChair);
 
+   std::cout << "\n===========\nExtra chair was added:\n";
+   econChair[1].push_back(true);
 
-    /*
+   displayChair (econChair);
 
-    По поводу успешного прохождения двумерных массивов собирается банкет, организуется стол на 12 персон, 2 из них - это места VIP,
-    они расположены рядом друг к другу во главе стола. Стол протяжённый в длину, места расположены в два ряда.
-    Каждый пришедший должен быть “упакован” соответствующим образом. Во-первых столовые приборы - их три на каждого человека (вилка, ложка, нож),
-    плюс одна маленькая дополнительная ложечка для VIP-персон, для десерта.
-    Это необходимо обеспечить. Следом тарелки, каждому по две - для первого и второго блюда, для VIP персон +1 тарелка для десерта.
-    Ну и конечно стул - один для каждого, минимум! Заведите соответствующие двумерные массивы для количества приборов,
-    посуды и стульев и проинициализируйте их как следует.
+   std::cout << "\n===========\nThe spoon was gone:\n";
+   for (int i = 0; i < econCultery[place].size() - 1; i++) {
+        econCultery [place][i] = econCultery [place][i + 1];
+    }
+    econCultery [place].pop_back();
 
-            Однако, это ещё не всё. В ходе банкета, уже после инициализации, происходят некоторые события.
-            Пришедшая на 5-ое место первого ряда дама пришла вместе с ребёнком и поэтому на данное место был приставлен ещё один стул.
-            С третьего места во втором ряду в неизвестном направлении была украдена ложка.
-            После этого одна из VIP персон (любая) поделилась своей ложкой с тем у кого она пропала, а сам стал есть суп десертной.
-            За ненадобностью официант забрал у него одну десертную тарелку, ибо есть десерт ложкой, которая побывала уже в супе - не комильфо.
-            Больше без происшествий!
+    display (econCultery);
 
-  */
+    std::cout << "\n===========\nThe VIP person share his spoon:\n";
+
+    for (int i = 0; i < vipCultery[0].size() - 1 ; i++) {
+        vipCultery [0][i] = vipCultery [0][i + 1];
+    }
+    vipCultery [0].pop_back();
+
+    econCultery[place].resize(econCultery[place].size() + 1);
+    for (int i = econCultery[place].size() - 1; i > 0; i--) {
+        econCultery [place][i] = econCultery [place][i - 1];
+    }
+    econCultery [place][0] = "spoon";
+
+    display (econCultery);
+    display (vipCultery);
+
+    std::cout << "\n===========\nThe desert plate was take away:\n";
+    vipPlate [0].pop_back();
+
+    display (vipPlate);
 
     return 0;
 }

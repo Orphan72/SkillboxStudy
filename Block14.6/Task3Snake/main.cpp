@@ -1,57 +1,42 @@
 #include <iostream>
 
-int main()
+const int SIZE = 5;
+
+void display (int mas [SIZE][SIZE])
 {
-   int SIZE = 5;
-   int mas [SIZE][SIZE];
-   int count = 0;
-
-
-  int i = 0;
-
-   for (int j = 0; j < 5; j++)
-   {
-       mas [i][j] = count++;
-   }
-
-   i = 1;
-
-   for (int j = 4; j >= 0; j--)
-   {
-       mas [i][j] = count++;
-   }
-
-    i = 2;
-
-    for (int j = 0; j < 5; j++)
+    for (int i = 0; i < SIZE; i++)
     {
-        mas [i][j] = count++;
-    }
-    i = 3;
-    for (int j = 4; j >= 0; j--)
-    {
-        mas [i][j] = count++;
-    }
-
-    i = 4;
-
-    for (int j = 0; j < 5; j++)
-    {
-        mas [i][j] = count++;
-    }
-
-
-
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < SIZE; j++)
         {
             std::cout << mas [i][j] << " ";
         }
         std::cout << std::endl;
     }
+}
 
+int main()
+{
+    int snake [SIZE][SIZE];
+    int count = 0;
 
+    int i = -1;
+    int j = -1;
+    for (int n = 0; n <= SIZE/2 ; n++)
+    {
+        i++;
+        j++;
+        for (; j < SIZE; j++)
+        {
+            snake[i][j] = count++;
+        }
+
+        i++;
+        j--;
+        for (; j >= 0; j--)
+        {
+            snake[i][j] = count++;
+        }
+    }
 
     return 0;
 }

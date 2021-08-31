@@ -18,13 +18,11 @@ int main()
     int snake [SIZE][SIZE];
     int count = 0;
 
-    int i = -1;
-    int j = -1;
+    int i = 0;
+    int j = 0;
 
     while  (i <= SIZE/2)
     {
-        i++;
-        j++;
         for (; j < SIZE; j++)
         {
             snake[i][j] = count++;
@@ -35,10 +33,10 @@ int main()
         {
             snake[i][j] = count++;
         }
+        i++;
+        j++;
     }
 
-    i++;
-    j++;
     for (; j < SIZE; j++)
     {
         snake[i][j] = count++;

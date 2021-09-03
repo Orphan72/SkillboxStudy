@@ -30,7 +30,6 @@ int main()
     float array [SIZE][SIZE];
 
     std::cout << "Please, full vector" << std::endl;
-
     for (int i = 0; i < SIZE; i++)
     {
         std::cin >> vec [i];
@@ -43,18 +42,17 @@ int main()
         {
             std::cin >> array [i][j];
         }
-
     }
 
     for (int i = 0; i < SIZE; i++)
-   {
+    {
        for (int j = 0; j < SIZE; j++)
        {
            result [i] += vec [i] * array [j][i];
        }
-   }
+    }
 
-   std::cout << "Vector\n";
+    std::cout << "Vector\n";
     dispVec(vec);
 
     std::cout << "Array\n";

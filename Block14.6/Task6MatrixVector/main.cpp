@@ -2,13 +2,13 @@
 #include <vector>
 const int SIZE = 4;
 
-void displayMas (float ms [SIZE][SIZE])
+void displayArray (float mas [SIZE][SIZE])
 {
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            std::cout << ms[i][j] << " ";
+            std::cout << mas[i][j] << " ";
         }
         std::cout << std::endl;
     }
@@ -23,47 +23,45 @@ void dispVec (std::vector <float> vec)
     std::cout << std::endl;
 }
 
-
 int main()
 {
-    std::vector <float> vector (SIZE);
-    vector = {1,2,3,4};
-
+    std::vector <float> vec (SIZE);
     std::vector <float> result (SIZE);
-    float mas [SIZE][SIZE] = {
-            {1,2,3,4},
-            {1,2,3,4},
-            {1,2,3,4},
-            {1,2,3,4}};
+    float array [SIZE][SIZE];
 
-    //пояснить cout ом, что это
-    //std::
-    displayMas(mas);
-    //пояснить cout ом, что это
-    dispVec(vector);
+    std::cout << "Please, full vector" << std::endl;
 
-    //пояснить cout ом, что это
+    for (int i = 0; i < SIZE; i++)
+    {
+        std::cin >> vec [i];
+    }
 
+    std::cout << "Please, full array" << std::endl;
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            std::cin >> array [i][j];
+        }
+
+    }
+
+    for (int i = 0; i < SIZE; i++)
+   {
+       for (int j = 0; j < SIZE; j++)
+       {
+           result [i] += vec [i] * array [j][i];
+       }
+   }
+
+   std::cout << "Vector\n";
+    dispVec(vec);
+
+    std::cout << "Array\n";
+    displayArray(array);
+
+    std::cout << "Result\n";
     dispVec(result);
-
 
     return 0;
 }
-
-
-/*
-Задача 6. Умножение матрицы на вектор
-
-Реализуйте частный случай умножения матрицы на матрицу, а именно — умножение вектора на матрицу.
-Данная операция также весьма распространена в компьютерной индустрии в целом и в компьютерное графике в частности,
-поэтому это будет хорошим упражнением.
-
-Итак, у нас есть 4-х компонентный вектор V представленный с помощью массива, и матрица M размером 4х4,
-представленная в виде двумерного массива. Их произведением будет новый 4-х компонентный вектор R.
-Его компоненты будут суммой произведений компонент вектора V на строку матрицы M.
-Индекс столбца при этом равен индексу соответствующей компоненты вектора R, который мы и рассчитываем в текущий момент времени.
-
-Все входные данные, матрица M и вектор V вносятся из пользовательского ввода.
-Итоговый вектор R надо вывести в консоль (std::cout). Тип данных элементов - всегда float.
-Желательно реализовать этот алгоритм с помощью вложенного цикла на умножение колонки
-*/

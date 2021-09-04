@@ -1,22 +1,60 @@
 #include <iostream>
+#include <vector>
+#include <valarray>
 
-const int SIZE = 12;
+const int SIZE = 5;
 
-void display (bool array [SIZE][SIZE])
+void display (std::vector <std::vector <bool>> vec)
 {
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            std::cout << (array[i][j] ?  "O " : "X ");
+            std::cout << (vec [i][j] ?  "O " : "X ");
         }
         std::cout << std::endl;
     }
 }
 
+bool checkEnter (int a, int b)
+{
+    return !(a < 1 || a > SIZE || b < 1 || b > SIZE);
+}
+
+std::vector<std::vector <bool>> pop (std::vector<std::vector <bool>> vec, int stY, int stX, int finY, int finX)
+{
+    for (int i = (stY - 1); i < finY; i++)
+    {
+        for (int j = (stX - 1); j < finX; j++)
+        {
+            vec [i][j] = false;
+        }
+    }
+    return vec;
+}
+
+bool checkIntact (std::vector <std::vector <bool>> vec)
+{
+    int countIntact = 0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (vec [i][j]) countIntact++;
+        }
+    }
+
+    return countIntact > 0;
+}
+
 int main() {
 
-    bool bubble [SIZE][SIZE];
+    std::vector <std::vector<bool>> bubble (SIZE, std::vector<bool> (SIZE));
+    int rowStart = 0;
+    int colStart = 0;
+    int rowFin   = 0;
+    int colFin   = 0;
+    bool intact  = true;
 
     for (int i = 0; i < SIZE; i++)
     {
@@ -26,17 +64,43 @@ int main() {
         }
     }
 
-    int rowStart, colStart;
-    std::cout << "Please input start coordinates\n=>";
-    std::cin >> rowStart >> colStart;
-
-    int rowFin, colFin;
-    std::cout << "Please input start coordinates\n=>";
-    std::cin >> rowFin >> colFin;
-
-    
-
     display(bubble);
+
+    while (intact)
+    {
+        bool correct = false;
+        while (!correct)
+        {
+            std::cout << "Please input start coordinates from 1 to 12\n=>";
+            std::cin >> rowStart >> colStart;
+            correct = checkEnter (rowStart, colStart);
+            if (!correct)
+            {
+                std::cout << "Values must be from 1 to 12. Please, try again\n";
+            }
+        }
+
+        correct = false;
+
+        while (!correct)
+        {
+            std::cout << "Please input finish coordinates from 1 to 12\n=>";
+            std::cin >> rowFin >> colFin;
+            correct = checkEnter (rowFin, colFin);
+            if (!correct)
+            {
+                std::cout << "Values must be from 1 to 12. Please, try again\n";
+            }
+        }
+
+        bubble = pop (bubble, rowStart, colStart, rowFin, colFin);
+
+        display(bubble);
+
+        //std::cout << "Enter intct\n";
+        intact = checkIntact (bubble);
+        std::cout << "intct  " << intact;
+    }
 
     return 0;
 }

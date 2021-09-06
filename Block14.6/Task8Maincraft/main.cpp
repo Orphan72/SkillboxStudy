@@ -1,9 +1,61 @@
 #include <iostream>
 #include <vector>
+
+const int SIZE = 3;
+
+void display (std::vector <bool> vec [SIZE])
+{
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < vec[i].size(); j++)
+        {
+            std::cout << vec[i][j] << " ";
+        }
+
+        std::cout << std::endl;
+    }
+
+}
+
+
+//todo сделать срез для двумерного массива
+
 int main()
 {
+    /*
     const int maxHight = 10;
-    std::vector <int> mas [5][5];
+    std::vector <int> sector [5][5];
+    int hights [5][5];
+
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            std::cout << "Enter hight " << i + j + 5 + 1 << "pillar\=>";
+            std::cin >> hights [i][j];
+            sector [i]->push_back(j);
+        }
+    }
+*/
+
+    const int maxHight = 10;
+    std::vector <bool> sector [SIZE];
+    int hight = 0;
+
+    for (int i = 0; i < 3; i++)
+    {
+
+            std::cout << "Enter hight " << i + 1 << " pillar\n=>";
+            std::cin >> hight;
+        for (int j = 0; j < hight; j++)
+            sector[i].push_back(true);
+    }
+
+
+display (sector);
+
+
 
 
     return 0;

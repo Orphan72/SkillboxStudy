@@ -3,60 +3,66 @@
 
 const int SIZE = 3;
 
-void display (std::vector <bool> vec [SIZE])
+void display (std::vector <bool> vec [SIZE][SIZE])
 {
-
     for (int i = 0; i < SIZE; i++)
     {
-        for (int j = 0; j < vec[i].size(); j++)
+        for (int j = 0; j < SIZE; j++)
         {
-            std::cout << vec[i][j] << " ";
-        }
+            for (int k = 0; k < vec[i][j].size(); k++)
+            {
+                std::cout << vec[i][j][k] << " ";
+            }
 
+            std::cout << std::endl;
+        }
         std::cout << std::endl;
     }
-
+    std::cout << std::endl;
 }
 
-
-//todo сделать срез для двумерного массива
+void slice (std::vector <bool> vec [SIZE][SIZE], int k)
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            std::cout << vec[i][j][k] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
 
 int main()
 {
-    /*
     const int maxHight = 10;
-    std::vector <int> sector [5][5];
-    int hights [5][5];
+    std::vector <bool> sector [SIZE][SIZE];
+    int hightPillar = 0;
+    int hightSlice  = 0;
 
-    for (int i = 0; i < 5; i++)
+    int l = 0;
+    for (int i = 0; i < SIZE; i++)
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < SIZE; j++)
         {
-            std::cout << "Enter hight " << i + j + 5 + 1 << "pillar\=>";
-            std::cin >> hights [i][j];
-            sector [i]->push_back(j);
+            std::cout << "Enter hight of " << i + j + l + 1 << " pillar=>";
+            std::cin >> hightPillar;
+            for (int k = 0; k < hightPillar; k++)
+            {
+                sector[i][j].push_back(true);
+            }
         }
+        l += SIZE - 1;
     }
-*/
-
-    const int maxHight = 10;
-    std::vector <bool> sector [SIZE];
-    int hight = 0;
-
-    for (int i = 0; i < 3; i++)
-    {
-
-            std::cout << "Enter hight " << i + 1 << " pillar\n=>";
-            std::cin >> hight;
-        for (int j = 0; j < hight; j++)
-            sector[i].push_back(true);
-    }
-
 
 display (sector);
 
-
-
+    while (hightSlice != -2)
+    {
+        std::cout << "Enter hight of slice \n=>";
+        std::cin >> hightSlice;
+        slice(sector, hightSlice - 1);
+    }
 
     return 0;
 }

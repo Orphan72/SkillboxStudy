@@ -2,7 +2,6 @@
 #include <vector>
 
 const int SIZE = 12;
-const int DIFF = 46;
 const int DELTA = 2;
 
 void display (char array [SIZE][SIZE])
@@ -19,8 +18,53 @@ void display (char array [SIZE][SIZE])
     std::cout << std::endl;
 }
 
+
+void setupShip (char array [SIZE][SIZE], int dsk)
+{
+    for (int count = 0; count < dsk; count++)
+    {
+        std::cout << "Enter coordinates " << count + 1 << " ship =>";
+        int horisontal, vertical;
+        char position = ' ';
+        std::cin >> horisontal >> vertical;
+        int i = horisontal + DELTA;
+        int j = vertical + DELTA;
+        bool correctPos = false;
+        while (!correctPos)
+       {
+            std::cout << "Enter ship's position (V or H)\n=>";
+            std::cin >> position;
+            correctPos = (position == 'V' || position == 'H');
+            if (position == 'V')
+            {
+                std::cout << "vertical\n";
+                for (; i < (horisontal + DELTA + dsk); i++)
+                {
+                    array[i][j] = 'O';
+                }
+            }
+            else if (position == 'H')
+            {
+                std::cout << "horisontal\n";
+                for (; j < (vertical + DELTA + dsk); j++)
+                {
+                    array[i][j] = 'O';
+                }
+            }
+            else
+               std::cout << "Position incorrect, please try again\n";
+       }
+
+       display (array);
+    }
+}
+
+
+
 int main()
 {
+    const int DIFF = 46;
+    //int desk = 3;
     char field1 [SIZE][SIZE];
     char field2 [SIZE][SIZE];
 
@@ -54,30 +98,24 @@ int main()
 
     display (field1);
 
-  //  std::cout << "Enter coordinates =>";
-
-   // int h, v;
-
-  //  std::cin >> h >> v;
-
- //   field1 [h + DELTA][v + DELTA] = 'O';
-
-  //  display (field1);
-
-    std::cout << "Enter coordinates =>";
-
-     int h, v;
-    std::cin >> h >> v;
-
-    int i = h + DELTA;
-    int j = v + DELTA;
-
-    for (; j < (v + DELTA + 4); j++)
-    {
-        field1 [i][j] = 'O';
-    }
+    int countShip = 4;
+    int desk = 2;
 
 
-    display (field1);
+    setupShip (field1, desk);
+    //setuoFlot
+
+    /*
+    std::cout <<  "Entering " << countShip << " " <<  desk <<  "-desk ships.\n";
+    setupShip (field1, desk);
+    countShip--;
+    desk++;
+
+    std::cout <<  "Entering " << countShip << " " <<  desk <<  "-desk ships.\n";
+    setupShip (field1, desk);
+    countShip--;
+    desk++;
+     */
+
     return 0;
 }

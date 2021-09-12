@@ -18,32 +18,46 @@ void display (char array [SIZE][SIZE])
     std::cout << std::endl;
 }
 
-void setupShip (char array [SIZE][SIZE], int dsk, int count, int hrs, int vrt, char pos)
+
+void setupShip (char array [SIZE][SIZE], int dsk)
 {
-    for (int cnt = 0; cnt < count; cnt++)
+    for (int count = 0; count < dsk; count++)
     {
-        int i = hrs + DELTA;
-        int j = vrt + DELTA;
-        if (pos == 'V')
+        std::cout << "Enter coordinates " << count + 1 << " ship =>";
+        int horisontal, vertical;
+        char position = ' ';
+        std::cin >> horisontal >> vertical;
+        int i = horisontal + DELTA;
+        int j = vertical + DELTA;
+        bool correctPos = false;
+        while (!correctPos)
+       {
+            std::cout << "Enter ship's position (V or H)\n=>";
+            std::cin >> position;
+            correctPos = (position == 'V' || position == 'H');
+            if (position == 'V')
             {
-                for (; i < (hrs + DELTA + dsk); i++)
+                std::cout << "vertical\n";
+                for (; i < (horisontal + DELTA + dsk); i++)
+                {
+                    array[i][j] = 'O';
+                }
+            }
+            else if (position == 'H')
+            {
+                std::cout << "horisontal\n";
+                for (; j < (vertical + DELTA + dsk); j++)
                 {
                     array[i][j] = 'O';
                 }
             }
             else
-            {
-                for (; j < (vrt + DELTA + dsk); j++)
-                {
-                    array[i][j] = 'O';
-                }
-            }
-
+               std::cout << "Position incorrect, please try again\n";
        }
 
        display (array);
+    }
 }
-
 
 
 
@@ -88,72 +102,20 @@ int main()
     int desk = 2;
 
 
-
+    setupShip (field1, desk);
     //setuoFlot
 
-
+    /*
     std::cout <<  "Entering " << countShip << " " <<  desk <<  "-desk ships.\n";
-
-    bool correctPos = false;
-    char position = ' ';
-    while (!correctPos)
-    {
-        std::cout << "Enter ship's position (V or H)\n=>";
-        std::cin >> position;
-        correctPos = (position == 'V' || position == 'H');
-        if (!correctPos)
-        {
-            std::cout << "Position incorrect, please try again\n";
-        }
-    }
-
-    std::cout << "Enter ship's coordinates\n";
-    int horisontal, vertical;
-
-    std::cin >> horisontal >> vertical;
-
-    setupShip (field1, countShip, desk, horisontal, vertical, position);
-
+    setupShip (field1, desk);
     countShip--;
     desk++;
 
-
     std::cout <<  "Entering " << countShip << " " <<  desk <<  "-desk ships.\n";
-
-    correctPos = false;
-    position = ' ';
-    while (!correctPos)
-    {
-        std::cout << "Enter ship's position (V or H)\n=>";
-        std::cin >> position;
-        correctPos = (position == 'V' || position == 'H');
-        if (!correctPos)
-        {
-            std::cout << "Position incorrect, please try again\n";
-        }
-    }
-
-    std::cout << "Enter ship's coordinates\n";
-
-    std::cin >> horisontal >> vertical;
-
-    setupShip (field1, countShip, desk, horisontal, vertical, position);
-
+    setupShip (field1, desk);
     countShip--;
     desk++;
-
-
-
-
-
-
-
-
-
-
-
-
-
+     */
 
     return 0;
 }

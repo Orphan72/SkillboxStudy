@@ -18,67 +18,115 @@ void display (char array [SIZE][SIZE])
     std::cout << std::endl;
 }
 
+bool checkCorrectInput (int v, int h, int dsk, char pos)
+{
+    if (v < 0 || h < 0 || v > 9 || h > 9)
+    {
+        std::cout << "Coordinates incorrect\n";
+        return false;
+    }
+    else if ((pos == 'V' && (v + DELTA + dsk > SIZE)) ||
+             (pos == 'H' && (h + DELTA + dsk > SIZE)))
+    {
+        std::cout << "The ship is out of the field\n";
+        return false;
+    }
+    else
+        return true;
+}
+
 void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
 {
-   for (int n = 0; n < cntShp; n++)
-   {
-       char position = ' ';
-       if (dsk != 1)
-       {
-           bool correctPos = false;
-           while (!correctPos)
-           {
-               std::cout << "Enter ship's position (V or H)\n=>";
-               std::cin >> position;
-               correctPos = (position == 'V' || position == 'H');
-               if (!correctPos)
-                   std::cout << "Position incorrect, please try again\n";
+    for (int n = 1; n <= cntShp; n++)
+    {
+        char position = ' ';
+        if (dsk != 1)
+        {
+            bool correctPos = false;
+            while (!correctPos)
+            {
+                std::cout << "Enter position of ";
+                std::cout << n << " " << dsk << "-desk ship (V or H)\n=>";
+                std::cin >> position;
+                correctPos = (position == 'V' || position == 'H');
+                if (!correctPos)
+                    std::cout << "Position incorrect, please try again\n";
+            }
+        }
+        else
+        {
+            position = 'V';
+        }
+
+        int vertical, horizontal;
+        bool correctCoordinates = false;
+
+        while (!correctCoordinates)
+        {
+            std::cout << "Enter coordinates of ";
+            std::cout << n << " " << dsk << "-desk ship from 0 to 9 =>";
+            std::cin >> vertical;
+            std::cin >> horizontal;
+            correctCoordinates = checkCorrectInput (vertical, horizontal, dsk, position);
+
+            if (!correctCoordinates)
+            {
+                std::cout << "Please try again\n";
+            }
+            else
+            {
+                int i = vertical + DELTA;
+                int j = horizontal + DELTA;
+
+                if (position == 'V')
+                {
+                    for (; i < (vertical + DELTA + dsk); i++)
+                    {
+                        if (array[i][j] == 'O')
+                        {
+                            std::cout << "BUSY!!!\n";
+                            correctCoordinates = false;
+                            break;
+                        }
+                    }
+
+                    if (correctCoordinates)
+                    {
+                        i = vertical + DELTA;
+                        for (; i < (vertical + DELTA + dsk); i++) {
+                            array[i][j] = 'O';
+                        }
+                    }
+                }
+
+                else if (position == 'H')
+                {
+
+                    for (; j < (horizontal + DELTA + dsk); j++)
+                    {
+                        if (array[i][j] == 'O')
+                        {
+                            std::cout << "BUSY!!!\n";
+                            correctCoordinates = false;
+                            break;
+                        }
+                    }
+
+                    if (correctCoordinates)
+                    {
+                        j = horizontal + DELTA;
+                        for (; j < (horizontal + DELTA + dsk); j++)
+                        {
+                            array[i][j] = 'O';
+                        }
+                    }
+                }
            }
-       }
-       else
-       {
-           position = 'V';
-       }
+            display(array);
+         }
 
-
-       bool correctCoordinates = false;
-
-       while (!correctCoordinates)
-       {
-           std::cout << "Enter coordinates ship =>";
-           int horisontal, vertical;
-           std::cin >> horisontal >> vertical;
-           correctCoordinates = (horisontal >= 0 && vertical >= 0 &&
-                                 horisontal <= 9 && vertical <= 9);
-           if (!correctCoordinates)
-           {
-               
-           }
-       }
-
-
-
-
-
-       int i = horisontal + DELTA;
-       int j = vertical + DELTA;
-
-       if (position == 'V')
-       {
-           for (; i < (horisontal + DELTA + dsk); i++)
-           {
-               array[i][j] = 'O';
-           }
-       }
-       else if (position == 'H')
-       {
-           for (; j < (vertical + DELTA + dsk); j++) {
-               array[i][j] = 'O';
-           }
-       }
-
-       display(array);
-   }
+        display(array);
+    }
 }
 
 int main()
@@ -88,6 +136,9 @@ int main()
 
     char field1 [SIZE][SIZE];
     char field2 [SIZE][SIZE];
+
+    //function fo draw
+
 
     field1 [0][0] = ' ';
 
@@ -119,11 +170,12 @@ int main()
 
     display (field1);
 
-    //setup flot
     for (int desk = 1, countShip = 4; desk <= MAXDESK; desk++)
     {
         setupShip(field1, desk, countShip);
         countShip--;
     }
+
+    display (field1);
     return 0;
 }

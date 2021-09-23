@@ -4,6 +4,8 @@
 const int SIZE = 12;
 const int DELTA = 2;
 const int SEA = 9;
+const int MAXCOUNTSHIP = 4;
+
 const int DIFF = 46;
 
 void setupSea (char array [SIZE][SIZE])
@@ -60,6 +62,8 @@ bool checkCorrectInput (int v, int h, int dsk, char pos)
         return true;
 }
 
+
+//СЮДА МОЖНО ПЕРЕДАТЬ ГЛОБАЛЬНУЮ ПЕРЕМЕННУЮ MAXCOUNTSHIP вмместо cntShp
 void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
 {
     for (int n = 1; n <= cntShp; n++)
@@ -123,10 +127,8 @@ void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
                         }
                     }
                 }
-
                 else if (position == 'H')
                 {
-
                     for (; j < (horizontal + DELTA + dsk); j++)
                     {
                         if (array[i][j] == 'O')
@@ -149,78 +151,62 @@ void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
            }
             display(array);
          }
-
-      //  display(array);
     }
 }
-
-
+/*
 void tempSetup (char array [SIZE][SIZE], int dsk)
 {
-
     int vertical, horizontal;
-
     std::cout << "Enter coordinates ";
     std::cin >> vertical >> horizontal;
-
     int i = vertical + DELTA;
     int j = horizontal + DELTA;
-
     for (; i < (vertical + DELTA + dsk); i++) {
         array[i][j] = 'O';
     }
-
 }
+*/
 
 void drawEmpty ()
 {
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < SIZE*2; i++)
     {
         std::cout << std::endl;
     }
 }
 
-
-void shoot (char arr1 [SIZE][SIZE], char arr2 [SIZE][SIZE])
+bool shoot (char arr1 [SIZE][SIZE], char arr2 [SIZE][SIZE])
 {
     int ver, hor;
-
     std::cin >> ver >> hor;
-
     ver += DELTA;
     hor += DELTA;
     if (arr1 [ver][hor] == 'O')
     {
         arr2 [ver][hor] = 'X';
-        display(arr2);
-        std::cout << "Popal";
+        std::cout << "GOAL!!!";
+        return true;
     }
     else
     {
         arr2 [ver][hor] = '*';
-        display(arr2);
-        std::cout << "Mimo";
+        std::cout << "MISSED\n";
+        return false;
     }
-
-
-
 }
-
-
-
-
-
-
-
-
 
 int main()
 {
     const int MAXDESK = 4;
+
+
     char field1 [SIZE][SIZE];
     char field2 [SIZE][SIZE];
     char field2For1 [SIZE][SIZE];
     char field1For2 [SIZE][SIZE];
+
+    int countAllDesk1 = 20;
+    int countAllDesk2 = 20;
 
     setupSea (field1);
     setupSea (field2);
@@ -229,80 +215,55 @@ int main()
 
     display (field1);
     std::cout << "Player 1, set your ships\n ";
-    tempSetup (field1, MAXDESK);
+
+    for (int desk = 1, countShip = 4; desk <= MAXDESK; desk++)
+    {
+        setupShip(field1, desk, countShip);
+        countShip--;
+    }
+
+        //tempSetup (field1, MAXDESK);
     display (field1);
     std::cout << "Player 1, all your ships have been set\n ";
-    system("pause");
     drawEmpty();
 
     display (field2);
     std::cout << "Player 2, set your ships\n ";
+
+
+
+    ///ОСТАНОВИЛСЯ ЗДЕСЬ
+
+
+
     tempSetup (field2, MAXDESK);
     display (field2);
     std::cout << "Player 2, all your ships have been set\n ";
-    system("pause");
     drawEmpty();
 
-
-//    int ver, hor;
-
-
-
-
-    std::cout << "Player 1, your turn\n ";
-    shoot (field2, field2For1);
-
-    std::cout << "Player 2, your turn\n ";
-    shoot (field1, field1For2);
-
-/*
-
-    std::cin >> ver >> hor;
-
-    ver += DELTA;
-    hor += DELTA;
-    if (field2 [ver][hor] == 'O')
+    while (countAllDesk1 > 0 &&  countAllDesk2 > 0)
     {
-        field2For1[ver][hor] = 'X';
-        display(field2For1);
-        std::cout << "Popal";
+        std::cout << "Player 1, your turn\n ";
+        if (shoot(field2, field2For1))
+            countAllDesk2--;
+
+        std::cout << "Player 1, see field of player 2\n ";
+        display (field2For1);
+        if (!countAllDesk2) break;
+
+        std::cout << "Player 2, your turn\n ";
+        if (shoot(field1, field1For2))
+            countAllDesk1--;
+
+        std::cout << "Player 2, see field of player 1\n ";
+        display (field1For2);
+        if (!countAllDesk1) break;
     }
+
+    if (countAllDesk2 == 0)
+        std::cout << "Player1 won!";
     else
-    {
-        std::cout << "Mimo";
-    }
-
-*/
-/*
-    std::cout << "Player 2, your turn\n ";
-    std::cin >> ver >> hor;
-
-    ver += DELTA;
-    hor += DELTA;
-    if (field1 [ver][hor] == 'O')
-    {
-        field1For2[ver][hor] = 'X';
-        display(field1For2);
-        std::cout << "Popal";
-    }
-    else
-    {
-        std::cout << "Mimo";
-    }
-
-  */
-
-
-
-
-
-
-
-
-
-
-
-
+        std::cout << "Player2 won!";
 
     return 0;
 }

@@ -1,12 +1,9 @@
 #include <iostream>
-#include <vector>
 
 const int SIZE = 12;
 const int DELTA = 2;
 const int SEA = 9;
-const int MAXCOUNTSHIP = 4;
-
-const int DIFF = 46;
+const int CHARDIFF = 46;
 
 void setupSea (char array [SIZE][SIZE])
 {
@@ -22,10 +19,10 @@ void setupSea (char array [SIZE][SIZE])
 
     for (int i = DELTA; i < SIZE; i++)
     {
-        array [i][0] = char(i + DIFF);
+        array [i][0] = char(i + CHARDIFF);
         for (int j = DELTA; j < SIZE; j++)
         {
-            array [0][j] = char(j + DIFF);
+            array [0][j] = char(j + CHARDIFF);
             array[i][j] = '~';
         }
     }
@@ -62,8 +59,6 @@ bool checkCorrectInput (int v, int h, int dsk, char pos)
         return true;
 }
 
-
-//СЮДА МОЖНО ПЕРЕДАТЬ ГЛОБАЛЬНУЮ ПЕРЕМЕННУЮ MAXCOUNTSHIP вмместо cntShp
 void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
 {
     for (int n = 1; n <= cntShp; n++)
@@ -93,8 +88,10 @@ void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
         while (!correctCoordinates)
         {
             std::cout << "Enter coordinates of ";
-            std::cout << n << " " << dsk << "-desk ship from 0 to 9 =>";
+            std::cout << n << " " << dsk << "-desk ship from 0 to 9:\n";
+            std::cout << "Vertical =>";
             std::cin >> vertical;
+            std::cout << "Horizontal =>";
             std::cin >> horizontal;
             correctCoordinates = checkCorrectInput (vertical, horizontal, dsk, position);
 
@@ -114,6 +111,7 @@ void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
                         if (array[i][j] == 'O')
                         {
                             std::cout << "BUSY!!!\n";
+                            std::cout << "Try again\n";
                             correctCoordinates = false;
                             break;
                         }
@@ -134,6 +132,7 @@ void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
                         if (array[i][j] == 'O')
                         {
                             std::cout << "BUSY!!!\n";
+                            std::cout << "Try again\n";
                             correctCoordinates = false;
                             break;
                         }
@@ -153,19 +152,6 @@ void setupShip (char array [SIZE][SIZE], int dsk, int cntShp)
          }
     }
 }
-/*
-void tempSetup (char array [SIZE][SIZE], int dsk)
-{
-    int vertical, horizontal;
-    std::cout << "Enter coordinates ";
-    std::cin >> vertical >> horizontal;
-    int i = vertical + DELTA;
-    int j = horizontal + DELTA;
-    for (; i < (vertical + DELTA + dsk); i++) {
-        array[i][j] = 'O';
-    }
-}
-*/
 
 void drawEmpty ()
 {
@@ -175,30 +161,47 @@ void drawEmpty ()
     }
 }
 
-bool shoot (char arr1 [SIZE][SIZE], char arr2 [SIZE][SIZE])
-{
+bool shoot (char arr1 [SIZE][SIZE], char arr2 [SIZE][SIZE]) {
     int ver, hor;
-    std::cin >> ver >> hor;
-    ver += DELTA;
-    hor += DELTA;
-    if (arr1 [ver][hor] == 'O')
+    bool correctCoord = false;
+
+    while (!correctCoord)
     {
-        arr2 [ver][hor] = 'X';
-        std::cout << "GOAL!!!";
-        return true;
-    }
-    else
-    {
-        arr2 [ver][hor] = '*';
-        std::cout << "MISSED\n";
-        return false;
+        std::cout << "Enter coordinates for shooting:";
+        std::cout << "Vertical =>";
+        std::cin >> ver;
+        ver += DELTA;
+        std::cout << "Horizontal =>";
+        std::cin >> hor;
+        hor += DELTA;
+        correctCoord = (ver > 0 && hor > 0 && ver < SEA && hor < SEA);
+       if (!correctCoord)
+        {
+            std::cout << "Coordinates incorrect\n";
+            std::cout << "Please try again\n";
+        }
+        else
+        {
+            if (arr1[ver][hor] == 'O')
+            {
+                arr2[ver][hor] = 'X';
+                std::cout << "GOAL!!!\n";
+                return true;
+            }
+            else
+            {
+                arr2[ver][hor] = '*';
+                std::cout << "MISSED\n";
+                return false;
+            }
+        }
     }
 }
 
 int main()
 {
     const int MAXDESK = 4;
-
+    const int MAXCOUNTSHIP = 4;
 
     char field1 [SIZE][SIZE];
     char field2 [SIZE][SIZE];
@@ -215,33 +218,34 @@ int main()
 
     display (field1);
     std::cout << "Player 1, set your ships\n ";
-
-    for (int desk = 1, countShip = 4; desk <= MAXDESK; desk++)
+    for (int desk = 1, countShip = MAXCOUNTSHIP; desk <= MAXDESK; desk++)
     {
         setupShip(field1, desk, countShip);
         countShip--;
     }
+     std::cout << "Player 1, all your ships have been set\n ";
 
-        //tempSetup (field1, MAXDESK);
-    display (field1);
-    std::cout << "Player 1, all your ships have been set\n ";
-    drawEmpty();
+    char delay = false;
+    std::cout << "Press any one symbol\n ";
+    while (!delay)
+    {
+        std::cin >> delay;
+        if (delay)
+            drawEmpty();
+        else std::cout << "Try again\n ";
 
+    }
     display (field2);
     std::cout << "Player 2, set your ships\n ";
-
-
-
-    ///ОСТАНОВИЛСЯ ЗДЕСЬ
-
-
-
-    tempSetup (field2, MAXDESK);
-    display (field2);
+    for (int desk = 1, countShip = MAXCOUNTSHIP; desk <= MAXDESK; desk++)
+    {
+        setupShip(field2, desk, countShip);
+        countShip--;
+    }
     std::cout << "Player 2, all your ships have been set\n ";
     drawEmpty();
 
-    while (countAllDesk1 > 0 &&  countAllDesk2 > 0)
+    while (countAllDesk1 > 0 && countAllDesk2 > 0)
     {
         std::cout << "Player 1, your turn\n ";
         if (shoot(field2, field2For1))

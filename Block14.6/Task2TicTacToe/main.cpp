@@ -20,13 +20,13 @@ char checkWin (char vec [SIZE][SIZE])
     {
         int k = 0;
         int n = 0;
-        if (vec[i][k] == vec[i][++k] && vec[i][k] == vec[i][++k] && vec[i][k] != ' ')
+        if (vec[i][k] == vec[i][k + 1] && vec[i][k + 1] == vec[i][k + 2] && vec[i][k] != ' ')
         {
             winner = vec[i][k];
             return winner;
         }
 
-        else if  (vec [n][i] == vec [++n][i] && vec [n][i] == vec [++n][i] && vec [n][i] != ' ')
+        else if  (vec [n][i] == vec [n + 1][i] && vec [n][i] == vec [n + 2][i] && vec [n][i] != ' ')
         {
             winner = vec [n][i];
             return winner;

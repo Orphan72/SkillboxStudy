@@ -13,6 +13,28 @@ void displayField (char vec [SIZE][SIZE])
     }
 }
 
+void turn (char player, char arrow [SIZE][SIZE])
+{
+    int row = 0;
+    int col = 0;
+    bool correct = false;
+    while (!correct) {
+        std::cout << "Player " << player  << ", your turn. Input row\n=>";
+        std::cin >> row;
+        std::cout << "Input column\n=>";
+        std::cin >> col;
+        correct = (row > 0 && row <= SIZE) && (col > 0 && col <= SIZE);
+        if (!correct) {
+            std::cout << "incorrect input. Please, try again\n";
+        } else if (arrow[row - 1][col - 1] != ' ') {
+            std::cout << "This cell is busy. Please, try again\n";
+            correct = false;
+        }
+    }
+    arrow [row - 1][col - 1] = player;
+    displayField(arrow);
+}
+
 char checkWin (char vec [SIZE][SIZE])
 {
     char winner = 'N';
@@ -38,10 +60,8 @@ char checkWin (char vec [SIZE][SIZE])
 int main()
 {
    char field [SIZE][SIZE];
-   int row = 0;
-   int col = 0;
    int turnCounter = 0;
-   char win = 'N';
+   char win = ' ';
 
    for (int i = 0; i < SIZE; i++)
    {
@@ -54,47 +74,14 @@ int main()
 
    while (true)
    {
-       bool correct = false;
-       while (!correct)
-       {
-           std::cout << "Player X, your turn. Input row\n=>";
-           std::cin >> row;
-           std::cout << "Input column\n=>";
-           std::cin >> col;
-           correct = (row > 0 && row <= SIZE) && (col > 0 && col <= SIZE);
-           if (!correct)
-           {
-               std::cout << "incorrect input. Please, try again\n";
-           }
-           else if (field[row - 1][col - 1] != ' ')
-           {
-               std::cout << "This cell is busy. Please, try again\n";
-               correct = false;
-           }
-       }
-
-       field[row - 1][col - 1] = 'X';
-       displayField (field);
+       turn ('X', field);
        win = checkWin(field);
        turnCounter++;
+
        if (win == 'X' || turnCounter == SIZE*SIZE) break;
-       else {
-           correct = false;
-           while (!correct) {
-               std::cout << "Player O, your turn. Input row\n=>";
-               std::cin >> row;
-               std::cout << "Input column\n=>";
-               std::cin >> col;
-               correct = (row > 0 && row <= SIZE) && (col > 0 && col <= SIZE);
-               if (!correct) {
-                   std::cout << "incorrect input. Please, try again\n";
-               } else if (field[row - 1][col - 1] != ' ') {
-                   std::cout << "This cell is busy. Please, try again\n";
-                   correct = false;
-               }
-           }
-           field[row - 1][col - 1] = 'O';
-           displayField(field);
+       else
+       {
+           turn('O', field);
            win = checkWin(field);
            turnCounter++;
            if (win == 'O')
@@ -108,4 +95,3 @@ int main()
        std::cout << "Player " << win << " won!\n";
    return 0;
 }
-

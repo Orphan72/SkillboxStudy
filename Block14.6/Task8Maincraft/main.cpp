@@ -2,7 +2,8 @@
 #include <vector>
 
 const int SIZE = 3;
-void displayAll (std::vector <bool> vec [SIZE][SIZE])
+
+void displayAll (std::vector <std::vector <std::vector <bool>>> vec)
 {
     for (int i = 0; i < SIZE; i++)
     {
@@ -19,7 +20,7 @@ void displayAll (std::vector <bool> vec [SIZE][SIZE])
     std::cout << std::endl;
 }
 
-void displaySlice (std::vector <bool> vec [SIZE][SIZE], int k)
+void displaySlice (std::vector <std::vector <std::vector <bool>>> vec, int k)
 {
     for (int i = 0; i < SIZE; i++)
     {
@@ -33,10 +34,11 @@ void displaySlice (std::vector <bool> vec [SIZE][SIZE], int k)
 
 int main()
 {
-    std::vector <bool> sector [SIZE][SIZE];
-    const int maxHight = 10;
+
     int hightPillar    = 0;
     int hightSlice     = 0;
+    const int maxHight = 10;
+    std::vector <std::vector <std::vector <bool>>> sector (SIZE, std::vector<std::vector<bool>>(SIZE, std::vector <bool>(0)));
 
     for (int i = 0, l = 0; i < SIZE; i++)
     {

@@ -7,7 +7,8 @@ std::vector <int> sort (std::vector <int> vec)
     {
         for (int j = 0; j < vec.size() - 1; j++)
         {
-            if (vec[j] > vec[j + 1]) {
+            if (vec[j] > vec[j + 1])
+            {
                 vec[j] = vec[j] + vec[j + 1];
                 vec[j + 1] = vec[j] - vec[j + 1];
                 vec[j] = vec[j] - vec[j + 1];
@@ -32,7 +33,8 @@ int main()
          {
              vect.pop_back();
              vect = sort(vect);
-             if (vect.size() < INDEX) {
+             if (vect.size() < INDEX)
+             {
                  std::cout << INDEX  << " member doesn't exist " << std::endl;
              }
              else

@@ -14,19 +14,14 @@ std::vector <int> sort (std::vector <int> vec)
             }
         }
     }
-
     return vec;
 }
 
 int main()
 {
+    const int INDEX = 5;
     std::vector <int> vect;
-
-
     int number = 0;
-
- //while (true)
- //{
 
      while (number != -2)
      {
@@ -37,50 +32,17 @@ int main()
          {
              vect.pop_back();
              vect = sort(vect);
-             for (int i = 0; i < vect.size(); i++)
+             if (vect.size() < INDEX) {
+                 std::cout << INDEX  << " member doesn't exist " << std::endl;
+             }
+             else
              {
-                 std::cout << vect[i] << " ";
+                 std::cout << INDEX  << " member is " << vect[INDEX - 1] << std::endl;
              }
          }
          else if (number == -2)
-             std::cout << "Bay " << std::endl;
-
-
+             std::cout << "Bye " << std::endl;
      }
-
-     //std::cout << "Bay " << std::endl;
-       //  break;
-
- //}
-
-
     std::cout << std::endl;
-
-    //std::cout << "Hello, World!" << std::endl;
     return 0;
 }
-
-
-
-
-
-/*
-
-С клавиатуры вводятся числа. Когда пользователь вводит -1 --
-необходимо выводить на экран пятое по возрастанию число среди введённых.
-Когда пользователь вводит -2 -- программа завершает работу.
-
-Пример:
-
-ввод: 7 5 3 1 2 4 6 -1
-
-вывод: 5 (в отсортированном виде массив выглядит так: {1,2,3,4,5,6,7})
-
-ввод: 1 1 1 -1
-
-вывод: 2 (в отсортированном виде массив выглядит так: {1,1,1,1,2,3,4,5,6,7})
-
-ввод -2
-
-завершение программы
-*/

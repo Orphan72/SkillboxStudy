@@ -20,7 +20,7 @@ int main()
                         vect [j + 1] = temp;
                     }
                 }
-                else if (vect [j + 1] >= 0)
+                else
                 {
                     //case 2
                     if (-vect [j] > vect [j + 1])
@@ -32,7 +32,7 @@ int main()
                 }
             }
 
-            else if (vect [j] >= 0)
+            else
             {
                 if (vect [j + 1] < 0)
                 {
@@ -44,7 +44,7 @@ int main()
                         vect [j + 1] = temp;
                     }
                 }
-                else if (vect [j + 1] >= 0)
+                else
                 {
                     //case 4
                     if (vect [j] > vect [j + 1])

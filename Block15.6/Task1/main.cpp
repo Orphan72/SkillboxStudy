@@ -3,13 +3,14 @@
 
 int main()
 {
-   //std::vector <int> vec = {-2,1,-3,4,-1,2,1,-5,4};
-    std::vector <int> vec = {2,4,9,-8,10};
+   std::vector <int> vec = {-2,1,-3,4,-1,2,1,-5,4};
+   // std::vector <int> vec = {0, 0, 10, -1};
    int size = vec.size();
    int maxsum = 0;
    int maxstart = 0;
    int maxend = 0;
    int sum = 0;
+   int minpos = -1;
 
 
     for (int i = 0; i < size; i++)
@@ -19,12 +20,13 @@ int main()
         {
             maxsum = sum;
             maxend = i;
+            maxstart = minpos + 1;
         }
 
-        if (vec [i] > maxsum)
+        if (sum < 0)
         {
-            maxsum = sum = vec [i];
-            maxstart = maxend = i;
+            sum = 0;
+            minpos = i;
         }
     }
 

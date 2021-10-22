@@ -1,37 +1,41 @@
 #include <iostream>
+#include <iomanip>
 #include <sstream>
+
+bool compare (double value, double reference, double epsilon)
+{
+    return (value >= reference - epsilon) && (value <= reference + epsilon);
+}
 
 int main()
 {
-
     std::stringstream text;
     double const EPSILON = 0.01;
-    const int MIN = 0;
-    const int MAX = 0;
-
+    const int MAXSPEED = 150;
     double speed  = 0.0;
     double raise  = 0.0;
-    double result = 0.0;
 
+    std::cout << "Go!\n";
+    do
+    {
+       std::cout << "\nEnter delta \n=>";
+        std::cin >> raise;
+        speed = speed + raise;
+        if (speed < 0 - EPSILON || speed > MAXSPEED + EPSILON)
+        {
+            std::cout << "speed value is not correct" << std::endl;
+            speed = speed - raise;
+            std::cout << "try again" << std::endl;
+        }
+        else
+        {
+            std::cout << "Speed is " << speed << " km/h" << std::endl;
+            text << "\nSpeed is " << std::fixed << std::setprecision(1) << speed << " km/h";
+        }
 
+    } while (!compare(speed, 0, EPSILON));
 
-
+    std::cout << text.str();
 
     return 0;
 }
-
-
-
-
-/*
-
-
-Надо реализовать цифровой спидометр автомобиля. Сама модель автомобиля, которую нужно будет воссоздать весьма проста.
-Начальная скорость - 0 км/ч. Пользователь вводит в стандартный ввод разницу (дельту)
-в скорости и результирующая скорость показывается на спидометре в стандартный вывод.
-Так происходит до той поры, пока машина снова не остановится, т.е. пока скорость не станет меньше или равна нулю
-(сравнение должно происходить с дельтой в 0.01).
-Диапазон возможных значений скорости машины от 0 до 150 км/ч.
-Сам показатель спидометра, вместе с единицами измерения, требуется записывать в отдельную строку-буфер,
-которая потом и будет показываться на экране. Точность отображения скорость до 0.1 км/ч.
-*/

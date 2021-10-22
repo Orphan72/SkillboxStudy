@@ -20,11 +20,19 @@ int main()
     {
        std::cout << "\nEnter delta \n=>";
         std::cin >> raise;
-        speed = speed + raise;
-        if (speed < 0 - EPSILON || speed > MAXSPEED + EPSILON)
+        speed += raise;
+        if (speed < 0 - EPSILON)
         {
-            std::cout << "speed value is not correct" << std::endl;
-            speed = speed - raise;
+            std::cout << "Speed result is less than 0" << std::endl;
+            speed -= raise;
+            std::cout << "Speed delta should be not less, than " << -speed << std::endl;
+            std::cout << "try again" << std::endl;
+        }
+        else if (speed > MAXSPEED + EPSILON)
+        {
+            std::cout << "Speed result is more than " << MAXSPEED << std::endl;
+            speed -= raise;
+            std::cout << "Speed delta should be not more, than " << MAXSPEED - speed << std::endl;
             std::cout << "try again" << std::endl;
         }
         else

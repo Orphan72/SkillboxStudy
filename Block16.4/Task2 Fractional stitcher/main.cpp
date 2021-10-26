@@ -31,9 +31,7 @@ int main()
     double result = 0.0;
     if (integer < 0)
     {
-        integer = -integer;
-        result = integer + frac;
-        result = -result;
+        result = (integer - frac);
     }
     else
         result = integer + frac;

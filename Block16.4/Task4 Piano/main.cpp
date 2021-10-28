@@ -6,7 +6,7 @@ int main()
    {
        DO = 1,
        RE = 2,
-       MI = 3,
+       MI = 4,
        FA = 8,
        SOL = 16,
        LA = 32,
@@ -14,21 +14,23 @@ int main()
    };
 
    int num = 5;
+
+   int note = 1 << num;
+   std::cout << "note " << note << std::endl;
+
    //std::cout <<
 
    int state = 0;
    state |= DO;
    state |= MI;
-   std::cout << "state1 " << state << std::endl;
-   std::cout << "DO " << DO << std::endl;
-   std::cout << "state2 " << state << std::endl;
-   std::cout << "DO " << DO << std::endl;
+   state |= note;
+
+
+
+
+   if (state & DO) std::cout << "DO" << std::endl;
    if (state & RE) std::cout << "RE" << std::endl;
-   std::cout << "state3 " << state << std::endl;
-
-
    if (state & MI) std::cout << "MI" << std::endl;
-    std::cout << "state4 " << state << std::endl;
    if (state & FA) std::cout << "FA" << std::endl;
    if (state & SOL) std::cout << "SOL" << std::endl;
    if (state & LA) std::cout << "LA" << std::endl;

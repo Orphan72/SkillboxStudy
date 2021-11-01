@@ -1,43 +1,82 @@
 #include <iostream>
+#include <string>
+#include <iomanip>
 
 int main()
 {
-   enum notes
-   {
-       DO = 1,
-       RE = 2,
-       MI = 4,
-       FA = 8,
-       SOL = 16,
-       LA = 32,
-       TI = 64
-   };
+    enum notes
+    {
+        DO = 1,
+        RE = 2,
+        MI = 4,
+        FA = 8,
+        SOL = 16,
+        LA = 32,
+        TI = 64
+    };
 
-   int num = 5;
+    const int DIFFASCII = 48;
+    std::stringstream text;
+    bool fl = true;
 
-   int note = 1 << num;
-   std::cout << "note " << note << std::endl;
+    for (int i = 0; (i < 3 & fl == true); i++)
+    {
+        std::cout << "Enter " << i << " code\n=>";
 
-   //std::cout <<
+        std::string str = " ";
+        int length = 0;
 
-   int state = 0;
-   state |= DO;
-   state |= MI;
-   state |= note;
+        std::cin >> str;
+        length = str.length();
+        int arr[length];
+
+        int note = 0;
+
+        int state = 0;
+        for (int j = 0; j < length; j++)
+        {
+            arr[j] = str[j] - DIFFASCII - 1;
+            if (arr[j] < 7)
+            {
+                note = 1 << arr[j];
+                state |= note;
+
+                if (state & DO) text << "DO ";
+                if (state & RE) text << "RE ";
+                if (state & MI) text << "MI ";
+                if (state & FA) text << "FA ";
+                if (state & SOL) text << "SOL ";
+                if (state & LA) text << "LA ";
+                if (state & TI) text << "TI ";
+
+
+            }
+            else
+            {
+
+                std::cout << "Fall\n";
+                fl = false;
+                break;
+
+
+
+            }
+
+
+
+        }
+
+       // if (state & DO)
+         //   text << "DO ";
 
 
 
 
-   if (state & DO) std::cout << "DO" << std::endl;
-   if (state & RE) std::cout << "RE" << std::endl;
-   if (state & MI) std::cout << "MI" << std::endl;
-   if (state & FA) std::cout << "FA" << std::endl;
-   if (state & SOL) std::cout << "SOL" << std::endl;
-   if (state & LA) std::cout << "LA" << std::endl;
-   if (state & TI) std::cout << "TI" << std::endl;
+        text << " ";
 
+    }
 
+    std::cout << text.str();
 
-    std::cout << "Hello, World!" << std::endl;
     return 0;
 }

@@ -1,9 +1,14 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <vector>
 
 int main()
 {
+    const int DIFFASCII = 48;
+    const int REPET = 4;
+    const int NOT = 7;
+
     enum notes
     {
         DO = 1,
@@ -15,68 +20,57 @@ int main()
         TI = 64
     };
 
-    const int DIFFASCII = 48;
     std::stringstream text;
-    bool fl = true;
 
-    for (int i = 0; (i < 3 & fl == true); i++)
+    for (int i = 1; (i < REPET); )
     {
-        std::cout << "Enter " << i << " code\n=>";
-
-        std::string str = " ";
-        int length = 0;
-
-        std::cin >> str;
-        length = str.length();
-        int arr[length];
-
+       std::string str = " ";
         int note = 0;
-
         int state = 0;
+        int length = 0;
+        bool correctStr = false;
+        std::vector<int> intVec (10);
+        while (!correctStr)
+        {
+            std::cout << "Enter " << i << " code\n=>";
+            std::cin >> str;
+            length = str.length();
+            int incorrect = 0;
+            for (int k = 0; k < length; k++)
+            {
+                intVec [k]  = (str[k] - DIFFASCII);
+                if (intVec[k] > NOT)
+                {
+                    incorrect++;
+                }
+            }
+            correctStr = (incorrect == 0);
+
+            if (!correctStr)
+            {
+                std::cout << "Incorrect number of note\n";
+                std::cout << "Please, try again\n";
+            }
+         }
+
+        i++;
+
         for (int j = 0; j < length; j++)
         {
-            arr[j] = str[j] - DIFFASCII - 1;
-            if (arr[j] < 7)
-            {
-                note = 1 << arr[j];
-                state |= note;
-
-                if (state & DO) text << "DO ";
-                if (state & RE) text << "RE ";
-                if (state & MI) text << "MI ";
-                if (state & FA) text << "FA ";
-                if (state & SOL) text << "SOL ";
-                if (state & LA) text << "LA ";
-                if (state & TI) text << "TI ";
-
-
-            }
-            else
-            {
-
-                std::cout << "Fall\n";
-                fl = false;
-                break;
-
-
-
-            }
-
-
-
+            intVec [j] = str[j] - DIFFASCII - 1;
+            note = 1 << intVec[j];
+            state |= note;
+            if (state & DO) text << "DO ";
+            if (state & RE) text << "RE ";
+            if (state & MI) text << "MI ";
+            if (state & FA) text << "FA ";
+            if (state & SOL) text << "SOL ";
+            if (state & LA) text << "LA ";
+            if (state & TI) text << "TI ";
         }
-
-       // if (state & DO)
-         //   text << "DO ";
-
-
-
-
         text << " ";
-
     }
 
     std::cout << text.str();
-
     return 0;
 }

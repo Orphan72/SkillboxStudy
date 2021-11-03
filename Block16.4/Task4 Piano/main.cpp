@@ -6,7 +6,7 @@
 int main()
 {
     const int DIFFASCII = 48;
-    const int REPET = 4;
+    const int REPET = 12;
     const int NOT = 7;
     enum notes
     {
@@ -23,7 +23,7 @@ int main()
     std::string str = " ";
     int length = 0;
 
-    for (int i = 1; (i < REPET); )
+    for (int i = 1; (i <= REPET); )
     {
         bool correctStr = false;
         std::vector<int> intVec;

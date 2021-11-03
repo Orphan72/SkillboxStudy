@@ -8,7 +8,6 @@ int main()
     const int DIFFASCII = 48;
     const int REPET = 4;
     const int NOT = 7;
-
     enum notes
     {
         DO = 1,
@@ -21,20 +20,19 @@ int main()
     };
 
     std::stringstream text;
+    std::string str = " ";
+    int length = 0;
 
     for (int i = 1; (i < REPET); )
     {
-       std::string str = " ";
-        int note = 0;
-        int state = 0;
-        int length = 0;
         bool correctStr = false;
-        std::vector<int> intVec (10);
+        std::vector<int> intVec;
         while (!correctStr)
         {
             std::cout << "Enter " << i << " code\n=>";
             std::cin >> str;
             length = str.length();
+            intVec.resize(length);
             int incorrect = 0;
             for (int k = 0; k < length; k++)
             {
@@ -57,18 +55,21 @@ int main()
 
         for (int j = 0; j < length; j++)
         {
+            int state = 0;
+
             intVec [j] = str[j] - DIFFASCII - 1;
-            note = 1 << intVec[j];
+            int note = 1 << intVec[j];
             state |= note;
-            if (state & DO) text << "DO ";
-            if (state & RE) text << "RE ";
-            if (state & MI) text << "MI ";
-            if (state & FA) text << "FA ";
-            if (state & SOL) text << "SOL ";
-            if (state & LA) text << "LA ";
-            if (state & TI) text << "TI ";
+            if (state & DO) text << "DO";
+            if (state & RE) text << "RE";
+            if (state & MI) text << "MI";
+            if (state & FA) text << "FA";
+            if (state & SOL) text << "SOL";
+            if (state & LA) text << "LA";
+            if (state & TI) text << "TI";
+            text << " ";
         }
-        text << " ";
+        text << "\n";
     }
 
     std::cout << text.str();

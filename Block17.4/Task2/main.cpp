@@ -7,7 +7,7 @@ void reverse (int* arr)
     for (int i = 0; i < SIZE / 2; i++)
     {
         *(arr + i) += *(arr + SIZE - 1 - i);
-        *(arr+ 9 - i) = *(arr + i) - *(arr + SIZE - 1 - i);
+        *(arr+ SIZE - 1 - i) = *(arr + i) - *(arr + SIZE - 1 - i);
         *(arr + i) -= *(arr + SIZE - 1 - i);
     }
 }

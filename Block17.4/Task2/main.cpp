@@ -12,28 +12,27 @@ void reverse (int* arr)
     }
 }
 
+void show (int* arr)
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        std::cout << *(arr + i) << " ";
+    }
+    std::cout << std::endl;
+}
+
+
 int main()
 {
     int mas [] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::cout << mas << std::endl;
-
+   
     std::cout << "Origin array:\n";
-
-    for (int i = 0; i < 10; i++) {
-        std::cout << *(mas + i) << " ";
-    }
-    std::cout << std::endl;
+    show(mas);
 
     reverse(mas);
 
     std::cout << "Reversed array:\n";
-
-    for (int i = 0; i < 10; i++) {
-        std::cout << *(mas + i) << " ";
-    }
-
-    std::cout << std::endl;
+    show(mas);
 
     return 0;
-
 }

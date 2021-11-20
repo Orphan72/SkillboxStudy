@@ -25,6 +25,7 @@ const int DAYHOURS = 24;
 const int MORNING = 5;
 const int EVENING = 16;
 const int NIGHT = 20;
+const int DIFF = NIGHT - EVENING + 1;
 
 const int WIN_TEMP = 0;
 const int SUM_TEMP = 5;
@@ -49,11 +50,10 @@ int main()
 
     sunlight outside_light;
 
-    int diff = NIGHT - EVENING;
-    int color_temp [diff];
-    int step_color = (COLOR_TEMP_MAX - COLOR_TEMP_MIN) / diff;
+    int color_temp [DIFF];
+    int step_color = (COLOR_TEMP_MAX - COLOR_TEMP_MIN) / (DIFF - 1);
 
-    for (int k = 0; k <= diff; k++)
+    for (int k = 0; k < DIFF; k++)
     {
         color_temp [k] = COLOR_TEMP_MAX - step_color*k;
     }
@@ -74,6 +74,7 @@ int main()
             std::cout << "move outside status (Y/N),\nlight inside status (On/Off)\n=>";
 
             getline(std::cin, input_str);
+
             text << input_str;
             text >> outTemp >> inTemp >> str_move_sensor >> str_inside_illum;
 
@@ -149,7 +150,7 @@ int main()
             std::cout << ((state & AIRCONDITION) ? "AIRCONDITION is ON " : "AIRCONDITION is OFF ") << std::endl;
             std::cout << ((state & OUTSIDE_LIGHT) ? "OUTSIDE ILLUMINATIONT is ON " : "OUTSIDE LIGHT is OFF ") << std::endl;
             std::cout << "INSIDE ILLUMINATION LEVEL is " << level_illum << std::endl;
-           }
+        }
     }
 
     return 0;

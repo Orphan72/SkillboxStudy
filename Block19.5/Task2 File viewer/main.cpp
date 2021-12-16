@@ -6,27 +6,25 @@ const int SIZE = 20;
 
 int main()
 {
-    std::ifstream words;
+    std::ifstream poem;
 
     char buffer [SIZE];
 
-    words.open ("..\\data\\words.txt", std::ios::binary);
+    poem.open ("..\\data\\poem.txt");
 
-    if (words.is_open())
+    if (poem.is_open())
     {
         std::cout << "=The file is opened=\n";
 
-        while (!words.eof())
+        while (!poem.eof())
         {
-            words.read(buffer, sizeof(buffer)-1);
+            poem.read(buffer, sizeof(buffer)-1);
 
-            if (words.gcount() < SIZE -1 )
+            if (poem.gcount() < SIZE -1 )
             {
-                int count = words.gcount();
-                for (int i = 0; i < count; i++)
-                    std::cout << buffer [i];
+                int count = poem.gcount();
+                buffer [count] = 0;
             }
-            else
                 std::cout << buffer;
         }
     }
@@ -34,4 +32,6 @@ int main()
     {
         std::cout << "The file was not opened!!!\n";
     }
+
+    poem.close();
 }

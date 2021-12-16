@@ -19,12 +19,16 @@ int main()
 {
     std::string path;
     path = "..\\data\\Challenge.png";
+    //path = "..\\data\\BD.png";
+    //path = "..\\data\\skill.png";
+    //path = "..\\data\\test.png";
     char buffer [10];
     std::ifstream detector;
 
-    detector.open(path);
+    detector.open(path, std::ios::binary);
 
-    if (detector.is_open(), std::ios::binary)
+   // double value;
+    if (detector.is_open())
     {
         bool correctExtension = checkPngExtension(path);
         if (!correctExtension)
@@ -33,9 +37,14 @@ int main()
         }
         else
         {
+          //  detector.read((char*)&value, 10);
             detector.read(buffer, sizeof(buffer));
 
+            //std::cout << "value  " << value;
             std::cout << "buffer  " << buffer;
+            std::cout << "buffer [2]  " << (int)buffer [0];
+
+
             std::cout << "Yes";
 
         }

@@ -42,6 +42,7 @@ int main()
     std::cout << maxName << " " << maxSurname << " has it" << std::endl;
     std::cout << "Sum salary is " << sumSalary << std::endl;
 
+    bill.close();
     return 0;
 
 }

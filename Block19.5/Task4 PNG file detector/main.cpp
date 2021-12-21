@@ -1,71 +1,66 @@
 #include <iostream>
 #include <fstream>
 
-bool checkPngExtension (std::string str)
+bool checkPath (const std::string pth)
 {
-    const int LENGHTPNG = 4;
-    std::string ext = ".png";
-    int leghtPath = str.length();
+    const std::string ext = ".png";
+    std::string pthExt = pth.substr (pth.length() - ext.length(),pth.length());
 
-    for (int i = leghtPath - LENGHTPNG, j = 0; i < leghtPath; i++, j++)
-    {
-        if (str [i] != ext [j])
-           return false;
-    }
-    return true;
+    return (ext == pthExt);
+}
+
+bool checkContent (char* buf)
+{
+    std::string ext = "PNG";
+    const int num = -119;
+
+    std::string strBuf = buf;
+    std::string contExt = strBuf.substr (1,ext.length());
+    std::cout << "buffer  " << contExt << std::endl;
+
+    int contNum = (int)buf [0];
+    std::cout << "num " << contNum << std::endl;
+    return ((ext == contExt) && (num == contNum));
 }
 
 int main()
 {
     std::string path;
-    path = "..\\data\\Challenge.png";
-    //path = "..\\data\\BD.png";
-    //path = "..\\data\\skill.png";
-    //path = "..\\data\\test.png";
     char buffer [10];
     std::ifstream detector;
 
-    detector.open(path, std::ios::binary);
+    bool correctPath = false;
 
-   // double value;
-    if (detector.is_open())
+    while (!correctPath)
     {
-        bool correctExtension = checkPngExtension(path);
-        if (!correctExtension)
+        std::cout << "Please, enter the path\n=>";
+        std::cin >> path;
+        //path = "..\\data\\picture.png";
+        //path = "..\\data\\text.png";
+        //path = "..\\data\\text.txt";
+
+        detector.open(path, std::ios::binary);
+
+        if (detector.is_open())
         {
-            std::cout << "No";
+            correctPath = true;
         }
         else
         {
-          //  detector.read((char*)&value, 10);
-            detector.read(buffer, sizeof(buffer));
-
-            //std::cout << "value  " << value;
-            std::cout << "buffer  " << buffer;
-            std::cout << "buffer [2]  " << (int)buffer [0];
-
-
-            std::cout << "Yes";
-
+            std::cout << "The file was not opened!!!\n";
+            std::cout << "Try again\n";
         }
-
     }
-    else
+
+    bool isPng = false;
+
+    if (checkPath(path))
     {
-        std::cout << "The file was not opened!!!\n";
+        detector.read(buffer, sizeof(buffer));
+        isPng = checkContent(buffer);
     }
 
-
-
-
-
-
-
-
-
-
-
-
+    std::cout << (isPng ? "Yes" : "No");
 
     return 0;
 }

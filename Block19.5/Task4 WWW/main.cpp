@@ -1,18 +1,129 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
+
+int const NUM = 13;
+int const SIZE = 20;
+
+enum qustAnsw
+{
+    QUES,
+    ANSW
+};
+
+
+void rotation (int &sec)
+{
+    int offset = 0;
+
+    std::cout << "Please, spint the dream" << std::endl;
+    std::cout << "Enter offset\n=>";
+    std::cin >> offset;
+    sec += offset;
+    while (sec > NUM) sec -= NUM;
+
+    std::cout << "Sector is  " << sec << std::endl;
+}
+
+void show (std::string pth, char* buffer, qustAnsw qa)
+{
+    std::fstream text;
+    text.open(pth);
+
+    if (!text.is_open())
+    {
+        std::cout << "The file was not opened!!!\n";
+    }
+    else
+    {
+        if (qa == QUES)
+        {
+            std::cout << "Attention! The question:\n";
+        }
+        else
+        {
+            std::cout << "The correct answer is - ";
+        }
+        std::cout << "===================\n";
+
+        while (!text.eof())
+        {
+            text.read(buffer, SIZE - 1);
+
+            if (text.gcount() < SIZE)
+            {
+                int count = text.gcount();
+                buffer[count] = 0;
+            }
+            std::cout << buffer;
+        }
+    }
+    std::cout << "\n===================\n";
+}
+
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
-
-    std::string pathAnsw = "..//data//answers";
-    std::string pathQues = "..//data//questions";
-    std::string path = " ";
+    std::string pathQuesBegin = "..//data//questions//Q";
+    std::string pathAnswBegin = "..//data//answers//A";
+    std::string pathEnd = ".txt";
+    std::string pathQues = " ";
+    std::string pathAnsw = " ";
     int sector = 0;
-    std::vector <std::string> questions = {"Q01","Q02","Q03","Q01","Q02","Q03","Q01","Q02","Q03","Q01","Q02","Q03"};
-    std::vector <std::string> answers = {"A01","A02","A03","A01","A02","A03","A01","A02","A03","A01","A02","A03"};
+    std::vector <std::string> sectChar = {"01","02","03","04","05","06","07","08","09","10","11","12","13"};
 
-    int const NUM = 13;
+
+
+    std::string answer = " ";
+    char question [SIZE];
+    char correctAnswer [SIZE];
+
+
+    rotation(sector);
+    std::cout << "Sector is  " << sector << std::endl;
+    //sectChar = (char) (sector + ASCIIOFFSET);
+    //std::cout << "sect  " << sectChar << std::endl;
+
+    pathQues = pathQuesBegin + sectChar [sector -1] + pathEnd;
+
+
+
+    std::cout << "Path is  " << pathQues << std::endl;
+
+
+
+        show (pathQues, question, QUES);
+        /*
+
+        while (!text.eof()) {
+            text.read(question, sizeof(question) -1);
+
+            if (text.gcount() < SIZE - 1)
+            {
+                int count = text.gcount();
+                question [count] = 0;
+            }
+            std::cout << question << std::endl;
+        }
+
+*/
+
+
+
+
+        std::cout << "Enter your answer:\n";
+
+        std::cin >> answer;
+
+        std::cout << "Answer " << answer << std::endl;
+
+    //}
+
+
+
+
+
+
 
     return 0;
 }

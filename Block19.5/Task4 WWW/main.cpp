@@ -21,18 +21,16 @@ void rotation (int &sec)
     std::cin >> offset;
     sec += offset;
     while (sec > NUM) sec -= NUM;
-
-    std::cout << "Sector is  " << sec << std::endl;
 }
 
-void show (std::string pth, char* buffer, qustAnsw qa)
+void show (std::string pth, char* buffer, qustAnsw qa, bool &isOpn)
 {
     std::fstream text;
     text.open(pth);
 
     if (!text.is_open())
     {
-        std::cout << "The file was not opened!!!\n";
+        isOpn = false;
     }
     else
     {
@@ -64,58 +62,42 @@ void show (std::string pth, char* buffer, qustAnsw qa)
 
 int main()
 {
+    std::vector <std::string> sectChar = {"051","02","03","04","05","06","07","08","09","10","11","12","13"};
     std::string pathQuesBegin = "..//data//questions//Q";
     std::string pathAnswBegin = "..//data//answers//A";
     std::string pathEnd = ".txt";
     std::string pathQues = " ";
     std::string pathAnsw = " ";
-    int sector = 0;
-    std::vector <std::string> sectChar = {"01","02","03","04","05","06","07","08","09","10","11","12","13"};
-
-
 
     std::string answer = " ";
     char question [SIZE];
     char correctAnswer [SIZE];
 
+    int sector = 0;
+    bool isFileOpened = true;
 
     rotation(sector);
     std::cout << "Sector is  " << sector << std::endl;
-    //sectChar = (char) (sector + ASCIIOFFSET);
-    //std::cout << "sect  " << sectChar << std::endl;
 
     pathQues = pathQuesBegin + sectChar [sector -1] + pathEnd;
 
-
-
     std::cout << "Path is  " << pathQues << std::endl;
 
+    show (pathQues, question, QUES, isFileOpened);
 
-
-        show (pathQues, question, QUES);
-        /*
-
-        while (!text.eof()) {
-            text.read(question, sizeof(question) -1);
-
-            if (text.gcount() < SIZE - 1)
-            {
-                int count = text.gcount();
-                question [count] = 0;
-            }
-            std::cout << question << std::endl;
-        }
-
-*/
-
-
-
-
+    if (!isFileOpened)
+    {
+        std::cout << "The file was not opened!!!\n";
+    }
+    else
+    {
         std::cout << "Enter your answer:\n";
-
         std::cin >> answer;
-
         std::cout << "Answer " << answer << std::endl;
+
+    }
+
+
 
     //}
 

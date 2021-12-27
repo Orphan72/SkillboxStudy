@@ -62,5 +62,7 @@ int main()
 
     std::cout << (isPng ? "Yes" : "No");
 
+    detector.close();
+
     return 0;
 }

@@ -1,14 +1,22 @@
 #include <iostream>
 #include <ctime>
+#include <fstream>
 
 int SIZE = 6;
 int MAXCOUNT = 100;
 
 int main()
 {
+
     std::srand(std::time(nullptr));
 
+    std::ifstream memoryFrom;
+    std::ofstream memoryTo;
+
     int banknotes [] = {5000, 2000, 1000, 500, 200, 100};
+
+    memoryFrom.open ("..\\data\\river.txt");
+
     int boxes [] = {0, 0, 0, 0, 0, 0};
 
     int actualSum = 0;

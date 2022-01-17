@@ -3,101 +3,142 @@
 #include <fstream>
 
 int SIZE = 6;
-int MAXCOUNT = 100;
+int MAXCOUNT = 10;
+const int BANKNOTES [] = {5000, 2000, 1000, 500, 200, 100};
+
+int getavailableSum (int *bxs)
+{
+    int suum = 0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        suum += (bxs [i] * BANKNOTES [i]);
+    }
+
+    return suum;
+}
 
 int main()
 {
 
     std::srand(std::time(nullptr));
 
-    std::ifstream memoryFrom;
-    std::ofstream memoryTo;
-
-    int banknotes [] = {5000, 2000, 1000, 500, 200, 100};
-
-    memoryFrom.open ("..\\data\\river.txt");
-
     int boxes [] = {0, 0, 0, 0, 0, 0};
-
-    int actualSum = 0;
-    int sum = 13800;
+    int availableSum = 0;
+    int wishSum = 2000;
     int bank = 0;
 
 
-    for (int i = 0; i < MAXCOUNT; i++)
+    std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
+
+    if (memoryFrom.is_open())
     {
-        int num = std::rand()%SIZE;
-        std::cout << banknotes [num] << std::endl;
-        boxes [num]++;
-        actualSum += banknotes [num];
-    }
-
-    std::cout << "actualSum " << actualSum << std::endl;
-    for (int i = 0; i < SIZE; i++)
-    {
-        std::cout << boxes[i] << " ";
-    }
-
-    std::cout << std::endl;
-
-
-    std::cout << "actualSum " << actualSum << std::endl;
-    std::cout << "Wish sum " << sum << std::endl;
+        std::cout << "=memory open=\n";
+        memoryFrom.read((char *) boxes, sizeof(boxes));
 
 
 
-
-    if (sum > actualSum)
-    {
-        std::cout << "Not enough money in the ATM ";
-    }
-    else
-    {
-        std::cout << "Get your money:\n";
-
-
-        for (int box = 0; box < SIZE; box++)
+        /*
+        for (int i = 0; i < MAXCOUNT; i++)
         {
-            if (boxes[box] == 0)
-            {
-                box++;
-            }
-
-            //std::cout << "box - " << box << std::endl;
-            bank = *(banknotes + box);
-            while (sum >= bank)
-            {
-                if (boxes[box] == 0) break;
-                std::cout << "banknot  " << bank << std::endl;
-
-                sum -= bank;
-                boxes[box]--;
-                std::cout << "sum in while " << sum << std::endl;
-                //std::cout << "boxes [box] " << boxes [box] << std::e
-            }
+            int num = std::rand()%SIZE;
+            std::cout << BANKNOTES [num] << std::endl;
+            boxes [num]++;
         }
+         */
 
-        std::cout << "final sum " << sum << std::endl;
-        if (sum > 0)
-        {
-            std::cout << "it is impossible to provide this sum " << std::endl;
-        }
+        availableSum = getavailableSum(boxes);
+        std::cout << "rest in ATM  "<< availableSum << std::endl;
 
         for (int i = 0; i < SIZE; i++)
         {
             std::cout << boxes[i] << " ";
         }
+
+        std::cout << std::endl;
+
+
+        std::cout << "Wish sum " << wishSum << std::endl;
+
+        if (wishSum > availableSum)
+        {
+            std::cout << "Not enough money in the ATM ";
+        }
+        else
+        {
+            std::cout << "Get your money:\n";
+
+
+            for (int box = 0; box < SIZE; box++)
+            {
+                if (boxes[box] == 0)
+                {
+                    box++;
+                }
+
+                //std::cout << "box - " << box << std::endl;
+                bank = *(BANKNOTES + box);
+                while (wishSum >= bank)
+                {
+                    if (boxes[box] == 0) break;
+                    std::cout << "banknot  " << bank << std::endl;
+
+                    wishSum -= bank;
+                    boxes[box]--;
+                    std::cout << "sum in while " << wishSum << std::endl;
+                    //std::cout << "boxes [box] " << boxes [box] << std::e
+                }
+            }
+
+            std::cout << "final sum " << wishSum << std::endl;
+            if (wishSum > 0)
+            {
+                std::cout << "it is impossible to provide this sum " << std::endl;
+            }
+
+            for (int i = 0; i < SIZE; i++)
+            {
+                std::cout << boxes[i] << " ";
+            }
+        }
+
+
+        availableSum = getavailableSum(boxes);
+
+
+
+        std::cout << "rest in ATM  "<< availableSum;
     }
-
-    actualSum = 0;
-
-
-    for (int i = 0; i < SIZE; i++)
+    else
     {
-        actualSum += (boxes [i] * banknotes [i]);
+        std::cout << "=The memory of ATM is not available for reading=\n";
     }
 
-    std::cout << "rest in ATM  "<< actualSum;
+    memoryFrom.close();
+
+    std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
+    if (memoryTo.is_open())
+    {
+        memoryTo.write((char*)boxes, sizeof (boxes));
+    }
+    else
+    {
+        std::cout << "=The memory of ATM is not available for writing=\n";
+    }
+    memoryTo.close();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return 0;
 }

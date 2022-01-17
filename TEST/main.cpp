@@ -9,8 +9,10 @@ int main()
     int boxes [6];
 
     std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
-    memoryFrom.read((char*)boxes, sizeof (boxes));
-
+    if (memoryFrom.is_open())
+    {
+        memoryFrom.read((char *) boxes, sizeof(boxes));
+    }
 
     //std::cout << sizeof (boxes);
 

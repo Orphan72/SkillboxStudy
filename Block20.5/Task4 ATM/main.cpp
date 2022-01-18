@@ -3,7 +3,7 @@
 #include <fstream>
 
 int SIZE = 6;
-int MAXCOUNTBANKN = 1000;
+int MAXCOUNTBANKN = 40;
 const int BANKNOTES [] = {5000, 2000, 1000, 500, 200, 100};
 
 int getavailableSum (int *bxs)
@@ -26,23 +26,49 @@ int getCountBankn (int *bxs)
     return bnk;
 }
 
+void showATMboxes (int *bxs)
+{
+    std::cout << "ATM boxes: " << std::endl;
+    for (int i = 0; i < SIZE; i++)
+    {
+        std::cout << bxs[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+void showWallet (int *wlt)
+{
+    std::cout << "Money in wallet: \n";
+    int count = 0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        if (wlt[i] != 0)
+        {
+            std::cout << wlt[i] << " banknotes of " << BANKNOTES[i] << " RUR" << std::endl;
+            count++;
+        }
+
+        if (i == (SIZE -1) && count == 0)
+            std::cout << "Wallet is empty" << std::endl;
+    }
+}
+
+
 int main()
 {
 
     std::srand(std::time(nullptr));
     int boxes [] = {0, 0, 0, 0, 0, 0};
+    int wallet [] = {0, 0, 0, 0, 0, 0};
+
     int availableSum = 0;
     int wishSum = 0;
     int bank = 0;
     int countBank = 0;
     char answer = ' ';
-
-
     bool correctAnswer = false;
 
-
     std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
-
 
     if (memoryFrom.is_open())
     {
@@ -53,6 +79,9 @@ int main()
 
         countBank = getCountBankn (boxes);
         std::cout << "banknotes in ATM  "<< countBank << std::endl;
+
+        showATMboxes(boxes);
+        showWallet(wallet);
 
         std::cout  << "if you want to full ATM, please, press \"+\"\n";
         std::cout  << "if you want to get monery, please, press \"-\"\n=>";
@@ -81,31 +110,15 @@ int main()
         }
         else
         {
-            availableSum = getavailableSum(boxes);
-            std::cout << "rest in ATM  "<< availableSum << std::endl;
-
-            countBank = getCountBankn (boxes);
-            std::cout << "banknotes in ATM  "<< countBank << std::endl;
-
-            for (int i = 0; i < SIZE; i++)
-            {
-                std::cout << boxes[i] << " ";
-            }
-
-            std::cout << std::endl;
-
             std::cout << "Enter wish sum\n=>";
             std::cin >> wishSum;
             if (wishSum > availableSum)
             {
-                std::cout << "Not enough money in the ATM ";
+                std::cout << "Not enough money in the ATM\n";
             }
             else
             {
-                std::ofstream banknotes ("..\\data\\banknotes.bin", std::ios::binary);
-
-                std::cout << "Get your money:\n";
-                for (int box = 0; box < SIZE; box++)
+               for (int box = 0; box < SIZE; box++)
                 {
                     if (boxes[box] == 0)
                     {
@@ -115,19 +128,15 @@ int main()
                     while (wishSum >= bank)
                     {
                         if (boxes[box] == 0) break;
-                        std::cout << "banknot  " << bank << std::endl;
 
                         wishSum -= bank;
                         boxes[box]--;
-
-                        std::cout << "wishsum  " << wishSum << std::endl;
-
+                        wallet[box]++;
                     }
                 }
 
                 if (wishSum > 0)
                 {
-
                     memoryFrom.close();
                     std::cout << "it is impossible to provide this sum " << std::endl;
 
@@ -135,23 +144,22 @@ int main()
                     memFrom.read((char *) boxes, sizeof(boxes));
                     for (int i = 0; i < SIZE; i++)
                     {
-                        std::cout << boxes[i] << " ";
+                        wallet [i] = 0;
                     }
+
                     memFrom.close();
-
-                }
-
-                for (int i = 0; i < SIZE; i++)
-                {
-                    std::cout << boxes[i] << " ";
                 }
             }
         }
 
         availableSum = getavailableSum(boxes);
         countBank = getCountBankn (boxes);
-        std::cout << "rest in ATM  "<< availableSum << std::endl;
-        std::cout << "banknotes in ATM  "<< countBank << std::endl;
+        std::cout << "Rest in ATM  "<< availableSum << std::endl;
+        std::cout << "Banknotes in ATM  "<< countBank << std::endl;
+
+        showATMboxes(boxes);
+        showWallet (wallet);
+
     }
     else
     {
@@ -159,6 +167,7 @@ int main()
     }
 
     memoryFrom.close();
+
 
     std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
     if (memoryTo.is_open())

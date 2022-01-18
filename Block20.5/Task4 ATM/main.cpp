@@ -3,7 +3,7 @@
 #include <fstream>
 
 int SIZE = 6;
-int MAXCOUNTBANKN = 40;
+int MAXCOUNTBANKN = 1000;
 const int BANKNOTES [] = {5000, 2000, 1000, 500, 200, 100};
 
 int getavailableSum (int *bxs)

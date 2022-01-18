@@ -36,9 +36,9 @@ void showATMboxes (int *bxs)
     std::cout << std::endl;
 }
 
-void showWallet (int *wlt)
+void showGetMoney (int *wlt)
 {
-    std::cout << "Money in wallet: \n";
+    std::cout << "Your money: \n";
     int count = 0;
     for (int i = 0; i < SIZE; i++)
     {
@@ -49,7 +49,7 @@ void showWallet (int *wlt)
         }
 
         if (i == (SIZE -1) && count == 0)
-            std::cout << "Wallet is empty" << std::endl;
+            std::cout << "Empty" << std::endl;
     }
 }
 
@@ -81,7 +81,6 @@ int main()
         std::cout << "banknotes in ATM  "<< countBank << std::endl;
 
         showATMboxes(boxes);
-        showWallet(wallet);
 
         std::cout  << "if you want to full ATM, please, press \"+\"\n";
         std::cout  << "if you want to get monery, please, press \"-\"\n=>";
@@ -138,16 +137,24 @@ int main()
                 if (wishSum > 0)
                 {
                     memoryFrom.close();
+
                     std::cout << "it is impossible to provide this sum " << std::endl;
 
-                    std::ifstream memFrom ("..\\data\\memory.bin", std::ios::binary);
-                    memFrom.read((char *) boxes, sizeof(boxes));
-                    for (int i = 0; i < SIZE; i++)
+                    std::ifstream memFrm ("..\\data\\memory.bin", std::ios::binary);
+                    if (memFrm.is_open())
                     {
-                        wallet [i] = 0;
+                        memFrm.read((char *) boxes, sizeof(boxes));
+                        for (int i = 0; i < SIZE; i++)
+                        {
+                            wallet [i] = 0;
+                        }
+                    }
+                    else
+                    {
+                        std::cout << "=The memory of ATM is not available for reading=\n";
                     }
 
-                    memFrom.close();
+                    memFrm.close();
                 }
             }
         }
@@ -158,7 +165,7 @@ int main()
         std::cout << "Banknotes in ATM  "<< countBank << std::endl;
 
         showATMboxes(boxes);
-        showWallet (wallet);
+        showGetMoney(wallet);
 
     }
     else

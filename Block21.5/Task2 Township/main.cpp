@@ -3,7 +3,8 @@
 
 //TODO
 //оформить заполнение в отдельную функцию
-// написать функцию для показа домов
+// запись в файл?
+// чтение из файла?
 
 // создать функцию для рандомного заполнения
 
@@ -79,8 +80,8 @@ struct house
 {
     int florCount = 1;
     float area = 0.0;
-    //storey floor;
-    //std::vector<storey> flrs;
+    storey floor;
+    std::vector<storey> flrs;
     bool stove = false;
 };
 
@@ -143,6 +144,53 @@ void showBuildingName (buildNames bldNm)
 
 
 
+
+void showRoomName (roomNames roomNm)
+{
+    if (roomNm == UNKNOWROOM)
+        std::cout << "Unknown\n";
+    else if (roomNm == LIVINGROOM)
+        std::cout << "\t\t\tLivingroom, ";
+    else if (roomNm == BATHROOM)
+        std::cout << "\t\t\tBathroom, ";
+    else if (roomNm == KITCHEN)
+        std::cout << "\t\t\tKitchen, ";
+    else if (roomNm == BEDROOM)
+        std::cout << "\t\t\tBedroom, ";
+    else
+        std::cout << "\t\t\tNursery, ";
+}
+
+
+
+
+
+void showRoom (std::vector <room> rms, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        showRoomName (rms [i].name);
+        std::cout << rms[i].area << " sq. m\n";
+    }
+}
+
+
+
+void showFloor (std::vector <storey> flrs, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+
+        std::cout << "\t\t\Floor # " << flrs[i].num << " contains ";
+        std::cout << flrs [i].roomCount << " rooms:\n";
+        showRoom(flrs[i].rooms, flrs[i].roomCount);
+        std::cout << "\t\tHeight or " << flrs[i].num << " fl. is " << flrs[i].height << " m\n";
+
+    }
+}
+
+
+
 void showBuilding (std::vector <building> bls, int n)
 {
     for (int i = 0; i < n; i++)
@@ -167,6 +215,7 @@ void showHouse (house hs)
         std::cout << ", chimney on the roof\n";
     }
 
+    showFloor (hs.flrs, hs.florCount);
 }
 
 
@@ -289,7 +338,9 @@ int main()
                     str.sctn.build.area = 20.0; // введите площадь строения (меньше, чем остсток площади, но больше чем 20)
 
 
-                    std::cout << "Enter name of buildings: " << GARAGE << " or " << BATHHOUSE << " or " << BARN << "\n=>";
+                    std::cout << "Enter one name of :\n";
+                    std::cout << "Enter name of building from " << GARAGE << " to " << BARN << "\n";
+                    std::cout << GARAGE << " - Garage " << BATHHOUSE << " - Bathhouse " << BARN << "- Barn\n=>";
 
                     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     str.sctn.build.name = BATHHOUSE; // от 0 до количества в enum
@@ -331,9 +382,12 @@ int main()
             str.sctn.hs.stove = true;// введите наличие трубы в доме
 
 
-            /*
+
 
             int maxCountRoomFlor = areaHouse/MINAREAROOM;
+            std::cout << "********************************************\n";
+            std::cout << "maxCountRoomFlor = " << areaHouse  << " / " << MINAREAROOM << " = " << maxCountRoomFlor << "\n";
+            std::cout << "********************************************\n";
 
             if (maxCountRoomFlor > MAXCOUNTROOM)
                 maxCountRoomFlor = MAXCOUNTROOM;
@@ -354,28 +408,41 @@ int main()
                 float areaRestFlor = str.sctn.hs.area;
 
 
-                //for (int m = 0; m < MINCOUNTROOM; m++)
-                //{
-                  //  str.sctn.hs.floor.rm.name = (roomNames)(m + 1);
+             //   for (int m = 0; m < MINCOUNTROOM; m++)
+              //  {
+                   // str.sctn.hs.floor.rm.name = (roomNames)(m + 1);
                     //str.sctn.hs.floor.rooms.push_back(str.sctn.hs.floor.rm);
-                //}
+               // }
 
                 //for (int m = MINCOUNTROOM; m < str.sctn.hs.floor.roomCount; m++)
                 //{
                   //  str.sctn.hs.floor.rm.name = (roomNames)(m + 1);
-                    //str.sctn.hs.floor.rooms.push_back(str.sctn.hs.floor.rm);
+                   // str.sctn.hs.floor.rooms.push_back(str.sctn.hs.floor.rm);
                 //}
+
 
                 while (areaRestFlor > MINAREAROOM)
                 {
                     for (int m = str.sctn.hs.floor.roomCount; m > 0; m--)
                     {
-                        str.sctn.hs.floor.rm.name = (roomNames)(m + 1);
-                        std::cout << "Enter room's area from  " << MINAREAROOM;
-                        std::cout << "to " << areaRestFlor - MINAREAROOM * (float)(m - 1) << "\n=>";
+                        std::cout << "Enter name of room from " << LIVINGROOM << " to " << NURSERY << "\n";
+
+                        std::cout << LIVINGROOM << " - Garage\n" << BATHROOM << " - Bathhouse\n";
+                        std::cout << KITCHEN << " - Kitchen\n" << BEDROOM << " - Bedroom\n" << NURSERY << " - Nursery\n=>";
 
                         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                        str.sctn.hs.floor.rm.area = 20.0; // площадь не больше остатка площади этажа
+                        str.sctn.hs.floor.rm.name = (roomNames)3;// от 0 до количества в enum
+
+                        //str.sctn.hs.floor.rm.name = (roomNames)(4 - m + 1) ; // если по порядку
+                        std::cout << "********************************************\n";
+                        std::cout << "       " << str.sctn.hs.floor.rm.name << "\n";
+                        std::cout << "********************************************\n";
+
+                        std::cout << "Enter room's area from  " << MINAREAROOM;
+                        std::cout << " to " << areaRestFlor - MINAREAROOM * (float)(m - 1) << "\n=>";
+
+                        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                        str.sctn.hs.floor.rm.area = 12.0; // площадь не больше остатка площади этажа
 
 
                         areaRestFlor -= str.sctn.hs.floor.rm.area;
@@ -391,6 +458,7 @@ int main()
 
                     }
                 }
+
 
                 str.sctn.hs.flrs.push_back(str.sctn.hs.floor);
 

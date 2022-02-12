@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 //TODO
 
@@ -14,7 +15,7 @@ const int MAXCOUTSTREET = 4;
 const int MINCOUTSECTION = 1;
 const int MAXCOUTSECTION = 10;
 
-const int MINCOUTFLOR = 3;
+const int MINCOUTFLOR = 1;
 const int MAXCOUTFLOR = 3;
 
 const int MINCOUNTROOM = 2;
@@ -95,7 +96,7 @@ struct section
 {
     int number = 0;
     float area = 0.0;
-    int buildlCount = 1;
+    int buildlCount = 0;
     house hs;
     building build;
     std::vector<building> blds;
@@ -111,16 +112,20 @@ struct street
 
 void fullRoom (storey &flr, float area)
 {
-    while (area > MINAREAROOM)
-    {
+    int nm = 0;
+    //while (area > MINAREAROOM)
+    //{
         for (int m = flr.roomCount; m > 0; m--)
         {
+
             std::cout << "Enter name of room from " << LIVINGROOM << " to " << NURSERY << "\n";
-            std::cout << LIVINGROOM << " - Garage\n" << BATHROOM << " - Bathhouse\n";
+            std::cout << LIVINGROOM << " - Livingroom\n" << BATHROOM << " - Bathhouse\n";
             std::cout << KITCHEN << " - Kitchen\n" << BEDROOM << " - Bedroom\n" << NURSERY << " - Nursery\n=>";
 
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            flr.rm.name = (roomNames)3;// от 0 до количества в enum
+            std::cin >> nm;
+            flr.rm.name = (roomNames)nm;
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
             //str.sctn.hs.floor.rm.name = (roomNames)(4 - m + 1) ; // если по порядку
 
@@ -128,16 +133,18 @@ void fullRoom (storey &flr, float area)
             std::cout << " to " << area - MINAREAROOM * (float)(m - 1) << "\n=>";
 
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            flr.rm.area = 12.0; // площадь не больше остатка площади этажа
+            std::cin >> flr.rm.area;
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //flr.rm.area = 12.0; // площадь не больше остатка площади этажа
 
             area -= flr.rm.area;
 
             std::cout << "Rest area flor is " << area << "\n=>";
 
             flr.rooms.push_back(flr.rm);
-            if (area < MINAREAROOM) break;
+            //if (area < MINAREAROOM) break;
         }
-    }
+    //}
 }
 
 void fullStorey (house &hs)
@@ -152,10 +159,18 @@ void fullStorey (house &hs)
         hs.floor.num = l + 1;
 
         std::cout << "Enter a height of floor from " << MINHEIGHTFLOOR << " to " << MAXHEIGHTFLOOR << "\n=>";
-        hs.floor.height = 2.0; //введите высоту потолков (от 2,5 до 4)
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> hs.floor.height;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //hs.floor.height = 2.0; //введите высоту потолков (от 2,5 до 4)
 
         std::cout << "Enter a count of room from " << MINCOUNTROOM << " to " << maxCountRoomFlor << "\n=>";
-        hs.floor.roomCount = 4; //введите количество комнта (минимум 2, максимум 4)
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> hs.floor.roomCount;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //hs.floor.roomCount = 4; //введите количество комнта (минимум 2, максимум 4)
 
         float areaRestFlor = hs.area;
 
@@ -167,36 +182,42 @@ void fullStorey (house &hs)
 
 void fullYard (section &sct, float area)
 {
-// остаток площади
-    while (area >= MINAREABUILDING)
-    {
+    int nm = 0;
+    // остаток площади
+    //while (area > MINAREABUILDING)
+    //{
         for (int k = sct.buildlCount; k > 0; k--)
         {
-            std::cout << "Enter count of buildings from 0 to " << MINAREABUILDING;
+            std::cout << "Enter buildings area from " << MINAREABUILDING;
             std::cout << " to " << area - MINAREABUILDING * (float) (k - 1) << "\n=>";
 
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            sct.build.area = 20.0; // введите площадь строения (меньше, чем остсток площади, но больше чем 20)
+            std::cin >> sct.build.area;
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //sct.build.area = 20.0; // введите площадь строения (меньше, чем остсток площади, но больше чем 20)
 
-            std::cout << "Enter one name of :\n";
             std::cout << "Enter name of building from " << GARAGE << " to " << BARN << "\n";
             std::cout << GARAGE << " - Garage " << BATHHOUSE << " - Bathhouse " << BARN << "- Barn\n=>";
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            sct.build.name = BATHHOUSE; // от 0 до количества в enum
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            std::cin >> nm;
+            sct.build.name = (buildNames)nm;
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-            (sct.build.name == BATHHOUSE) ? sct.build.stove = true : sct.build.stove = false;
+            //sct.build.name = BATHHOUSE; // от 0 до количества в enum
+
+            sct.build.stove = (sct.build.name == BATHHOUSE);
 
             area -= sct.build.area;
 
-            std::cout << "areaRestSect is " << area;
+            std::cout << "areaRestSect is " << area << std::endl;
 
             sct.blds.push_back(sct.build);
 
-            if (area < MINAREABUILDING)
-                break;
+            //if (area < MINAREABUILDING)
+              //  break;
         }
-    }
+    //}
 }
 
 void fullStreet (street &str, int n)
@@ -207,57 +228,56 @@ void fullStreet (street &str, int n)
 
         std::cout << "Enter section's area from " << MINAREASECTION << " to " << MAXAREASECTION << "\n=>";
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        str.sctn.area = 100.0; // введите площадь участка (от 100 до 1000)
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> str.sctn.area;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //str.sctn.area = 100.0; // введите площадь участка (от 100 до 1000)
 
         float areaSect = str.sctn.area;
 
         std::cout << "Enter hous' area from " << MINAREAHOUSE << " to " << areaSect * MAXSHARE << "\n=>";
 
+       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> str.sctn.hs.area;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+       //str.sctn.hs.area = 50.0; // введите площадь дома (между 50 и площадью участка)
 
-
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        str.sctn.hs.area = 50.0; // введите площадь дома (между 50 и площадью участка)
-
-//float areaHouse = str.sctn.hs.area;
         float areaRestSect = areaSect - str.sctn.hs.area;
         int maxCountBuild = (areaRestSect) / MINAREABUILDING;
 
         std::cout << "Enter count of buildings from 0 to " << maxCountBuild << "\n=>";
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        str.sctn.buildlCount = 2;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> str.sctn.buildlCount;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //str.sctn.buildlCount = 2;
 
+        if (str.sctn.buildlCount)
+        {
+            fullYard(str.sctn, areaRestSect);
+        }
 
-        fullYard(str.sctn, areaRestSect);
 
         std::cout << "Enter count of floors from " << MINCOUTFLOR << " to " << MAXCOUTFLOR << "\n=>";
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        str.sctn.hs.florCount = 2; // введите количество этажей (от 1 до 3)
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> str.sctn.hs.florCount;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //str.sctn.hs.florCount = 2; // введите количество этажей (от 1 до 3)
 
+        std::cout << "Is there tube on the roof?\n";
+        std::cout << "1 - tube is\n0 - tube is not\n=>";
 
-
-        std::cout << "Is there tube on the roof?\n=>";
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        str.sctn.hs.stove = true;// введите наличие трубы в доме
-
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        std::cin >> str.sctn.hs.stove;
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //str.sctn.hs.stove = true;// введите наличие трубы в доме
 
         fullStorey(str.sctn.hs);
 
-//=============================================================
         str.sects.push_back(str.sctn);
     }
-
-
 }
-
-
-
-
-
 
 void showStreetName (streetNames strNm)
 {
@@ -286,9 +306,6 @@ void showBuildingName (buildNames bldNm)
         std::cout << "\t\tBarn, ";
 }
 
-
-
-
 void showRoomName (roomNames roomNm)
 {
     if (roomNm == UNKNOWROOM)
@@ -305,10 +322,6 @@ void showRoomName (roomNames roomNm)
         std::cout << "\t\t\tNursery, ";
 }
 
-
-
-
-
 void showRoom (std::vector <room> rms, int n)
 {
     for (int i = 0; i < n; i++)
@@ -317,8 +330,6 @@ void showRoom (std::vector <room> rms, int n)
         std::cout << rms[i].area << " sq. m\n";
     }
 }
-
-
 
 void showFloor (std::vector <storey> flrs, int n)
 {
@@ -333,28 +344,21 @@ void showFloor (std::vector <storey> flrs, int n)
     }
 }
 
-
-
-
-
-
 void showBuilding (std::vector <building> bls, int n)
 {
     for (int i = 0; i < n; i++)
     {
         showBuildingName(bls [i].name);
-        std::cout << bls [i].area << " sq.m";
+        std::cout << bls [i].area << " sq.m\n";
         if (bls[i].stove == true)
         {
-            std::cout << ", chimney on the roof\n";
+            std::cout << "\t\t\tchimney on the roof\n";
         }
     }
 }
 
-
 void showHouse (house hs)
 {
-
     std::cout << "\t\tArea " << hs.area << " sq. m, ";
     std::cout << hs.florCount << " fl.";
     if (hs.stove == true)
@@ -365,10 +369,6 @@ void showHouse (house hs)
     showFloor (hs.flrs, hs.florCount);
 }
 
-
-
-
-
 void showSection (std::vector<section> scts, int n)
 {
     for (int i = 0; i < n; i++)
@@ -377,48 +377,41 @@ void showSection (std::vector<section> scts, int n)
         std::cout << "\tArea: " << scts [i].area << "\n";
         std::cout << "\tHOUSE:\n";
         showHouse (scts[i].hs);
-        //std::cout << "\tHous' area is " << scts [i].hs.area << "\n";
-        std::cout << "\tBuildings:\n";
-        showBuilding(scts[i].blds, scts[i].buildlCount);
-
+        if (!scts[i].buildlCount)
+        {
+            std::cout << "There is no any add buildings in the yard\n";
+        }
+        else
+        {
+            std::cout << "\tBuildings:\n";
+            showBuilding(scts[i].blds, scts[i].buildlCount);
+        }
 
     }
 }
 
+void showStreet (std::vector<street> strs, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        showStreetName(strs[i].name);
+        std::cout << "\tCount of sections is " << strs[i].sectionCount << std::endl;
 
-
-
- void showStreet (std::vector<street> strs, int n)
- {
-     for (int i = 0; i < n; i++)
-     {
-         showStreetName(strs[i].name);
-         std::cout << "\tCount of sections is " << strs[i].sectionCount << std::endl;
-
-         showSection(strs[i].sects, strs[i].sectionCount);
-
-
-     }
- }
-
-
-
-
-
-
-
-
+        showSection(strs[i].sects, strs[i].sectionCount);
+    }
+}
 
 
 int main()
 {
-
     int streetCount = 0;
 
     std::cout << "Enter count of street from " << MINCOUTSTREET << " to " << MAXCOUTSTREET << "\n=>";
 
     //>>>>>>>>>>>>>>>>>>>>>>
-    streetCount = 1;
+    std::cin >> streetCount;
+    //>>>>>>>>>>>>>>>>>>>>>>
+    //streetCount = 1;
 
     std::vector<street> strts;
 
@@ -431,10 +424,11 @@ int main()
         std::cout << "Enter count of section from " << MINCOUTSECTION << " to " << MAXCOUTSECTION << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>
-        str.sectionCount = 2;   // need enter
+        std::cin >> str.sectionCount;
+        //>>>>>>>>>>>>>>>>>>>>>>
+        //str.sectionCount = 2;   // need enter
 
         fullStreet (str, i);
-
 
         strts.push_back(str);
     }
@@ -442,7 +436,6 @@ int main()
 std::cout << "=======================================================\n";
 
     showStreet (strts, streetCount);
-
 
     return 0;
 }

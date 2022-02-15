@@ -139,7 +139,7 @@ void fullRoom (storey &flr, float area)
 
             area -= flr.rm.area;
 
-            std::cout << "Rest area flor is " << area << "\n=>";
+            std::cout << "Rest area flor is " << area << "\n";
 
             flr.rooms.push_back(flr.rm);
             //if (area < MINAREAROOM) break;
@@ -336,7 +336,7 @@ void showFloor (std::vector <storey> flrs, int n)
     for (int i = 0; i < n; i++)
     {
 
-        std::cout << "\t\t\Floor # " << flrs[i].num << " contains ";
+        std::cout << "\t\tFloor # " << flrs[i].num << " contains ";
         std::cout << flrs [i].roomCount << " rooms:\n";
         showRoom(flrs[i].rooms, flrs[i].roomCount);
         std::cout << "\t\tHeight or " << flrs[i].num << " fl. is " << flrs[i].height << " m\n";
@@ -415,10 +415,11 @@ int main()
 
     std::vector<street> strts;
 
-    street str;
+
 
     for (int i = 0; i < streetCount; i++)
     {
+        street str;
         str.name = (streetNames)(i + 1);
 
         std::cout << "Enter count of section from " << MINCOUTSECTION << " to " << MAXCOUTSECTION << "\n=>";
@@ -436,6 +437,44 @@ int main()
 std::cout << "=======================================================\n";
 
     showStreet (strts, streetCount);
+
+    //Общая площадь всех участков
+    float vilageArea = 0.0;
+    float commonHouseArea = 0.0;
+    float buildingsArea = 0.0;
+    float commonBuildingsArea = 0.0;
+
+    for (int i = 0; i < strts.size(); i++)
+    {
+        for (int j = 0; j < strts[i].sects.size(); j++)
+        {
+            commonHouseArea += strts[i].sects[j].hs.area;
+            vilageArea += strts[i].sects[j].area;
+            for (int k = 0; k < strts[i].sects[j].blds.size(); k++)
+            {
+                buildingsArea =+ strts[i].sects[j].blds[k].area;
+            }
+
+            commonBuildingsArea += (commonHouseArea + buildingsArea);
+            std::cout << "commonSettArea = " << vilageArea << std::endl;
+        }
+    }
+
+
+
+std::cout << "=======================================================\n";
+
+
+    std::cout << "All houses area is = " << commonHouseArea;
+    std::cout << "All buildings is = " << buildingsArea;
+    std::cout << "Common buidings area is = " << commonBuildingsArea;
+
+    std::cout << "Vilages area is = " << vilageArea << std::endl;
+
+    float perscent = commonBuildingsArea/vilageArea * 100;
+    std::cout << "The share of houses is " << perscent << "% of the area of the entire village";
+
+
 
     return 0;
 }

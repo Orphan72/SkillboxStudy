@@ -177,6 +177,7 @@ void fullStorey (house &hs)
         fullRoom(hs.floor, areaRestFlor);
 
         hs.flrs.push_back(hs.floor);
+        hs.floor.rooms.clear();
     }
 }
 
@@ -214,6 +215,7 @@ void fullYard (section &sct, float area)
 
             sct.blds.push_back(sct.build);
 
+
             //if (area < MINAREABUILDING)
               //  break;
         }
@@ -224,7 +226,7 @@ void fullStreet (street &str, int n)
 {
 
     for (int j = 0; j < str.sectionCount; j++) {
-        str.sctn.number = n * str.sectionCount + j + 1;
+        str.sctn.number = n*MAXCOUTSTREET + j + 1;
 
         std::cout << "Enter section's area from " << MINAREASECTION << " to " << MAXAREASECTION << "\n=>";
 
@@ -258,6 +260,7 @@ void fullStreet (street &str, int n)
         }
 
 
+
         std::cout << "Enter count of floors from " << MINCOUTFLOR << " to " << MAXCOUTFLOR << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -276,6 +279,7 @@ void fullStreet (street &str, int n)
         fullStorey(str.sctn.hs);
 
         str.sects.push_back(str.sctn);
+        str.sctn.hs.flrs.clear ();
     }
 }
 
@@ -335,11 +339,11 @@ void showFloor (std::vector <storey> flrs, int n)
 {
     for (int i = 0; i < n; i++)
     {
-
-        std::cout << "\t\tFloor # " << flrs[i].num << " contains ";
+        std::cout << "\n\t\tFloor # " << flrs[i].num << " contains ";
         std::cout << flrs [i].roomCount << " rooms:\n";
+
         showRoom(flrs[i].rooms, flrs[i].roomCount);
-        std::cout << "\t\tHeight or " << flrs[i].num << " fl. is " << flrs[i].height << " m\n";
+        std::cout << "\t\t\tHeight or " << flrs[i].num << " fl. is " << flrs[i].height << " m\n";
 
     }
 }
@@ -359,8 +363,7 @@ void showBuilding (std::vector <building> bls, int n)
 
 void showHouse (house hs)
 {
-    std::cout << "\t\tArea " << hs.area << " sq. m, ";
-    std::cout << hs.florCount << " fl.";
+
     if (hs.stove == true)
     {
         std::cout << ", chimney on the roof\n";
@@ -373,13 +376,19 @@ void showSection (std::vector<section> scts, int n)
 {
     for (int i = 0; i < n; i++)
     {
-        std::cout << "Section # " << scts [i].number << "\n";
-        std::cout << "\tArea: " << scts [i].area << "\n";
-        std::cout << "\tHOUSE:\n";
+        std::cout << "\tSection # " << scts [i].number << "\n";
+        std::cout << "\t\tArea: " << scts [i].area << "\n";
+        std::cout << "\t\tHOUSE:\n";
+        std::cout << "\t\t\tArea: " << scts[i].hs.area << "\n";
+        std::cout << "\t\t\tNumber of floors: " << scts[i].hs.florCount << "\n";
+
+
+
+
         showHouse (scts[i].hs);
         if (!scts[i].buildlCount)
         {
-            std::cout << "There is no any add buildings in the yard\n";
+            std::cout << "\tThere is no any add buildings in the yard\n";
         }
         else
         {

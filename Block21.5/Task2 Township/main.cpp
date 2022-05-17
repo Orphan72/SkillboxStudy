@@ -4,6 +4,7 @@
 
 //TODO
 
+// протестить
 // создать функцию для рандомного заполнения
 
 const int MINCOUTSTREET = 1;
@@ -264,6 +265,7 @@ void fullStreet (street &str, int n)
 
         str.sects.push_back(str.sctn);
         str.sctn.hs.flrs.clear ();
+        str.sctn.blds.clear();
     }
 }
 
@@ -432,9 +434,10 @@ std::cout << "=======================================================\n";
     float vilageArea = 0.0;
     float commonHouseArea = 0.0;
     float commonBuildingsArea = 0.0;
-    float commonBuildingsHousArea = 0.0;
 
-    for (int i = 0; i < strts.size(); i++)
+
+
+   /* for (int i = 0; i < strts.size(); i++)
     {
         for (int j = 0; j < strts[i].sects.size(); j++)
         {
@@ -443,21 +446,39 @@ std::cout << "=======================================================\n";
             vilageArea += strts[i].sects[j].area;
             commonBuildingsHousArea += (commonHouseArea + commonBuildingsArea);
         }
+    }*/
+
+
+    for (int i = 0; i < strts.size(); i++)
+    {
+        for (int j = 0; j < strts[i].sects.size(); j++)
+        {
+            commonHouseArea += strts[i].sects[j].hs.area;
+            vilageArea += strts[i].sects[j].area;
+            for (int k = 0; k < strts[i].sects[j].blds.size(); k++)
+            {
+                commonBuildingsArea += strts[i].sects[j].blds[k].area;
+            }
+
+
+            //std::cout << "commonSettArea = " << vilageArea << std::endl;
+        }
     }
+
+
+
+
+
 
 std::cout << "=======================================================\n";
 
+    std::cout << "Vilages area is " << vilageArea << std::endl;
+    std::cout << "Area of all houses is " << commonHouseArea << std::endl;
+    std::cout << "Area of all buildings is " << commonBuildingsArea << std::endl;
 
-    std::cout << "Vilages area is = " << vilageArea << std::endl;
-    std::cout << "All houses area is = " << commonHouseArea << std::endl;
-    std::cout << "All buildings is = " << commonBuildingsArea << std::endl;
-    std::cout << "Common buidings area is = " << commonBuildingsHousArea << std::endl;
+    float perscent = (commonHouseArea + commonBuildingsArea)/vilageArea * 100;
 
-
-    float perscent = commonBuildingsHousArea/vilageArea * 100;
-    std::cout << "The share of buildings is " << perscent << "% of the area of the entire village";
-
-
+    std::cout << "The share of all houses and buildings is " << perscent << "% of the area of the entire village";
 
     return 0;
 }

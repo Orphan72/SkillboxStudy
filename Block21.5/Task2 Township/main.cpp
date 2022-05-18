@@ -7,14 +7,16 @@
 // протестить
 // создать функцию для рандомного заполнения
 
-const int MINCOUTSTREET = 1;
-const int MAXCOUTSTREET = 4;
+const int MINCOUNTSTREET = 1;
+const int MAXCOUNTSTREET = 4;
 
-const int MINCOUTSECTION = 1;
-const int MAXCOUTSECTION = 10;
+const int MINCOUNTSECTION = 1;
+const int MAXCOUNTSECTION = 5;
 
-const int MINCOUTFLOR = 1;
-const int MAXCOUTFLOR = 3;
+const int MAXCOUNTBUILDING = 4;
+
+const int MINCOUNTFLOR = 1;
+const int MAXCOUNTFLOR = 3;
 
 const int MINCOUNTROOM = 2;
 const int MAXCOUNTROOM = 4;
@@ -114,11 +116,15 @@ void fullRoom (storey &flr, float area)
    for (int m = flr.roomCount; m > 0; m--)
    {
         std::cout << "Enter name of room from " << LIVINGROOM << " to " << NURSERY << "\n";
-        std::cout << LIVINGROOM << " - Livingroom\n" << BATHROOM << " - Bathhouse\n";
+        std::cout << LIVINGROOM << " - Livingroom\n" << BATHROOM << " - Bathroom\n";
         std::cout << KITCHEN << " - Kitchen\n" << BEDROOM << " - Bedroom\n" << NURSERY << " - Nursery\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> nm;
+        //std::cin >> nm;
+        int diffNm = NURSERY - LIVINGROOM;
+        nm = std::rand()%(diffNm + 1) + LIVINGROOM;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
         flr.rm.name = (roomNames)nm;
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -126,7 +132,10 @@ void fullRoom (storey &flr, float area)
         std::cout << " to " << area - MINAREAROOM * (float)(m - 1) << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> flr.rm.area;
+        //std::cin >> flr.rm.area;
+        int diffAr = (area - MINAREAROOM * (float)(m - 1)) - MINAREAROOM;
+        flr.rm.area = std::rand()%(diffAr + 1) + MINAREAROOM;
+
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         area -= flr.rm.area;
@@ -150,16 +159,20 @@ void fullStorey (house &hs)
         std::cout << "Enter a height of floor from " << MINHEIGHTFLOOR << " to " << MAXHEIGHTFLOOR << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> hs.floor.height;
+        //std::cin >> hs.floor.height;
+        int diffHght = MAXHEIGHTFLOOR - MINHEIGHTFLOOR;
+        hs.floor.height = std::rand()%(diffHght + 1) + MINHEIGHTFLOOR;
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //hs.floor.height = 2.0; //введите высоту потолков (от 2,5 до 4)
+
 
         std::cout << "Enter a count of room from " << MINCOUNTROOM << " to " << maxCountRoomFlor << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> hs.floor.roomCount;
+        //std::cin >> hs.floor.roomCount;
+        int diffRoomCount = maxCountRoomFlor - MINCOUNTROOM;
+        hs.floor.roomCount = std::rand()% (diffRoomCount + 1) + MINCOUNTROOM;
+
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //hs.floor.roomCount = 4; //введите количество комнта (минимум 2, максимум 4)
 
         float areaRestFlor = hs.area;
 
@@ -173,18 +186,18 @@ void fullStorey (house &hs)
 void fullYard (section &sct, float area)
 {
     int nm = 0;
-    // остаток площади
-    //while (area > MINAREABUILDING)
-    //{
+
         for (int k = sct.buildlCount; k > 0; k--)
         {
             std::cout << "Enter buildings area from " << MINAREABUILDING;
             std::cout << " to " << area - MINAREABUILDING * (float) (k - 1) << "\n=>";
 
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            std::cin >> sct.build.area;
+            //std::cin >> sct.build.area;
+            int diffBldArea = (area - MINAREABUILDING * (float) (k - 1)) - MINAREABUILDING;
+            sct.build.area = std::rand()%(diffBldArea + 1) + MINAREABUILDING;
+
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //sct.build.area = 20.0; // введите площадь строения (меньше, чем остсток площади, но больше чем 20)
 
             sct.comBuildArea += sct.build.area;
 
@@ -192,11 +205,12 @@ void fullYard (section &sct, float area)
             std::cout << GARAGE << " - Garage " << BATHHOUSE << " - Bathhouse " << BARN << "- Barn\n=>";
 
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            std::cin >> nm;
+            //std::cin >> nm;
+            int diffNm = BARN - GARAGE;
+            nm = std::rand()%(diffNm + 1) + GARAGE;
+
             sct.build.name = (buildNames)nm;
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-            //sct.build.name = BATHHOUSE; // от 0 до количества в enum
 
             sct.build.stove = (sct.build.name == BATHHOUSE);
 
@@ -211,33 +225,38 @@ void fullStreet (street &str, int n)
 {
 
     for (int j = 0; j < str.sectionCount; j++) {
-        str.sctn.number = n*MAXCOUTSTREET + j + 1;
+        str.sctn.number = n*MAXCOUNTSTREET + j + 1;
 
         std::cout << "Enter section's area from " << MINAREASECTION << " to " << MAXAREASECTION << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> str.sctn.area;
+        //std::cin >> str.sctn.area;
+        int diffSectAr = MAXAREASECTION - MINAREASECTION;
+        str.sctn.area = std::rand()%(diffSectAr + 1) + MINAREASECTION;
+
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //str.sctn.area = 100.0; // введите площадь участка (от 100 до 1000)
 
         float areaSect = str.sctn.area;
 
         std::cout << "Enter hous' area from " << MINAREAHOUSE << " to " << areaSect * MAXSHARE << "\n=>";
 
        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> str.sctn.hs.area;
+        //std::cin >> str.sctn.hs.area;
+        int diffHsAr = areaSect * MAXSHARE - MINAREAHOUSE;
+        str.sctn.hs.area = std::rand()%(diffHsAr + 1) + MINAREAHOUSE;
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-       //str.sctn.hs.area = 50.0; // введите площадь дома (между 50 и площадью участка)
+
 
         float areaRestSect = areaSect - str.sctn.hs.area;
-        int maxCountBuild = (areaRestSect) / MINAREABUILDING;
+        //int maxCountBuild = (areaRestSect) / MINAREABUILDING;
 
-        std::cout << "Enter count of buildings from 0 to " << maxCountBuild << "\n=>";
+        std::cout << "Enter count of buildings from 0 to " << MAXCOUNTBUILDING << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> str.sctn.buildlCount;
+        //std::cin >> str.sctn.buildlCount;
+        str.sctn.buildlCount = std::rand()%(MAXCOUNTBUILDING + 1);
+
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //str.sctn.buildlCount = 2;
 
         if (str.sctn.buildlCount)
         {
@@ -246,20 +265,25 @@ void fullStreet (street &str, int n)
 
 
 
-        std::cout << "Enter count of floors from " << MINCOUTFLOR << " to " << MAXCOUTFLOR << "\n=>";
+        std::cout << "Enter count of floors from " << MINCOUNTFLOR << " to " << MAXCOUNTFLOR << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> str.sctn.hs.florCount;
+        //std::cin >> str.sctn.hs.florCount;
+        int diffCntFl = MAXCOUNTFLOR - MINCOUNTFLOR;
+        str.sctn.hs.florCount = std::rand()%(diffCntFl + 1) + MINCOUNTFLOR;
+
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //str.sctn.hs.florCount = 2; // введите количество этажей (от 1 до 3)
+
 
         std::cout << "Is there tube on the roof?\n";
         std::cout << "1 - tube is\n0 - tube is not\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> str.sctn.hs.stove;
+        //std::cin >> str.sctn.hs.stove;
+        str.sctn.hs.stove = std::rand()%2;
+
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //str.sctn.hs.stove = true;// введите наличие трубы в доме
+
 
         fullStorey(str.sctn.hs);
 
@@ -397,13 +421,20 @@ void showStreet (std::vector<street> strs, int n)
 int main()
 {
     int streetCount = 0;
+    std::cout << "Do you want to fill data automatically or manually?";
 
-    std::cout << "Enter count of street from " << MINCOUTSTREET << " to " << MAXCOUTSTREET << "\n=>";
+
+    std::cout << "Enter count of street from " << MINCOUNTSTREET << " to " << MAXCOUNTSTREET << "\n=>";
 
     //>>>>>>>>>>>>>>>>>>>>>>
-    std::cin >> streetCount;
+    //std::cin >> streetCount;
+    int diffStrCount = MAXCOUNTSTREET - MINCOUNTSTREET;
+    streetCount = std::rand()%(diffStrCount + 1) + MINCOUNTSTREET;
+
     //>>>>>>>>>>>>>>>>>>>>>>
-    //streetCount = 1;
+
+
+
 
     std::vector<street> strts;
 
@@ -414,12 +445,15 @@ int main()
         street str;
         str.name = (streetNames)(i + 1);
 
-        std::cout << "Enter count of section from " << MINCOUTSECTION << " to " << MAXCOUTSECTION << "\n=>";
+        std::cout << "Enter count of section from " << MINCOUNTSECTION << " to " << MAXCOUNTSECTION << "\n=>";
 
         //>>>>>>>>>>>>>>>>>>>>>>
         std::cin >> str.sectionCount;
+        //int diffSectCount = MAXCOUNTSECTION - MINCOUNTSECTION;
+        //str.sectionCount = std::rand()%(diffSectCount + 1) + MINCOUNTSECTION;
+
         //>>>>>>>>>>>>>>>>>>>>>>
-        //str.sectionCount = 2;   // need enter
+
 
         fullStreet (str, i);
 
@@ -437,17 +471,6 @@ std::cout << "=======================================================\n";
 
 
 
-   /* for (int i = 0; i < strts.size(); i++)
-    {
-        for (int j = 0; j < strts[i].sects.size(); j++)
-        {
-            commonHouseArea += strts[i].sects[j].hs.area;
-            commonBuildingsArea += strts[i].sects[j].comBuildArea;
-            vilageArea += strts[i].sects[j].area;
-            commonBuildingsHousArea += (commonHouseArea + commonBuildingsArea);
-        }
-    }*/
-
 
     for (int i = 0; i < strts.size(); i++)
     {
@@ -461,7 +484,7 @@ std::cout << "=======================================================\n";
             }
 
 
-            //std::cout << "commonSettArea = " << vilageArea << std::endl;
+
         }
     }
 

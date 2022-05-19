@@ -2,16 +2,11 @@
 #include <vector>
 #include <ctime>
 
-//TODO
-
-// протестить
-// создать функцию для рандомного заполнения
-
 const int MINCOUNTSTREET = 1;
-const int MAXCOUNTSTREET = 4;
+const int MAXCOUNTSTREET = 2;
 
 const int MINCOUNTSECTION = 1;
-const int MAXCOUNTSECTION = 5;
+const int MAXCOUNTSECTION = 2;
 
 const int MAXCOUNTBUILDING = 4;
 
@@ -110,42 +105,39 @@ struct street
     std::vector <section> sects;
 };
 
-void fullRoom (storey &flr, float area)
+void fullRoom (storey &flr, float area, bool rndm)
 {
    int nm = 0;
    for (int m = flr.roomCount; m > 0; m--)
    {
-        std::cout << "Enter name of room from " << LIVINGROOM << " to " << NURSERY << "\n";
-        std::cout << LIVINGROOM << " - Livingroom\n" << BATHROOM << " - Bathroom\n";
-        std::cout << KITCHEN << " - Kitchen\n" << BEDROOM << " - Bedroom\n" << NURSERY << " - Nursery\n=>";
+       if (rndm)
+       {
+           int diffNm = NURSERY - LIVINGROOM;
+           nm = std::rand()%(diffNm + 1) + LIVINGROOM;
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> nm;
-        int diffNm = NURSERY - LIVINGROOM;
-        nm = std::rand()%(diffNm + 1) + LIVINGROOM;
+           int diffAr = (area - MINAREAROOM * (float)(m - 1)) - MINAREAROOM;
+           flr.rm.area = std::rand()%(diffAr + 1) + MINAREAROOM;
+       }
+       else
+       {
+           std::cout << "Enter name of room from " << LIVINGROOM << " to " << NURSERY << "\n";
+           std::cout << LIVINGROOM << " - Livingroom\n" << BATHROOM << " - Bathroom\n";
+           std::cout << KITCHEN << " - Kitchen\n" << BEDROOM << " - Bedroom\n" << NURSERY << " - Nursery\n=>";
+           std::cin >> nm;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        flr.rm.name = (roomNames)nm;
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+           std::cout << "Enter room's area from  " << MINAREAROOM;
+           std::cout << " to " << area - MINAREAROOM * (float)(m - 1) << "\n=>";
+           std::cin >> flr.rm.area;
+       }
+       flr.rm.name = (roomNames)nm;
 
-        std::cout << "Enter room's area from  " << MINAREAROOM;
-        std::cout << " to " << area - MINAREAROOM * (float)(m - 1) << "\n=>";
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> flr.rm.area;
-        int diffAr = (area - MINAREAROOM * (float)(m - 1)) - MINAREAROOM;
-        flr.rm.area = std::rand()%(diffAr + 1) + MINAREAROOM;
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        area -= flr.rm.area;
-        std::cout << "Rest area flor is " << area << "\n";
-
-        flr.rooms.push_back(flr.rm);
+       area -= flr.rm.area;
+       std::cout << "Rest area flor is " << area << "\n";
+       flr.rooms.push_back(flr.rm);
    }
 }
 
-void fullStorey (house &hs)
+void fullStorey (house &hs, bool rndm)
 {
     int maxCountRoomFlor = hs.area/MINAREAROOM;
 
@@ -156,136 +148,137 @@ void fullStorey (house &hs)
     {
         hs.floor.num = l + 1;
 
-        std::cout << "Enter a height of floor from " << MINHEIGHTFLOOR << " to " << MAXHEIGHTFLOOR << "\n=>";
+        if (rndm)
+        {
+            int diffHght = MAXHEIGHTFLOOR - MINHEIGHTFLOOR;
+            hs.floor.height = std::rand()%(diffHght + 1) + MINHEIGHTFLOOR;
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> hs.floor.height;
-        int diffHght = MAXHEIGHTFLOOR - MINHEIGHTFLOOR;
-        hs.floor.height = std::rand()%(diffHght + 1) + MINHEIGHTFLOOR;
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-        std::cout << "Enter a count of room from " << MINCOUNTROOM << " to " << maxCountRoomFlor << "\n=>";
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> hs.floor.roomCount;
-        int diffRoomCount = maxCountRoomFlor - MINCOUNTROOM;
-        hs.floor.roomCount = std::rand()% (diffRoomCount + 1) + MINCOUNTROOM;
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            int diffRoomCount = maxCountRoomFlor - MINCOUNTROOM;
+            hs.floor.roomCount = std::rand()% (diffRoomCount + 1) + MINCOUNTROOM;
+        }
+        else
+        {
+            std::cout << "Enter a height of floor from " << MINHEIGHTFLOOR << " to " << MAXHEIGHTFLOOR << "\n=>";
+            std::cin >> hs.floor.height;
+            std::cout << "Enter a count of room from " << MINCOUNTROOM << " to " << maxCountRoomFlor << "\n=>";
+            std::cin >> hs.floor.roomCount;
+        }
 
         float areaRestFlor = hs.area;
 
-        fullRoom(hs.floor, areaRestFlor);
+        fullRoom(hs.floor, areaRestFlor, rndm);
 
         hs.flrs.push_back(hs.floor);
         hs.floor.rooms.clear();
     }
 }
 
-void fullYard (section &sct, float area)
+void fullYard (section &sct, float area, bool rndm)
 {
     int nm = 0;
 
         for (int k = sct.buildlCount; k > 0; k--)
         {
-            std::cout << "Enter buildings area from " << MINAREABUILDING;
-            std::cout << " to " << area - MINAREABUILDING * (float) (k - 1) << "\n=>";
+           // std::cout << "RESTAREA = " << area << std::endl;
 
-            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //std::cin >> sct.build.area;
-            int diffBldArea = (area - MINAREABUILDING * (float) (k - 1)) - MINAREABUILDING;
-            sct.build.area = std::rand()%(diffBldArea + 1) + MINAREABUILDING;
+            if (rndm)
+            {
+                int diffBldArea = (area - MINAREABUILDING * (float) (k - 1)) - MINAREABUILDING;
+                sct.build.area = std::rand()%(diffBldArea + 1) + MINAREABUILDING;
 
-            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                int diffNm = BARN - GARAGE;
+                nm = std::rand()%(diffNm + 1) + GARAGE;
+            }
+            else
+            {
+                std::cout << "Enter buildings area from " << MINAREABUILDING;
+                std::cout << " to " << area - MINAREABUILDING * (float) (k - 1) << "\n=>";
+                std::cin >> sct.build.area;
+                std::cout << "Enter name of building from " << GARAGE << " to " << BARN << "\n";
+                std::cout << GARAGE << " - Garage " << BATHHOUSE << " - Bathhouse " << BARN << "- Barn\n=>";
+                std::cin >> nm;
+            }
 
             sct.comBuildArea += sct.build.area;
-
-            std::cout << "Enter name of building from " << GARAGE << " to " << BARN << "\n";
-            std::cout << GARAGE << " - Garage " << BATHHOUSE << " - Bathhouse " << BARN << "- Barn\n=>";
-
-            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //std::cin >> nm;
-            int diffNm = BARN - GARAGE;
-            nm = std::rand()%(diffNm + 1) + GARAGE;
-
             sct.build.name = (buildNames)nm;
-            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
             sct.build.stove = (sct.build.name == BATHHOUSE);
-
             area -= sct.build.area;
 
-            std::cout << "areaRestSect is " << area << std::endl;
             sct.blds.push_back(sct.build);
         }
 }
 
-void fullStreet (street &str, int n)
+void fullStreet (street &str, int n, bool rndm)
 {
+    float areaSect = 0.0;
+    float areaRestSect = 0.0;
+    int maxCountBuild = 0;
 
-    for (int j = 0; j < str.sectionCount; j++) {
+
+
+
+
+
+    for (int j = 0; j < str.sectionCount; j++)
+    {
         str.sctn.number = n*MAXCOUNTSTREET + j + 1;
 
-        std::cout << "Enter section's area from " << MINAREASECTION << " to " << MAXAREASECTION << "\n=>";
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> str.sctn.area;
-        int diffSectAr = MAXAREASECTION - MINAREASECTION;
-        str.sctn.area = std::rand()%(diffSectAr + 1) + MINAREASECTION;
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        float areaSect = str.sctn.area;
-
-        std::cout << "Enter hous' area from " << MINAREAHOUSE << " to " << areaSect * MAXSHARE << "\n=>";
-
-       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> str.sctn.hs.area;
-        int diffHsAr = areaSect * MAXSHARE - MINAREAHOUSE;
-        str.sctn.hs.area = std::rand()%(diffHsAr + 1) + MINAREAHOUSE;
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-        float areaRestSect = areaSect - str.sctn.hs.area;
-        //int maxCountBuild = (areaRestSect) / MINAREABUILDING;
-
-        std::cout << "Enter count of buildings from 0 to " << MAXCOUNTBUILDING << "\n=>";
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> str.sctn.buildlCount;
-        str.sctn.buildlCount = std::rand()%(MAXCOUNTBUILDING + 1);
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        if (str.sctn.buildlCount)
+        if (rndm)
         {
-            fullYard(str.sctn, areaRestSect);
+            int diffSectAr = MAXAREASECTION - MINAREASECTION;
+            str.sctn.area = std::rand()%(diffSectAr + 1) + MINAREASECTION;
+
+            areaSect = str.sctn.area;
+            int diffHsAr = areaSect * MAXSHARE - MINAREAHOUSE;
+            str.sctn.hs.area = std::rand()%(diffHsAr + 1) + MINAREAHOUSE;
+
+            areaRestSect = areaSect - str.sctn.hs.area;
+            maxCountBuild = (areaRestSect) / MINAREABUILDING;
+            if (maxCountBuild > MAXCOUNTBUILDING) maxCountBuild = MAXCOUNTBUILDING;
+
+            str.sctn.buildlCount = std::rand()%(maxCountBuild + 1);
+
+            int diffCntFl = MAXCOUNTFLOR - MINCOUNTFLOR;
+            str.sctn.hs.florCount = std::rand()%(diffCntFl + 1) + MINCOUNTFLOR;
+
+            str.sctn.hs.stove = std::rand()%2;
+        }
+        else
+        {
+            std::cout << "Enter section's area from " << MINAREASECTION << " to " << MAXAREASECTION << "\n=>";
+            std::cin >> str.sctn.area;
+
+            areaSect = str.sctn.area;
+            std::cout << "Enter hous' area from " << MINAREAHOUSE << " to " << areaSect * MAXSHARE << "\n=>";
+            std::cin >> str.sctn.hs.area;
+
+            areaRestSect = areaSect - str.sctn.hs.area;
+            maxCountBuild = (areaRestSect) / MINAREABUILDING;
+            if (maxCountBuild > MAXCOUNTBUILDING) maxCountBuild = MAXCOUNTBUILDING;
+
+            //std::cout << "SECTION AREA IS "<< areaRestSect << std::endl;
+
+
+            std::cout << "Enter count of buildings from 0 to " << maxCountBuild << "\n=>";
+            std::cin >> str.sctn.buildlCount;
+
+            std::cout << "Enter count of floors from " << MINCOUNTFLOR << " to " << MAXCOUNTFLOR << "\n=>";
+            std::cin >> str.sctn.hs.florCount;
+
+            std::cout << "Is there tube on the roof?\n";
+            std::cout << "1 - tube is\n0 - tube is not\n=>";
+            std::cin >> str.sctn.hs.stove;
         }
 
 
 
-        std::cout << "Enter count of floors from " << MINCOUNTFLOR << " to " << MAXCOUNTFLOR << "\n=>";
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> str.sctn.hs.florCount;
-        int diffCntFl = MAXCOUNTFLOR - MINCOUNTFLOR;
-        str.sctn.hs.florCount = std::rand()%(diffCntFl + 1) + MINCOUNTFLOR;
+        if (str.sctn.buildlCount)
+        {
+            fullYard(str.sctn, areaRestSect, rndm);
+        }
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-        std::cout << "Is there tube on the roof?\n";
-        std::cout << "1 - tube is\n0 - tube is not\n=>";
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //std::cin >> str.sctn.hs.stove;
-        str.sctn.hs.stove = std::rand()%2;
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-        fullStorey(str.sctn.hs);
+        fullStorey(str.sctn.hs, rndm);
 
         str.sects.push_back(str.sctn);
         str.sctn.hs.flrs.clear ();
@@ -306,7 +299,6 @@ void showStreetName (streetNames strNm)
     else
         std::cout << "Pylnaya str.\n";
 }
-
 
 void showBuildingName (buildNames bldNm)
 {
@@ -354,7 +346,6 @@ void showFloor (std::vector <storey> flrs, int n)
 
         showRoom(flrs[i].rooms, flrs[i].roomCount);
         std::cout << "\t\t\tHeight or " << flrs[i].num << " fl. is " << flrs[i].height << " m\n";
-
     }
 }
 
@@ -373,13 +364,11 @@ void showBuilding (std::vector <building> bls, int n)
 
 void showHouse (house hs)
 {
-
-    if (hs.stove == true)
+    if (hs.stove)
     {
         std::cout << ", chimney on the roof\n";
     }
-
-    showFloor (hs.flrs, hs.florCount);
+   showFloor (hs.flrs, hs.florCount);
 }
 
 void showSection (std::vector<section> scts, int n)
@@ -402,7 +391,6 @@ void showSection (std::vector<section> scts, int n)
             std::cout << "\tBuildings:\n";
             showBuilding(scts[i].blds, scts[i].buildlCount);
         }
-
     }
 }
 
@@ -417,46 +405,43 @@ void showStreet (std::vector<street> strs, int n)
     }
 }
 
-
 int main()
 {
+   // std::srand(std::time(nullptr));
     int streetCount = 0;
-    std::cout << "Do you want to fill data automatically or manually?";
+    bool random = false;
+    std::cout << "Do you want to fill data manually or automatically?\n 0 - manualy\n 1 - automatically\n";
+    std::cin >> random;
 
-
-    std::cout << "Enter count of street from " << MINCOUNTSTREET << " to " << MAXCOUNTSTREET << "\n=>";
-
-    //>>>>>>>>>>>>>>>>>>>>>>
-    //std::cin >> streetCount;
-    int diffStrCount = MAXCOUNTSTREET - MINCOUNTSTREET;
-    streetCount = std::rand()%(diffStrCount + 1) + MINCOUNTSTREET;
-
-    //>>>>>>>>>>>>>>>>>>>>>>
-
-
-
+    if (random)
+    {
+        int diffStrCount = MAXCOUNTSTREET - MINCOUNTSTREET;
+        streetCount = std::rand()%(diffStrCount + 1) + MINCOUNTSTREET;
+    }
+    else
+    {
+        std::cout << "Enter count of street from " << MINCOUNTSTREET << " to " << MAXCOUNTSTREET << "\n=>";
+        std::cin >> streetCount;
+    }
 
     std::vector<street> strts;
-
-
 
     for (int i = 0; i < streetCount; i++)
     {
         street str;
         str.name = (streetNames)(i + 1);
+        if (random)
+        {
+            int diffSectCount = MAXCOUNTSECTION - MINCOUNTSECTION;
+            str.sectionCount = std::rand()%(diffSectCount + 1) + MINCOUNTSECTION;
+        }
+        else
+        {
+            std::cout << "Enter count of section from " << MINCOUNTSECTION << " to " << MAXCOUNTSECTION << "\n=>";
+            std::cin >> str.sectionCount;
+        }
 
-        std::cout << "Enter count of section from " << MINCOUNTSECTION << " to " << MAXCOUNTSECTION << "\n=>";
-
-        //>>>>>>>>>>>>>>>>>>>>>>
-        std::cin >> str.sectionCount;
-        //int diffSectCount = MAXCOUNTSECTION - MINCOUNTSECTION;
-        //str.sectionCount = std::rand()%(diffSectCount + 1) + MINCOUNTSECTION;
-
-        //>>>>>>>>>>>>>>>>>>>>>>
-
-
-        fullStreet (str, i);
-
+        fullStreet (str, i, random);
         strts.push_back(str);
     }
 
@@ -464,13 +449,9 @@ std::cout << "=======================================================\n";
 
     showStreet (strts, streetCount);
 
-    //Общая площадь всех участков
     float vilageArea = 0.0;
     float commonHouseArea = 0.0;
     float commonBuildingsArea = 0.0;
-
-
-
 
     for (int i = 0; i < strts.size(); i++)
     {
@@ -482,16 +463,8 @@ std::cout << "=======================================================\n";
             {
                 commonBuildingsArea += strts[i].sects[j].blds[k].area;
             }
-
-
-
         }
     }
-
-
-
-
-
 
 std::cout << "=======================================================\n";
 

@@ -3,7 +3,7 @@
 #include <ctime>
 
 const int MINCOUNTSTREET = 1;
-const int MAXCOUNTSTREET = 2;
+const int MAXCOUNTSTREET = 3;
 
 const int MINCOUNTSECTION = 1;
 const int MAXCOUNTSECTION = 2;
@@ -17,7 +17,7 @@ const int MINCOUNTROOM = 2;
 const int MAXCOUNTROOM = 4;
 
 const float MINAREASECTION = 100.0;
-const float MAXAREASECTION = 1000.0;
+const float MAXAREASECTION = 500.0;
 
 const float MINAREAHOUSE = 50.0;
 const float MINAREABUILDING = 20.0;
@@ -132,7 +132,6 @@ void fullRoom (storey &flr, float area, bool rndm)
        flr.rm.name = (roomNames)nm;
 
        area -= flr.rm.area;
-       std::cout << "Rest area flor is " << area << "\n";
        flr.rooms.push_back(flr.rm);
    }
 }
@@ -179,8 +178,6 @@ void fullYard (section &sct, float area, bool rndm)
 
         for (int k = sct.buildlCount; k > 0; k--)
         {
-           // std::cout << "RESTAREA = " << area << std::endl;
-
             if (rndm)
             {
                 int diffBldArea = (area - MINAREABUILDING * (float) (k - 1)) - MINAREABUILDING;
@@ -213,11 +210,6 @@ void fullStreet (street &str, int n, bool rndm)
     float areaSect = 0.0;
     float areaRestSect = 0.0;
     int maxCountBuild = 0;
-
-
-
-
-
 
     for (int j = 0; j < str.sectionCount; j++)
     {
@@ -256,9 +248,6 @@ void fullStreet (street &str, int n, bool rndm)
             maxCountBuild = (areaRestSect) / MINAREABUILDING;
             if (maxCountBuild > MAXCOUNTBUILDING) maxCountBuild = MAXCOUNTBUILDING;
 
-            //std::cout << "SECTION AREA IS "<< areaRestSect << std::endl;
-
-
             std::cout << "Enter count of buildings from 0 to " << maxCountBuild << "\n=>";
             std::cin >> str.sctn.buildlCount;
 
@@ -269,9 +258,6 @@ void fullStreet (street &str, int n, bool rndm)
             std::cout << "1 - tube is\n0 - tube is not\n=>";
             std::cin >> str.sctn.hs.stove;
         }
-
-
-
 
         if (str.sctn.buildlCount)
         {
@@ -407,7 +393,7 @@ void showStreet (std::vector<street> strs, int n)
 
 int main()
 {
-   // std::srand(std::time(nullptr));
+    std::srand(std::time(nullptr));
     int streetCount = 0;
     bool random = false;
     std::cout << "Do you want to fill data manually or automatically?\n 0 - manualy\n 1 - automatically\n";

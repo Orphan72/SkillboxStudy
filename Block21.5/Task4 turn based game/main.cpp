@@ -1,11 +1,23 @@
 #include <iostream>
+#include <vector>
 
 const int SIZE = 10;
+const int ENEMYCOUNT = 3;
+const int CHARDIFF = 49;
 
-struct player
+struct location
 {
     int coordX = 0;
     int coordY = 0;
+};
+
+struct character
+{
+    std::string name = "noname";
+    int health = 0;
+    int armor = 0;
+    int damage = 0;
+    location lctn;
 };
 
 void setupField  (char array [SIZE][SIZE])
@@ -19,11 +31,32 @@ void setupField  (char array [SIZE][SIZE])
     }
 }
 
-void setupPlayer (char array [SIZE][SIZE], player &gmr)
+void createGamer (char array [SIZE][SIZE], character &gmr)
 {
-    gmr.coordX = 0;
-    gmr.coordY = 0;
-    array [gmr.coordX][gmr.coordY] = 'P';
+    std::cout << "Set your character's options:\n";
+    std::cout << "Enter the Name\n=>";
+    std::cin >> gmr.name;
+    std::cout << "Enter horisontal's value, from 1 to 40\n=>";
+    std::cin >> gmr.lctn.coordY;
+    std::cout << "Enter vertical's value, from 1 to 40\n=>";
+    std::cin >> gmr.lctn.coordX;
+    array [gmr.lctn.coordX][gmr.lctn.coordY] = 'P';
+}
+
+void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
+{
+    for (int i = 0; i < ENEMYCOUNT; i++)
+    {
+        character enemy;
+        char enemyNumner;
+        std::string strName = "Enemy #";
+        enemyNumner = (char)(i + CHARDIFF);
+        enemy.name = strName + enemyNumner;
+        enemy.lctn.coordX = i;
+        enemy.lctn.coordY = i + 2;
+        array [enemy.lctn.coordX][enemy.lctn.coordY] = 'E';
+        ems.push_back(enemy);
+    }
 }
 
 void display (char array [SIZE][SIZE])
@@ -40,51 +73,70 @@ void display (char array [SIZE][SIZE])
     std::cout << std::endl;
 }
 
-void movePlayer (char array [SIZE][SIZE], player &gmr)
+void moveCharacter (char array [SIZE][SIZE], character &chrct)
 {
-    array [gmr.coordX][gmr.coordY] = '*';
+    array [chrct.lctn.coordX][chrct.lctn.coordY] = '*';
     std::string cmd = " ";
-    std::cout << "Enter command :\n=>";
-    std::cin >> cmd;
+    bool correctAnswer = false;
+    while (!correctAnswer)
+    {
+        std::cout << "Enter one of next commands:\n- '\left\'\n- \'right\'\n- \'top\'\n- \'button\'\n=>";
+        std::cin >> cmd;
+        correctAnswer = (cmd == "left" || cmd == "right"
+                      || cmd == "top"  || cmd == "button");
+        if (!correctAnswer)
+        {
+            std::cout << "Answer incorrect. Try again\n";
+            array [chrct.lctn.coordX][chrct.lctn.coordY] = 'P';
+            display (array);
+        }
+        else
+            array [chrct.lctn.coordX][chrct.lctn.coordY] = '*';
+    };
     if (cmd == "left")
     {
-        gmr.coordY--;
+        chrct.lctn.coordY--;
     }
     else if (cmd == "right")
     {
-        gmr.coordY++;
+        chrct.lctn.coordY++;
     }
     else if (cmd == "top")
     {
-        gmr.coordX--;
+        chrct.lctn.coordX--;
     }
     else
     {
-        gmr.coordX++;
+        chrct.lctn.coordX++;
     }
-    array [gmr.coordX][gmr.coordY] = 'P';
-
+    array [chrct.lctn.coordX][chrct.lctn.coordY] = 'P';
 }
-
-
-
-
 
 
 int main()
 {
     char field [SIZE][SIZE];
+    std::vector <character> enemies;
 
-    player gamer;
+    character gamer;
     setupField (field);
-    setupPlayer (field, gamer);
+
+    createEnemies (field, enemies);
+    for (int i = 0; i < ENEMYCOUNT; i++)
+    {
+        std::cout << enemies[i].name << std::endl;
+        std::cout << enemies[i].lctn.coordX << " " << enemies[i].lctn.coordY << std::endl;
+    }
+
+    display (field);
+
+    createGamer (field, gamer);
     display (field);
     for (int i = 0; i < 10; i++)
     {
-        movePlayer (field, gamer);
+        moveCharacter (field, gamer);
         display (field);
     }
-
 
     return 0;
 }

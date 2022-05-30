@@ -1,11 +1,29 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
+
+
+
+//Уровень жизней врагам задаётся случайно — от 50 до 150.
+//Уровень брони варьируется от 0 до 50.
+//Урон тоже выбирается случайно — от 15 до 30 единиц.
+
+
+//TODO 21.3 Работа со структурами пересмотреть
 
 const int SIZE = 10;
 const int ENEMYCOUNT = 3;
-const int CHARDIFF = 49;
 
-struct location
+const int MINHEALTH = 50;
+const int MAXHEALTH = 100;
+
+const int MINARMOR = 0;
+const int MAXARMOR = 50;
+
+const int MINDAMAGE = 15;
+const int MAXDAMAGE = 30;
+
+struct position
 {
     int coordX = 0;
     int coordY = 0;
@@ -17,7 +35,7 @@ struct character
     int health = 0;
     int armor = 0;
     int damage = 0;
-    location lctn;
+    position pos;
 };
 
 void setupField  (char array [SIZE][SIZE])
@@ -37,10 +55,10 @@ void createGamer (char array [SIZE][SIZE], character &gmr)
     std::cout << "Enter the Name\n=>";
     std::cin >> gmr.name;
     std::cout << "Enter horisontal's value, from 1 to 40\n=>";
-    std::cin >> gmr.lctn.coordY;
+    std::cin >> gmr.pos.coordY;
     std::cout << "Enter vertical's value, from 1 to 40\n=>";
-    std::cin >> gmr.lctn.coordX;
-    array [gmr.lctn.coordX][gmr.lctn.coordY] = 'P';
+    std::cin >> gmr.pos.coordX;
+    array [gmr.pos.coordX][gmr.pos.coordY] = 'P';
 }
 
 void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
@@ -48,13 +66,21 @@ void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
     for (int i = 0; i < ENEMYCOUNT; i++)
     {
         character enemy;
-        char enemyNumner;
         std::string strName = "Enemy #";
-        enemyNumner = (char)(i + CHARDIFF);
-        enemy.name = strName + enemyNumner;
-        enemy.lctn.coordX = i;
-        enemy.lctn.coordY = i + 2;
-        array [enemy.lctn.coordX][enemy.lctn.coordY] = 'E';
+        enemy.name = strName + std::to_string (i + 1);
+
+        int diffHealth = MAXHEALTH - MINHEALTH;
+        enemy.health = std::rand()%(diffHealth + 1) + MINHEALTH;
+
+        int diffArmor = MAXARMOR - MINARMOR;
+        enemy.armor = std::rand()%(diffArmor + 1) + MINARMOR;
+
+        int diffDamage = MAXDAMAGE - MINDAMAGE;
+        enemy.damage = std::rand()%(diffDamage + 1) + MINDAMAGE;
+
+        enemy.pos.coordX = i;
+        enemy.pos.coordY = i + 2;
+        array [enemy.pos.coordX][enemy.pos.coordY] = 'E';
         ems.push_back(enemy);
     }
 }
@@ -73,48 +99,62 @@ void display (char array [SIZE][SIZE])
     std::cout << std::endl;
 }
 
-void moveCharacter (char array [SIZE][SIZE], character &chrct)
+void moveCharacter (char array [SIZE][SIZE], character &person)
 {
-    array [chrct.lctn.coordX][chrct.lctn.coordY] = '*';
-    std::string cmd = " ";
+    array [person.pos.coordX][person.pos.coordY] = '*';
+    char cmd = ' ';
     bool correctAnswer = false;
     while (!correctAnswer)
     {
-        std::cout << "Enter one of next commands:\n- '\left\'\n- \'right\'\n- \'top\'\n- \'button\'\n=>";
+        std::cout << "Enter one of next commands:\n- '\l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
         std::cin >> cmd;
-        correctAnswer = (cmd == "left" || cmd == "right"
-                      || cmd == "top"  || cmd == "button");
+        correctAnswer = (cmd == 'l' || cmd == 'r'
+                      || cmd == 't'  || cmd == 'b');
         if (!correctAnswer)
         {
             std::cout << "Answer incorrect. Try again\n";
-            array [chrct.lctn.coordX][chrct.lctn.coordY] = 'P';
+            array [person.pos.coordX][person.pos.coordY] = 'P';
             display (array);
         }
         else
-            array [chrct.lctn.coordX][chrct.lctn.coordY] = '*';
+            array [person.pos.coordX][person.pos.coordY] = '*';
     };
-    if (cmd == "left")
+    if (cmd == 'l')
     {
-        chrct.lctn.coordY--;
+        person.pos.coordY--;
     }
-    else if (cmd == "right")
+    else if (cmd == 'r')
     {
-        chrct.lctn.coordY++;
+        person.pos.coordY++;
     }
-    else if (cmd == "top")
+    else if (cmd == 't')
     {
-        chrct.lctn.coordX--;
+        person.pos.coordX--;
     }
     else
     {
-        chrct.lctn.coordX++;
+        person.pos.coordX++;
     }
-    array [chrct.lctn.coordX][chrct.lctn.coordY] = 'P';
+    array [person.pos.coordX][person.pos.coordY] = 'P';
 }
+
+void takeDamage (character &person, int dmg)
+{
+    std::cout << person.name << " took damage: -" << dmg << std::endl;
+    person.armor -= dmg;
+    if (person.armor < 0)
+    {
+        person.health += person.armor;
+        person.armor = 0;
+    }
+}
+
+
 
 
 int main()
 {
+    std::srand(std::time(nullptr));
     char field [SIZE][SIZE];
     std::vector <character> enemies;
 
@@ -125,7 +165,10 @@ int main()
     for (int i = 0; i < ENEMYCOUNT; i++)
     {
         std::cout << enemies[i].name << std::endl;
-        std::cout << enemies[i].lctn.coordX << " " << enemies[i].lctn.coordY << std::endl;
+        std::cout << "Health: " << enemies[i].health << std::endl;
+        std::cout << "Armor: " << enemies[i].armor << std::endl;
+        std::cout << "Damage: " << enemies[i].damage << std::endl;
+        std::cout << enemies[i].pos.coordX << " " << enemies[i].pos.coordY << std::endl;
     }
 
     display (field);

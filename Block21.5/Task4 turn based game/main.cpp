@@ -12,7 +12,7 @@
 //TODO 21.3 Работа со структурами пересмотреть
 
 const int SIZE = 10;
-const int ENEMYCOUNT = 3;
+const int ENEMYCOUNT = 2;
 
 const int MINHEALTH = 50;
 const int MAXHEALTH = 100;
@@ -67,7 +67,8 @@ void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
     {
         character enemy;
         std::string strName = "Enemy #";
-        enemy.name = strName + std::to_string (i + 1);
+        int id = i + 1;
+        enemy.name = strName + std::to_string (id);
 
         int diffHealth = MAXHEALTH - MINHEALTH;
         enemy.health = std::rand()%(diffHealth + 1) + MINHEALTH;
@@ -85,7 +86,7 @@ void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
     }
 }
 
-void display (char array [SIZE][SIZE])
+void displayField (char array [SIZE][SIZE])
 {
     std::cout << std::endl;
     for (int i = 0; i < SIZE; i++)
@@ -99,11 +100,29 @@ void display (char array [SIZE][SIZE])
     std::cout << std::endl;
 }
 
+void displayCharacter (character &person)
+{
+    if (!person.health)
+    {
+        std::cout << person.name << " is dead" << std::endl;
+    }
+    else
+    {
+        std::cout << person.name << std::endl;
+        std::cout << "Health: " << person.health << std::endl;
+        std::cout << "Armor: " << person.armor << std::endl;
+        std::cout << "Damage: " << person.damage << std::endl;
+        std::cout << person.pos.coordX << " " << person.pos.coordY << std::endl;
+    }
+}
+
 void moveCharacter (char array [SIZE][SIZE], character &person)
 {
     array [person.pos.coordX][person.pos.coordY] = '*';
+
     char cmd = ' ';
     bool correctAnswer = false;
+
     while (!correctAnswer)
     {
         std::cout << "Enter one of next commands:\n- '\l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
@@ -114,11 +133,13 @@ void moveCharacter (char array [SIZE][SIZE], character &person)
         {
             std::cout << "Answer incorrect. Try again\n";
             array [person.pos.coordX][person.pos.coordY] = 'P';
-            display (array);
+            displayField (array);
         }
         else
             array [person.pos.coordX][person.pos.coordY] = '*';
     };
+
+
     if (cmd == 'l')
     {
         person.pos.coordY--;
@@ -135,8 +156,27 @@ void moveCharacter (char array [SIZE][SIZE], character &person)
     {
         person.pos.coordX++;
     }
+
+    if (array [person.pos.coordX][person.pos.coordY] == 'E')
+    {
+        takeDamage (character &person, int dmg
+    }
+
     array [person.pos.coordX][person.pos.coordY] = 'P';
+
+    if ()
+
+
 }
+
+// определения ID врага
+void fun (character &person, std::vector <character> enm)
+{
+
+
+}
+
+
 
 void takeDamage (character &person, int dmg)
 {
@@ -147,14 +187,22 @@ void takeDamage (character &person, int dmg)
         person.health += person.armor;
         person.armor = 0;
     }
+    if (person.health < 0)
+    {
+        person.health = 0;
+        std::cout << person.name << " died" << std::endl;
+
+    }
 }
+
+
 
 
 
 
 int main()
 {
-    std::srand(std::time(nullptr));
+    //std::srand(std::time(nullptr));
     char field [SIZE][SIZE];
     std::vector <character> enemies;
 
@@ -164,22 +212,21 @@ int main()
     createEnemies (field, enemies);
     for (int i = 0; i < ENEMYCOUNT; i++)
     {
-        std::cout << enemies[i].name << std::endl;
-        std::cout << "Health: " << enemies[i].health << std::endl;
-        std::cout << "Armor: " << enemies[i].armor << std::endl;
-        std::cout << "Damage: " << enemies[i].damage << std::endl;
-        std::cout << enemies[i].pos.coordX << " " << enemies[i].pos.coordY << std::endl;
+        displayCharacter (enemies[i]);
     }
 
-    display (field);
+    displayField (field);
 
-    createGamer (field, gamer);
-    display (field);
-    for (int i = 0; i < 10; i++)
-    {
-        moveCharacter (field, gamer);
-        display (field);
-    }
+    if ()
+
+
+    //createGamer (field, gamer);
+    //display (field);
+    //for (int i = 0; i < 10; i++)
+    //{
+      //  moveCharacter (field, gamer);
+        //display (field);
+    //}
 
     return 0;
 }

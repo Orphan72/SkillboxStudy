@@ -31,6 +31,7 @@ struct position
 
 struct character
 {
+    int id = 0;
     std::string name = "noname";
     int health = 0;
     int armor = 0;
@@ -67,8 +68,8 @@ void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
     {
         character enemy;
         std::string strName = "Enemy #";
-        int id = i + 1;
-        enemy.name = strName + std::to_string (id);
+        enemy.id = i + 1;
+        enemy.name = strName + std::to_string (enemy.id);
 
         int diffHealth = MAXHEALTH - MINHEALTH;
         enemy.health = std::rand()%(diffHealth + 1) + MINHEALTH;
@@ -116,7 +117,19 @@ void displayCharacter (character &person)
     }
 }
 
-void moveCharacter (char array [SIZE][SIZE], character &person)
+int detectID (character &person, std::vector <character> enm)
+{
+    for (int i = 0; i < enm.size(); i++)
+    {
+        if (person.pos.coordX == enm[i].pos.coordX &&
+            person.pos.coordY == enm[i].pos.coordY)
+        {
+            return enm[i].id;
+        }
+    }
+}
+
+void moveCharacter (char array [SIZE][SIZE], character &person, std::vector <character> enm)
 {
     array [person.pos.coordX][person.pos.coordY] = '*';
 
@@ -125,7 +138,7 @@ void moveCharacter (char array [SIZE][SIZE], character &person)
 
     while (!correctAnswer)
     {
-        std::cout << "Enter one of next commands:\n- '\l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
+        std::cout << "Enter one of next commands:\n- \'l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
         std::cin >> cmd;
         correctAnswer = (cmd == 'l' || cmd == 'r'
                       || cmd == 't'  || cmd == 'b');
@@ -159,22 +172,21 @@ void moveCharacter (char array [SIZE][SIZE], character &person)
 
     if (array [person.pos.coordX][person.pos.coordY] == 'E')
     {
-        takeDamage (character &person, int dmg
+
+        int ID = detectID (person, enm);
+        std::cout << "You atacked ENEMY # " << ID << std::endl;
+
+        //takeDamage (character &person, int dmg
     }
 
     array [person.pos.coordX][person.pos.coordY] = 'P';
 
-    if ()
+  //  if ()
 
 
 }
 
 // определения ID врага
-void fun (character &person, std::vector <character> enm)
-{
-
-
-}
 
 
 
@@ -196,10 +208,6 @@ void takeDamage (character &person, int dmg)
 }
 
 
-
-
-
-
 int main()
 {
     //std::srand(std::time(nullptr));
@@ -210,23 +218,25 @@ int main()
     setupField (field);
 
     createEnemies (field, enemies);
-    for (int i = 0; i < ENEMYCOUNT; i++)
+
+    std::cout << "enemies.size() is " << enemies.size() << std::endl;
+    for (int i = 0; i < enemies.size(); i++)
     {
         displayCharacter (enemies[i]);
     }
 
     displayField (field);
 
-    if ()
+    //if ()
 
 
-    //createGamer (field, gamer);
-    //display (field);
-    //for (int i = 0; i < 10; i++)
-    //{
-      //  moveCharacter (field, gamer);
-        //display (field);
-    //}
+    createGamer (field, gamer);
+    displayField (field);
+    for (int i = 0; i < 10; i++)
+    {
+        moveCharacter (field, gamer, enemies);
+        displayField (field);
+    }
 
     return 0;
 }

@@ -11,8 +11,9 @@
 
 //TODO 21.3 Работа со структурами пересмотреть
 
+
 const int SIZE = 10;
-const int ENEMYCOUNT = 2;
+const int ENEMYCOUNT = 3;
 
 const int MINHEALTH = 50;
 const int MAXHEALTH = 100;
@@ -22,6 +23,14 @@ const int MAXARMOR = 50;
 
 const int MINDAMAGE = 15;
 const int MAXDAMAGE = 30;
+
+enum fightResult
+{
+    DEFENDWON,
+    ATTAKCKWON,
+    DRAW
+};
+
 
 struct position
 {
@@ -37,6 +46,7 @@ struct character
     int armor = 0;
     int damage = 0;
     position pos;
+    position previosPos;
 };
 
 void setupField  (char array [SIZE][SIZE])
@@ -55,14 +65,22 @@ void createGamer (char array [SIZE][SIZE], character &gmr)
     std::cout << "Set your character's options:\n";
     std::cout << "Enter the Name\n=>";
     std::cin >> gmr.name;
+
+    std::cout << "Enter health\n=>";
+    std::cin >> gmr.health;
+    std::cout << "Enter armor\n=>";
+    std::cin >> gmr.armor;
+    std::cout << "Damage\n=>";
+    std::cin >> gmr.damage;
     std::cout << "Enter horisontal's value, from 1 to 40\n=>";
     std::cin >> gmr.pos.coordY;
     std::cout << "Enter vertical's value, from 1 to 40\n=>";
     std::cin >> gmr.pos.coordX;
     array [gmr.pos.coordX][gmr.pos.coordY] = 'P';
+    gmr.previosPos = gmr.pos;
 }
 
-void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
+void createEnemies (char array [SIZE][SIZE], std::vector <character> &enms)
 {
     for (int i = 0; i < ENEMYCOUNT; i++)
     {
@@ -83,7 +101,7 @@ void createEnemies (char array [SIZE][SIZE], std::vector <character> &ems)
         enemy.pos.coordX = i;
         enemy.pos.coordY = i + 2;
         array [enemy.pos.coordX][enemy.pos.coordY] = 'E';
-        ems.push_back(enemy);
+        enms.push_back(enemy);
     }
 }
 
@@ -117,80 +135,20 @@ void displayCharacter (character &person)
     }
 }
 
-int detectID (character &person, std::vector <character> enm)
+character detectEnemyName (character &person, std::vector <character> enm)
+//int detectEnemyName (character &person, std::vector <character> enm)
 {
     for (int i = 0; i < enm.size(); i++)
     {
         if (person.pos.coordX == enm[i].pos.coordX &&
             person.pos.coordY == enm[i].pos.coordY)
         {
-            return enm[i].id;
+            return enm[i];
         }
     }
 }
 
-void moveCharacter (char array [SIZE][SIZE], character &person, std::vector <character> enm)
-{
-    array [person.pos.coordX][person.pos.coordY] = '*';
-
-    char cmd = ' ';
-    bool correctAnswer = false;
-
-    while (!correctAnswer)
-    {
-        std::cout << "Enter one of next commands:\n- \'l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
-        std::cin >> cmd;
-        correctAnswer = (cmd == 'l' || cmd == 'r'
-                      || cmd == 't'  || cmd == 'b');
-        if (!correctAnswer)
-        {
-            std::cout << "Answer incorrect. Try again\n";
-            array [person.pos.coordX][person.pos.coordY] = 'P';
-            displayField (array);
-        }
-        else
-            array [person.pos.coordX][person.pos.coordY] = '*';
-    };
-
-
-    if (cmd == 'l')
-    {
-        person.pos.coordY--;
-    }
-    else if (cmd == 'r')
-    {
-        person.pos.coordY++;
-    }
-    else if (cmd == 't')
-    {
-        person.pos.coordX--;
-    }
-    else
-    {
-        person.pos.coordX++;
-    }
-
-    if (array [person.pos.coordX][person.pos.coordY] == 'E')
-    {
-
-        int ID = detectID (person, enm);
-        std::cout << "You atacked ENEMY # " << ID << std::endl;
-
-        //takeDamage (character &person, int dmg
-    }
-
-    array [person.pos.coordX][person.pos.coordY] = 'P';
-
-  //  if ()
-
-
-}
-
-// определения ID врага
-
-
-
-void takeDamage (character &person, int dmg)
+void attack (character &person, int dmg)
 {
     std::cout << person.name << " took damage: -" << dmg << std::endl;
     person.armor -= dmg;
@@ -202,9 +160,158 @@ void takeDamage (character &person, int dmg)
     if (person.health < 0)
     {
         person.health = 0;
-        std::cout << person.name << " died" << std::endl;
 
     }
+
+
+}
+
+/*
+fightResult fighting (character &attackPerson, character &defendPerson)
+{
+    takeDamage (defendPerson, attackPerson.damage);
+    if (!attackPerson.health) return DEFENDWON;
+    else if (!defendPerson.health) return ATTAKCKWON;
+    else return DRAW;
+}
+ */
+
+
+bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <character> &enms)
+{
+    array [gamer.pos.coordX][gamer.pos.coordY] = '*';
+    array [gamer.previosPos.coordX][gamer.previosPos.coordY] = '*';
+
+    char cmd = ' ';
+  //  bool correctAnswer = false;
+/*
+    while (!correctAnswer)
+    {
+        std::cout << "Enter one of next commands:\n- \'l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
+        std::cin >> cmd;
+        correctAnswer = (cmd == 'l' || cmd == 'r'
+                      || cmd == 't'  || cmd == 'b');
+        if (!correctAnswer)
+        {
+            std::cout << "Answer incorrect. Try again\n";
+            array [gamer.pos.coordX][gamer.pos.coordY] = 'P';
+            displayField (array);
+        }
+        else
+            array [gamer.pos.coordX][gamer.pos.coordY] = '*';
+    };
+*/
+
+    std::cout << "Enter one of next commands:\n- \'l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
+    gamer.previosPos = gamer.pos;
+    std::cin >> cmd;
+
+    if (cmd == 'l')
+    {
+        gamer.pos.coordY--;
+
+    }
+    else if (cmd == 'r')
+    {
+        gamer.pos.coordY++;
+
+
+
+    }
+    else if (cmd == 't')
+    {
+
+        gamer.pos.coordX--;
+
+    }
+    else
+    {
+
+        gamer.pos.coordX++;
+
+
+
+    }
+
+
+
+
+    //bool resultAttack;
+    if (array [gamer.pos.coordX][gamer.pos.coordY] == 'E')
+    {
+
+        character enm = detectEnemyName(gamer, enms);
+        int enmId = enm.id - 1;
+
+        std::cout << "=================" << std::endl;
+        std::cout << "You attack " << enm.name << std::endl;
+        std::cout << "=================" << std::endl;
+
+        attack(enm, gamer.damage);
+        enms[enmId] = enm;
+
+        //fighting (gamer, enm);
+
+        int win;
+        std::cout << "Enter winner 0 (Enemy), 1 (draw), 2 (gamer)" << std::endl;
+        //std::cin >> win;
+
+        if (win == 0)
+        {
+            std::cout << enms[enmId - 1].name << " won " << std::endl;
+            array [gamer.pos.coordX][gamer.pos.coordY] = 'E';
+            std::cout << "Game over " << std::endl;
+            return true;
+        }
+
+        if (enms[enmId].health)
+        {
+            std::cout << "DRAW " << std::endl;
+            gamer.pos = gamer.previosPos;
+            displayCharacter(enms[enmId]);
+        }
+        else
+        {
+            std::cout << enms[enmId].name << " was killed " << std::endl;
+        }
+
+
+        /*
+
+
+
+
+        displayCharacter(gamer);
+        displayCharacter(enm);
+        if (res == ATTAKCKWON) array [gamer.pos.coordX][gamer.pos.coordY] = 'P';
+        else if (res == DEFENDWON)
+        {
+            array [gamer.pos.coordX][gamer.pos.coordY] = 'E';
+            //array [gamer.previosPos.coordX][gamer.previosPos.coordY] = '*';
+        }
+
+
+        else if (res = DRAW)
+        {
+            gamer.pos = gamer.previosPos;
+            gamer.previosPos = gamer.pos;
+        }
+
+            //array [gamer.previosPos.coordX][gamer.previosPos.coordY] = 'P';
+
+            */
+
+
+    }
+
+       // if ()
+        //array [gamer.previosPos.coordX][gamer.previosPos.coordY] = 'O';
+        array [gamer.pos.coordX][gamer.pos.coordY] = 'P';
+        return false;
+
+   //if
+   //else  array [gamer.pos.coordX][gamer.pos.coordY] = 'E';
+
 }
 
 
@@ -212,7 +319,10 @@ int main()
 {
     //std::srand(std::time(nullptr));
     char field [SIZE][SIZE];
+
+    bool gameOver = false;
     std::vector <character> enemies;
+
 
     character gamer;
     setupField (field);
@@ -232,11 +342,26 @@ int main()
 
     createGamer (field, gamer);
     displayField (field);
-    for (int i = 0; i < 10; i++)
+
+
+
+    //for (int i = 0; i < 10; i++)
+    while (!gameOver)
     {
-        moveCharacter (field, gamer, enemies);
+        gameOver = moveCharacter (field, gamer, enemies);
         displayField (field);
     }
 
     return 0;
 }
+
+
+/*
+if (win == 0)
+{
+std::cout << enm.name << " won " << std::endl;
+array [gamer.pos.coordX][gamer.pos.coordY] = 'E';
+std::cout << "Game over " << std::endl;
+return true;
+}
+ */

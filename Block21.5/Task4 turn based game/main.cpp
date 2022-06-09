@@ -4,6 +4,7 @@
 
 
 
+
 //Уровень жизней врагам задаётся случайно — от 50 до 150.
 //Уровень брони варьируется от 0 до 50.
 //Урон тоже выбирается случайно — от 15 до 30 единиц.
@@ -143,6 +144,7 @@ character detectEnemyName (character &person, std::vector <character> enm)
         if (person.pos.coordX == enm[i].pos.coordX &&
             person.pos.coordY == enm[i].pos.coordY)
         {
+            //enm[i].id = i;
             return enm[i];
         }
     }
@@ -175,6 +177,30 @@ fightResult fighting (character &attackPerson, character &defendPerson)
     else return DRAW;
 }
  */
+
+
+void showEnemies (std::vector <character> enms)
+{
+    std::cout << "LIST ENEMIES\n";
+    for (int i = 0; i < enms.size(); i++)
+    {
+        std::cout << enms[i].name << " ID " << enms[i].id << std::endl;
+    }
+}
+
+
+void delElement (std::vector<character> &enms, int nm)
+{
+    std::vector<character> newEnms;
+    for (int i = nm; i < enms.size(); i++)
+    {
+        enms [i] = enms [i+1];
+    }
+
+    enms.pop_back();
+
+}
+
 
 
 bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <character> &enms)
@@ -241,14 +267,27 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
     {
 
         character enm = detectEnemyName(gamer, enms);
-        int enmId = enm.id - 1;
+        //TODO getNumber in vector
+        //int num = getNumber (enm, enms);
+        //вместо этого:
+        ///int enmId = enm.id - 1;
+
+        showEnemies (enms);
+
 
         std::cout << "=================" << std::endl;
-        std::cout << "You attack " << enm.name << std::endl;
+        std::cout << "You attack " << enm.name << " ID " << enm.id << std::endl;
         std::cout << "=================" << std::endl;
 
         attack(enm, gamer.damage);
         enms[enmId] = enm;
+
+
+        std::cout << "=================" << std::endl;
+        std::cout << "You already attacked enms [" << enmId << "]" << enms[enmId].name << " ID " << enms[enmId].id << std::endl;
+        std::cout << "=================" << std::endl;
+
+
 
         //fighting (gamer, enm);
 
@@ -273,6 +312,11 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
         else
         {
             std::cout << enms[enmId].name << " was killed " << std::endl;
+
+
+            delElement (enms, enmId);
+            showEnemies (enms);
+
         }
 
 
@@ -315,6 +359,9 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
 }
 
 
+
+
+
 int main()
 {
     //std::srand(std::time(nullptr));
@@ -329,6 +376,7 @@ int main()
 
     createEnemies (field, enemies);
 
+    showEnemies (enemies);
     std::cout << "enemies.size() is " << enemies.size() << std::endl;
     for (int i = 0; i < enemies.size(); i++)
     {

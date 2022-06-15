@@ -178,7 +178,7 @@ void attack (character &person, int dmg)
     }
 }
 
-void showEnemies (std::vector <character> enms)
+void showListEnemies (std::vector <character> enms)
 {
     std::cout << "LIST ENEMIES\n";
     for (int i = 0; i < enms.size(); i++)
@@ -333,7 +333,7 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
         {
             std::cout << enms[num].name << " was killed " << std::endl;
             delElement (enms, num);
-            showEnemies (enms);
+            showListEnemies(enms);
             if (enms.empty())
             {
                 std::cout << "LIST EMPTY\n";
@@ -347,30 +347,115 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
 
 int main()
 {
-   // std::srand(std::time(nullptr));
+    std::srand(std::time(nullptr));
     char field [SIZE][SIZE];
+
+
 
     bool gameOver = false;
     std::vector <character> enemies;
+    character enemy;
 
-    character gamer;
-    setupField (field);
+    //character gamer;
+    //setupField (field);
     createEnemies (field, enemies);
 
-    std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
-
-    showEnemies (enemies);
-
+//TEMP
     for (int i = 0; i < enemies.size(); i++)
     {
         displayCharacter (enemies[i]);
     }
+//
 
-    displayField (field);
+  //  std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
+   // memoryTo.write((char *) &(enemies[0]), sizeof(enemies[0]));
+ //   memoryTo.write((char *) &(enemies[0].id), sizeof(enemies[0].id));
+//    memoryTo.write((char *) &(enemies[0].name), sizeof(enemies[0].name));
+   // memoryTo.write((char *) &(enemies[0].health), sizeof(enemies[0].health));
+   // memoryTo.write((char *) &(enemies[0].armor), sizeof(enemies[0].armor));
+    //memoryTo.write((char *) &(enemies[0].damage), sizeof(enemies[0].damage));
+    //memoryTo.write((char *) &(enemies[0].pos), sizeof(enemies[0].pos));
+    //memoryTo.write((char *) &(enemies[0].previosPos), sizeof(enemies[0].previosPos));
 
-    createGamer (field, gamer);
-    displayField (field);
+  //  std::cout << "=Save succefuly=\n";
+   // memoryTo.close();
 
+
+    std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
+    std::cout << "=memory open for load=\n";
+    memoryFrom.read((char *) &enemy, sizeof(enemy));
+    //memoryFrom.read((char *) &(enemy.id), sizeof(enemy.id));
+   // memoryFrom.read((char *) &(enemy.name), sizeof(enemy.name));
+    //memoryFrom.read((char *) &(enemy.health), sizeof(enemy.health));
+    //memoryFrom.read((char *) &(enemy.armor), sizeof(enemy.armor));
+    //memoryFrom.read((char *) &(enemy.damage), sizeof(enemy.damage));
+    //memoryFrom.read((char *) &(enemy.pos), sizeof(enemy.pos));
+    //memoryFrom.read((char *) &(enemy.previosPos), sizeof(enemy.previosPos));
+
+    std::cout << "=memory open for load=\n";
+    memoryFrom.close();
+
+
+    std::cout << enemy.id << std::endl;
+  //  std::cout << enemy.name << std::endl;
+    std::cout << enemy.health << std::endl;
+    std::cout << enemy.pos.coordX << std::endl;
+    std::cout << enemy.pos.coordY << std::endl;
+
+   /*
+    if (memoryFrom.is_open())
+    {
+        std::cout << "=memory open for load=\n";
+
+        memoryFrom.read((char *) &(enemies[0].name), sizeof(enemies[0].name));
+        std::cout << "=Load succefuly=\n";
+        //for (int i = 0; i < 3; ++i)
+        //{
+            std::cout << enemies [0].name << std::endl;
+        //}
+    }
+    else
+    {
+        std::cout << "=The date is not available for reading=\n";
+    }
+
+    */
+
+    //showListEnemies(enemies);
+
+   // for (int i = 0; i < enemies.size(); i++)
+   // {
+       // displayCharacter (enemies[i]);
+   // }
+   // displayField (field);
+
+    //createGamer (field, gamer);
+    //displayField (field);
+
+
+
+   // std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
+
+    //if (memoryTo.is_open())
+    //{
+      //  std::cout << "=memory open for save=\n";
+
+        //for (int i = 0; i < 3; ++i)
+        //{
+         //   memoryTo.write((char *) &(enemies[0]), sizeof(enemies[0]));
+        //}
+
+       // std::cout << "=Save succefuly=\n";
+
+   // }
+   // else
+   // {
+    //    std::cout << "=The memory of ATM is not available for writing=\n";
+   // }
+   // memoryTo.close();
+
+
+/*
     while (!gameOver)
     {
         gameOver = moveCharacter (field, gamer, enemies);
@@ -392,6 +477,6 @@ int main()
             }
         }
     }
-
+*/
     return 0;
 }

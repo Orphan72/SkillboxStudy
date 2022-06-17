@@ -3,10 +3,6 @@
 #include <vector>
 #include <ctime>
 
-
-
-
-
 const int SIZE = 10;
 const int ENEMYCOUNT = 3;
 
@@ -345,19 +341,53 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
     return false;
 }
 
+
+void saveCharacter (std::ofstream & file, character & person)
+{
+    file.write ((char*) & person.id, sizeof (person.id));
+
+    int len = person.name.length();
+    file.write ((char *)& len, sizeof (len));
+    file.write ((char *) person.name.c_str(), len);
+
+    file.write ((char*) & person.health, sizeof (person.health));
+    file.write ((char*) & person.armor, sizeof (person.armor));
+    file.write ((char*) & person.damage, sizeof (person.damage));
+    file.write ((char*) & person.pos.coordX, sizeof (person.pos.coordX));
+    file.write ((char*) & person.pos.coordY, sizeof (person.pos.coordY));
+    std::cout << "=Save succefuly=\n";
+}
+
+
+void loadCharacter (std::ifstream &file, character & person)
+{
+    file.read ((char*) & person.id, sizeof (person.id));
+
+    int len = 0;
+    file.read ((char*) & len, sizeof (len));
+    person.name.resize(len);
+    file.read((char*) person.name.c_str(), len);
+
+    file.read ((char*) & person.health, sizeof (person.health));
+    file.read ((char*) & person.armor, sizeof (person.armor));
+    file.read ((char*) & person.damage, sizeof (person.damage));
+    file.read ((char*) & person.pos.coordX, sizeof (person.pos.coordX));
+    file.read ((char*) & person.pos.coordY, sizeof (person.pos.coordY));
+}
+
+
+
 int main()
 {
     std::srand(std::time(nullptr));
     char field [SIZE][SIZE];
 
-
-
     bool gameOver = false;
     std::vector <character> enemies;
     character enemy;
 
-    //character gamer;
-    //setupField (field);
+    character gamer;
+    setupField (field);
     createEnemies (field, enemies);
 
 //TEMP
@@ -367,97 +397,78 @@ int main()
     }
 //
 
-  //  std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
-   // memoryTo.write((char *) &(enemies[0]), sizeof(enemies[0]));
- //   memoryTo.write((char *) &(enemies[0].id), sizeof(enemies[0].id));
-//    memoryTo.write((char *) &(enemies[0].name), sizeof(enemies[0].name));
-   // memoryTo.write((char *) &(enemies[0].health), sizeof(enemies[0].health));
-   // memoryTo.write((char *) &(enemies[0].armor), sizeof(enemies[0].armor));
-    //memoryTo.write((char *) &(enemies[0].damage), sizeof(enemies[0].damage));
-    //memoryTo.write((char *) &(enemies[0].pos), sizeof(enemies[0].pos));
-    //memoryTo.write((char *) &(enemies[0].previosPos), sizeof(enemies[0].previosPos));
 
-  //  std::cout << "=Save succefuly=\n";
-   // memoryTo.close();
+/*
+    std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
 
+    if (memoryTo.is_open())
+    {
+        saveCharacter (memoryTo, enemies[1]);
+    }
 
-    std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
-    std::cout << "=memory open for load=\n";
-    memoryFrom.read((char *) &enemy, sizeof(enemy));
-    //memoryFrom.read((char *) &(enemy.id), sizeof(enemy.id));
-   // memoryFrom.read((char *) &(enemy.name), sizeof(enemy.name));
-    //memoryFrom.read((char *) &(enemy.health), sizeof(enemy.health));
-    //memoryFrom.read((char *) &(enemy.armor), sizeof(enemy.armor));
-    //memoryFrom.read((char *) &(enemy.damage), sizeof(enemy.damage));
-    //memoryFrom.read((char *) &(enemy.pos), sizeof(enemy.pos));
-    //memoryFrom.read((char *) &(enemy.previosPos), sizeof(enemy.previosPos));
+    else
+    {
+        std::cout << "=The data is not available for reading=\n";
+    }
 
-    std::cout << "=memory open for load=\n";
+    memoryTo.close();
+*/
+
+   std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
+
+    if (memoryFrom.is_open())
+    {
+        loadCharacter(memoryFrom, enemy);
+    }
+
+    else
+    {
+        std::cout << "=The data is not available for writing=\n";
+    }
+
     memoryFrom.close();
 
 
-    std::cout << enemy.id << std::endl;
-  //  std::cout << enemy.name << std::endl;
-    std::cout << enemy.health << std::endl;
-    std::cout << enemy.pos.coordX << std::endl;
-    std::cout << enemy.pos.coordY << std::endl;
 
-   /*
-    if (memoryFrom.is_open())
+
+
+    showListEnemies(enemies);
+
+    for (int i = 0; i < enemies.size(); i++)
     {
-        std::cout << "=memory open for load=\n";
-
-        memoryFrom.read((char *) &(enemies[0].name), sizeof(enemies[0].name));
-        std::cout << "=Load succefuly=\n";
-        //for (int i = 0; i < 3; ++i)
-        //{
-            std::cout << enemies [0].name << std::endl;
-        //}
+        displayCharacter (enemies[i]);
     }
-    else
-    {
-        std::cout << "=The date is not available for reading=\n";
-    }
+    displayField (field);
 
-    */
-
-    //showListEnemies(enemies);
-
-   // for (int i = 0; i < enemies.size(); i++)
-   // {
-       // displayCharacter (enemies[i]);
-   // }
-   // displayField (field);
-
-    //createGamer (field, gamer);
-    //displayField (field);
+    createGamer (field, gamer);
+    displayField (field);
 
 
 
-   // std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
 
-    //if (memoryTo.is_open())
-    //{
-      //  std::cout << "=memory open for save=\n";
-
-        //for (int i = 0; i < 3; ++i)
-        //{
-         //   memoryTo.write((char *) &(enemies[0]), sizeof(enemies[0]));
-        //}
-
-       // std::cout << "=Save succefuly=\n";
-
-   // }
-   // else
-   // {
-    //    std::cout << "=The memory of ATM is not available for writing=\n";
-   // }
-   // memoryTo.close();
-
-
-/*
     while (!gameOver)
     {
+
+        char cmdSafeLoad = ' ';
+
+        std::cout << "Enter \'s\' for safing or \'l\' for loading game\nEnter \'e\' for exit\n=>";
+        std::cin >> cmdSafeLoad;
+
+        if (cmdSafeLoad == 's')
+        {
+            std::cout << "SAFE";
+        }
+        else if (cmdSafeLoad == 'l')
+        {
+            std::cout << "LOAD";
+        }
+        else if (cmdSafeLoad == 'e')
+        {
+            gameOver = true;
+            std::cout << "EXIT";
+            break;
+        }
+
         gameOver = moveCharacter (field, gamer, enemies);
         displayField (field);
         if (gameOver)
@@ -477,6 +488,6 @@ int main()
             }
         }
     }
-*/
+
     return 0;
 }

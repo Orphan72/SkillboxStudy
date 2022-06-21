@@ -155,7 +155,7 @@ character getEnemy (character &person, std::vector <character> enm)
         if (person.pos.coordX == enm[i].pos.coordX &&
             person.pos.coordY == enm[i].pos.coordY)
         {
-           return enm[i];
+            return enm[i];
         }
     }
 }
@@ -208,10 +208,7 @@ bool moveEnemy (char array [SIZE][SIZE], character &enm, character &gamer)
     {
         array[enm.previosPos.coordX][enm.previosPos.coordY] = 'P';
     }
-    else
-    {
-        array [enm.previosPos.coordX][enm.previosPos.coordY] = '*';
-    }
+
 
     enm.previosPos = enm.pos;
 
@@ -230,14 +227,11 @@ bool moveEnemy (char array [SIZE][SIZE], character &enm, character &gamer)
         enm.pos.coordX < 0 || enm.pos.coordX == SIZE)
         enm.pos = enm.previosPos;
     /*
-
     int cmd = rand ()% (LAST);
-
     if (cmd == LEFT)        enm.pos.coordY--;
     else if (cmd == RIGHT)  enm.pos.coordY++;
     else if (cmd == TOP)    enm.pos.coordX--;
     else                    enm.pos.coordX++;
-
     */
 
     if (array [enm.pos.coordX][enm.pos.coordY] == 'P')
@@ -259,15 +253,27 @@ bool moveEnemy (char array [SIZE][SIZE], character &enm, character &gamer)
             return true;
         }
     }
-        array [enm.pos.coordX][enm.pos.coordY] = 'E';
-        return false;
+
+
+    if (array [enm.pos.coordX][enm.pos.coordY] == 'E')
+    {
+           std::cout << "BUSY!!" << std::endl;
+            enm.pos = enm.previosPos;
+            displayCharacter(gamer);
+    }
+
+
+
+
+    array [enm.pos.coordX][enm.pos.coordY] = 'E';
+    return false;
 }
 
 bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <character> &enms)
 {
     array [gamer.pos.coordX][gamer.pos.coordY] = '*';
 
-    array [gamer.previosPos.coordX][gamer.previosPos.coordY] = '*';
+    //array [gamer.previosPos.coordX][gamer.previosPos.coordY] = '*';
     if (array[gamer.previosPos.coordX][gamer.previosPos.coordY] == 'E')
     {
         array[gamer.previosPos.coordX][gamer.previosPos.coordY] = 'E';
@@ -387,7 +393,32 @@ int main()
     character enemy;
 
     character gamer;
+
+    char cmdSafeLoad = ' ';
+
+
     setupField (field);
+
+
+    std::cout << "Press \'n\' for new game or \'l\' for loading game\n=>";
+    std::cin >> cmdSafeLoad;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     createEnemies (field, enemies);
 
 //TEMP
@@ -400,21 +431,18 @@ int main()
 
 /*
     std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
-
     if (memoryTo.is_open())
     {
         saveCharacter (memoryTo, enemies[1]);
     }
-
     else
     {
         std::cout << "=The data is not available for reading=\n";
     }
-
     memoryTo.close();
 */
 
-   std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
+    std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
 
     if (memoryFrom.is_open())
     {
@@ -446,10 +474,18 @@ int main()
 
 
 
+
+
+
+
+
+
+
+
     while (!gameOver)
     {
 
-        char cmdSafeLoad = ' ';
+
 
         std::cout << "Enter \'s\' for safing or \'l\' for loading game\nEnter \'e\' for exit\n=>";
         std::cin >> cmdSafeLoad;
@@ -487,6 +523,7 @@ int main()
                 break;
             }
         }
+
     }
 
     return 0;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <ctime>
 
+
 const int SIZE = 10;
 const int ENEMYCOUNT = 3;
 
@@ -183,15 +184,6 @@ void showListEnemies (std::vector <character> enms)
     }
 }
 
-void delElement (std::vector<character> &enms, int nm)
-{
-    for (int i = nm; i < enms.size(); i++)
-    {
-        enms [i] = enms [i+1];
-    }
-    enms.pop_back();
-}
-
 int getNumber (character enm, std::vector<character> enms)
 {
     for (int i = 0; i < enms.size(); i++)
@@ -208,7 +200,6 @@ bool moveEnemy (char array [SIZE][SIZE], character &enm, character &gamer)
     {
         array[enm.previosPos.coordX][enm.previosPos.coordY] = 'P';
     }
-
 
     enm.previosPos = enm.pos;
 
@@ -254,7 +245,6 @@ bool moveEnemy (char array [SIZE][SIZE], character &enm, character &gamer)
         }
     }
 
-
     if (array [enm.pos.coordX][enm.pos.coordY] == 'E')
     {
            std::cout << "BUSY!!" << std::endl;
@@ -263,23 +253,21 @@ bool moveEnemy (char array [SIZE][SIZE], character &enm, character &gamer)
     }
 
 
-
-
     array [enm.pos.coordX][enm.pos.coordY] = 'E';
     return false;
 }
 
-bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <character> &enms)
+bool moveCharacter (char array [SIZE][SIZE], character &gmr, std::vector <character> &enms)
 {
-    array [gamer.pos.coordX][gamer.pos.coordY] = '*';
+    array [gmr.pos.coordX][gmr.pos.coordY] = '*';
 
     //array [gamer.previosPos.coordX][gamer.previosPos.coordY] = '*';
-    if (array[gamer.previosPos.coordX][gamer.previosPos.coordY] == 'E')
+    if (array[gmr.previosPos.coordX][gmr.previosPos.coordY] == 'E')
     {
-        array[gamer.previosPos.coordX][gamer.previosPos.coordY] = 'E';
+        array[gmr.previosPos.coordX][gmr.previosPos.coordY] = 'E';
     }
 
-    gamer.previosPos = gamer.pos;
+    gmr.previosPos = gmr.pos;
 
     char cmd = ' ';
     //  bool correctAnswer = false;
@@ -302,39 +290,41 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
 */
     std::cout << "Your turn\n";
     std::cout << "Enter one of next commands:\n- \'l (left)\'\n- \'r (right)\'\n- \'t (top)\'\n- \'b (button)\'\n=>";
-    gamer.previosPos = gamer.pos;
+    gmr.previosPos = gmr.pos;
     std::cin >> cmd;
 
-    if (cmd == 'l')      gamer.pos.coordY--;
-    else if (cmd == 'r') gamer.pos.coordY++;
-    else if (cmd == 't') gamer.pos.coordX--;
-    else                 gamer.pos.coordX++;
+    if (cmd == 'l')      gmr.pos.coordY--;
+    else if (cmd == 'r') gmr.pos.coordY++;
+    else if (cmd == 't') gmr.pos.coordX--;
+    else                 gmr.pos.coordX++;
 
-    if (gamer.pos.coordY < 0 || gamer.pos.coordY == SIZE ||
-        gamer.pos.coordX < 0 || gamer.pos.coordX == SIZE)
-        gamer.pos = gamer.previosPos;
+    if (gmr.pos.coordY < 0 || gmr.pos.coordY == SIZE ||
+        gmr.pos.coordX < 0 || gmr.pos.coordX == SIZE)
+        gmr.pos = gmr.previosPos;
 
-    if (array [gamer.pos.coordX][gamer.pos.coordY] == 'E')
+    if (array [gmr.pos.coordX][gmr.pos.coordY] == 'E')
     {
-        character enm = getEnemy(gamer, enms);
+        character enm = getEnemy(gmr, enms);
         int num = getNumber (enm, enms);
 
         std::cout << "=================" << std::endl;
         std::cout << "You attack " << enm.name << std::endl;
         std::cout << "=================" << std::endl;
-        attack(enm, gamer.damage);
+        attack(enm, gmr.damage);
         enms[num] = enm;
 
         if (enms[num].health)
         {
             std::cout << "DRAW " << std::endl;
-            gamer.pos = gamer.previosPos;
+            gmr.pos = gmr.previosPos;
             displayCharacter(enms[num]);
         }
         else
         {
             std::cout << enms[num].name << " was killed " << std::endl;
-            delElement (enms, num);
+
+            enms.erase(enms.begin() + num);
+
             showListEnemies(enms);
             if (enms.empty())
             {
@@ -343,7 +333,7 @@ bool moveCharacter (char array [SIZE][SIZE], character &gamer, std::vector <char
             }
         }
     }
-    array [gamer.pos.coordX][gamer.pos.coordY] = 'P';
+    array [gmr.pos.coordX][gmr.pos.coordY] = 'P';
     return false;
 }
 
@@ -368,7 +358,6 @@ void saveCharacter (std::ofstream & file, character & person)
 void loadCharacter (std::ifstream &file, character & person)
 {
     file.read ((char*) & person.id, sizeof (person.id));
-
     int len = 0;
     file.read ((char*) & len, sizeof (len));
     person.name.resize(len);
@@ -381,6 +370,88 @@ void loadCharacter (std::ifstream &file, character & person)
     file.read ((char*) & person.pos.coordY, sizeof (person.pos.coordY));
 }
 
+//void loadGame (char array [SIZE][SIZE], character &gmr, std::vector <character> &enms)
+void loadGame (char (&array) [SIZE][SIZE], character &gmr, std::vector <character> &enms)
+//void ShowData(int(&arr)[N]);
+{
+    std::ifstream memoryFrom("..\\data\\memory.bin", std::ios::binary);
+    character enemy;
+    if (memoryFrom.is_open())
+    {
+        std::cout << "ENEMIES LOADING...\n";
+        int countEnemy = 0;
+        memoryFrom.read((char *) &countEnemy, sizeof(countEnemy));
+        std::cout << "countEnemy = " << countEnemy << std::endl;
+
+        for (int i = 0; i < countEnemy; i++)
+        {
+            loadCharacter(memoryFrom, enemy);
+            enms.push_back(enemy);
+            array[enms[i].pos.coordX][enms[i].pos.coordY] = 'E';
+            enms[i].previosPos = enms[i].pos;
+
+        }
+
+        std::cout << "ENEMIES LOADED SUCCESFUL\n";
+
+        for (int i = 0; i < enms.size(); i++)
+        {
+            displayCharacter(enms[i]);
+        }
+
+        displayField(array);
+
+        std::cout << "CHARACTER LOADING...\n";
+
+        loadCharacter(memoryFrom, gmr);
+
+        array[gmr.pos.coordX][gmr.pos.coordY] = 'P';
+        gmr.previosPos = gmr.pos;
+
+        std::cout << "CHARACTER LOADED SUCCESFUL\n";
+
+        displayField(array);
+    }
+    else
+    {
+        std::cout << "=The data is not available for writing=\n";
+    }
+    memoryFrom.close();
+}
+
+
+
+
+void saveGame (character &gmr, std::vector <character> &enms)
+{
+    std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
+    if (memoryTo.is_open())
+    {
+        std::cout << "SAVING ENEMIES....\n";
+        int countEnemies = enms.size();
+        memoryTo.write ((char*) & countEnemies, sizeof (countEnemies));
+        for (int i = 0; i < enms.size(); i++)
+        {
+            saveCharacter (memoryTo, enms[i]);
+        }
+        std::cout << "ENEMIES SAVED SUCCESFUL\n";
+        std::cout << "SAVING CHARACTER....\n";
+
+        saveCharacter (memoryTo, gmr);
+
+        std::cout << "CHARACTER SAVED SUCCESFUL\n";
+    }
+    else
+    {
+        std::cout << "=The data is not available for reading=\n";
+    }
+    memoryTo.close();
+}
+
+
+
+
+
 
 
 int main()
@@ -390,8 +461,6 @@ int main()
 
     bool gameOver = false;
     std::vector <character> enemies;
-    character enemy;
-
     character gamer;
 
     char cmdSafeLoad = ' ';
@@ -405,98 +474,73 @@ int main()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    createEnemies (field, enemies);
-
-//TEMP
-    for (int i = 0; i < enemies.size(); i++)
+    if (cmdSafeLoad == 'l')
     {
-        displayCharacter (enemies[i]);
+        loadGame(field, gamer, enemies);
     }
-//
-
-
-/*
-    std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
-    if (memoryTo.is_open())
+    else if (cmdSafeLoad == 'n')
     {
-        saveCharacter (memoryTo, enemies[1]);
+        createEnemies (field, enemies);
+
+        showListEnemies(enemies);
+
+        for (int i = 0; i < enemies.size(); i++)
+        {
+            displayCharacter (enemies[i]);
+        }
+        displayField (field);
+        createGamer (field, gamer);
+        displayField (field);
     }
-    else
-    {
-        std::cout << "=The data is not available for reading=\n";
-    }
-    memoryTo.close();
-*/
-
-    std::ifstream memoryFrom ("..\\data\\memory.bin", std::ios::binary);
-
-    if (memoryFrom.is_open())
-    {
-        loadCharacter(memoryFrom, enemy);
-    }
-
-    else
-    {
-        std::cout << "=The data is not available for writing=\n";
-    }
-
-    memoryFrom.close();
-
-
-
-
-
-    showListEnemies(enemies);
-
-    for (int i = 0; i < enemies.size(); i++)
-    {
-        displayCharacter (enemies[i]);
-    }
-    displayField (field);
-
-    createGamer (field, gamer);
-    displayField (field);
-
-
-
-
-
-
-
-
-
-
-
 
     while (!gameOver)
     {
-
-
-
         std::cout << "Enter \'s\' for safing or \'l\' for loading game\nEnter \'e\' for exit\n=>";
         std::cin >> cmdSafeLoad;
-
         if (cmdSafeLoad == 's')
         {
-            std::cout << "SAFE";
+            saveGame (gamer, enemies);
+           /*
+            std::ofstream memoryTo ("..\\data\\memory.bin", std::ios::binary);
+            if (memoryTo.is_open())
+            {
+                std::cout << "SAVING ENEMIES....\n";
+                int countEnemies = enemies.size();
+                memoryTo.write ((char*) & countEnemies, sizeof (countEnemies));
+                for (int i = 0; i < enemies.size(); i++)
+                {
+                    saveCharacter (memoryTo, enemies[i]);
+                }
+                std::cout << "ENEMIES SAVED SUCCESFUL\n";
+                std::cout << "SAVING CHARACTER....\n";
+
+                saveCharacter (memoryTo, gamer);
+
+                std::cout << "CHARACTER SAVED SUCCESFUL\n";
+            }
+            else
+            {
+                std::cout << "=The data is not available for reading=\n";
+            }
+            memoryTo.close();
+            */
         }
         else if (cmdSafeLoad == 'l')
         {
-            std::cout << "LOAD";
+            setupField (field);
+            displayField (field);
+            enemies.clear();
+            loadGame(field, gamer, enemies);
+
+
+
+
+
+
+
+
+
+           // loadGame(field, gamer, enemies);
         }
         else if (cmdSafeLoad == 'e')
         {
@@ -523,7 +567,6 @@ int main()
                 break;
             }
         }
-
     }
 
     return 0;

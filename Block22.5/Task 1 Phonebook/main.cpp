@@ -8,61 +8,63 @@ const int MAXNUMBER = 70;
 
 const std::vector<std::string> SURNAMELIST
 {
-    "Petrov", "Sidorov", "Ivanov", "Kozlov", "Abramov", "Peredelkin", "Kashhkin"
+    "Petrov", "Sidorov", "Ivanov", "Kozlov", "Abramov", "Peredelkin", "Kashhkin", "Ivanov"
 };
+
+bool checkExistenceNumber (std::map<int, std::string> oMap, int num)
+{
+    for (std::map <int, std::string>::iterator it = oMap.begin(); it != oMap.end (); ++it)
+    {
+        if (num == it->first)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 void fullVector (std::vector <int> &vec)
 {
-    int exist = 0;
+    bool exist = false;
     while (vec.size() < SURNAMELIST.size())
     {
         int diffNumber = MAXNUMBER - MINNUMBER;
         int num = std::rand() % (diffNumber + 1) + MINNUMBER;
-
-
         for (int i = 0; i < vec.size(); i++)
         {
             if (num == vec[i])
             {
-                exist++;
+                exist = true;
+                break;
             }
         }
         if (!exist) vec.push_back(num);
-        else
-        {
-            std::cout << "Number "<< num << " busy\n";
-            exist = 0;
-        }
-
-        //exist = false;
+        else exist = false;
     }
 }
 
-
-
-
-
-;
-
-
-
-
-void fullMap (std::map <int, std::string> &oMap)
+void addPair (std::map <int, std::string> &oMap, int num, std::string str)
 {
-    oMap.insert(std::make_pair<int, std::string>(12348, "ten"));
-    oMap.insert(std::make_pair<int, std::string>(11, "eleven"));
-    oMap.insert(std::make_pair<int, std::string>(8, "eight"));
-    oMap.insert(std::make_pair<int, std::string>(6, "six"));
-    oMap.insert(std::make_pair<int, std::string>(7, "seven"));
-    oMap.insert(std::make_pair<int, std::string>(12, "twelve"));
-    oMap.insert(std::make_pair<int, std::string>(2, "two"));
-
+    std::pair<int, std::string> oPair (num, str);
+    oMap.insert(oPair);
 }
 
+void fullMap (std::map <int, std::string> &oMap, std::vector <int> vec)
+{
+    for (int i = 0; i < vec.size(); i++)
+    {
+        addPair (oMap, vec[i], SURNAMELIST[i]);
+    }
+}
 
-
-
-
+void showMap (std::map<int, std::string> oMap)
+{
+    for (std::map <int, std::string>::iterator it = oMap.begin();
+         it != oMap.end (); ++it)
+    {
+        std::cout << it->first << " " << it->second << std::endl;
+    }
+}
 
 std::vector <int> strinfToInt (std::string str)
 {
@@ -80,22 +82,37 @@ std::vector <int> strinfToInt (std::string str)
 }
 
 
-
-
-
-
 int main()
 {
-    std::map <std::vector<int>, std::string> phonebook;
-    std::vector <int> vecNumber;
+    std::map <int, std::string> phonebook;
+    std::vector <int> numberList;
+
+    fullVector(numberList);
+    fullMap (phonebook, numberList);
+    showMap(phonebook);
+
+    std::cout << "To add new subscriber press 1\n";
+    std::cout << "To find out subscriber's surname press 2\n";
+    std::cout << "To find out subscriber's number press 2\n";
+
+int number = 70;
+checkExistenceNumber (phonebook, number);
+
+ std::cout << "Number "<< number << " busy. Try again\n";
 
 
-    fullVector(vecNumber);
 
-    for (int i = 0; i < vecNumber.size(); i++)
+//2
+    std::cout << phonebook [603] << std::endl;
+
+//3
+    for (std::map <int, std::string>::iterator it = phonebook.begin();
+         it != phonebook.end (); ++it)
     {
-        std::cout << i+1 << " - " <<  vecNumber[i] << std::endl;
+        if (it->second == "Ivanov")
+        std::cout << it->first << std::endl;
     }
+
 
 
     /*
@@ -106,34 +123,10 @@ int main()
     std::cin >> stringNumber;
     vecNumber = strinfToInt(stringNumber);
 
-
-
-
-
-
     for (int i = 0; i < vecNumber.size(); i++)
     {
         std::cout << vecNumber[i];
     }
-
-
-
-
-
-     //hoursStart = 10* (start[0] - '0') + (start[1] - '0');
-     //minutesStart = 10* (start[3] - '0') + (start[4] - '0');
-
-   // hoursStart = '0';
-    //minutesStart = 10* (start[3] - '0') + (start[4] - '0');
-
-
-
-    //std::cout << hoursStart << std::endl;
-    //std::cout << minutesStart << std::endl;
-
-
-
-        std::cout << "Hello, World!" << std::endl;
 
         */
     return 0;

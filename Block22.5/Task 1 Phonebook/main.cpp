@@ -8,20 +8,9 @@ const int MAXNUMBER = 70;
 
 const std::vector<std::string> SURNAMELIST
 {
-    "Petrov", "Sidorov", "Ivanov", "Kozlov", "Abramov", "Peredelkin", "Kashhkin", "Ivanov"
+    "Petrov", "Sidorov", "Ivanov", "Kozlov", "Abramov", "Peredelkin", "Kashhkin"
 };
 
-bool checkExistenceNumber (std::map<int, std::string> oMap, int num)
-{
-    for (std::map <int, std::string>::iterator it = oMap.begin(); it != oMap.end (); ++it)
-    {
-        if (num == it->first)
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
 void fullVector (std::vector <int> &vec)
 {
@@ -66,9 +55,11 @@ void showMap (std::map<int, std::string> oMap)
     }
 }
 
-std::vector <int> strinfToInt (std::string str)
+int strinfToInt (std::string str)
 {
     std::vector <int> vec;
+    int num = 0;
+    int dec = 1;
     for (int i = 0; i < str.length(); i++)
     {
         int intNumber = 0;
@@ -78,7 +69,37 @@ std::vector <int> strinfToInt (std::string str)
             vec.push_back(intNumber);
         }
     }
-    return vec;
+
+    for (int i = vec.size() - 1; i >= 0; i--)
+    {
+        num += (vec[i] * dec);
+        dec *= 10;
+    }
+
+    return num;
+}
+
+bool checkBusyNumber (std::map<int, std::string> oMap, int num)
+{
+    for (std::map <int, std::string>::iterator it = oMap.begin(); it != oMap.end (); ++it)
+    {
+        if (num == it->first)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkExistNumber (std::map<int, std::string> oMap, int num)
+{
+    int exist = 0;
+    for (std::map <int, std::string>::iterator it = oMap.begin(); it != oMap.end (); ++it)
+    {
+        if (num == it->first) exist++;
+    }
+    if (exist == 0) return false;
+    else return true;
 }
 
 
@@ -86,48 +107,78 @@ int main()
 {
     std::map <int, std::string> phonebook;
     std::vector <int> numberList;
+    int answer = -1;
+    int intPhoneNomber = 0;
+    std::string strPhoneNomber = " ";
+    std::string surname = " ";
+    bool busyNumber = true;
+    bool existNumber = false;
+    bool correctAnswer = false;
+
 
     fullVector(numberList);
     fullMap (phonebook, numberList);
     showMap(phonebook);
 
+    while (!correctAnswer)
+
+    std::cout << "Enter one of the next numbers:\n";
     std::cout << "To add new subscriber press 1\n";
     std::cout << "To find out subscriber's surname press 2\n";
-    std::cout << "To find out subscriber's number press 2\n";
+    std::cout << "To find out subscriber's number press 3\n";
+    std::cout << "To show all phonebook press 4\n";
+    std::cout << "To exit press 0\n";
 
-int number = 70;
-checkExistenceNumber (phonebook, number);
+    std::cin >> answer;
 
- std::cout << "Number "<< number << " busy. Try again\n";
-
-
-
-//2
-    std::cout << phonebook [603] << std::endl;
-
-//3
-    for (std::map <int, std::string>::iterator it = phonebook.begin();
-         it != phonebook.end (); ++it)
+    if (answer == 1)
     {
-        if (it->second == "Ivanov")
-        std::cout << it->first << std::endl;
+        while (busyNumber)
+        {
+            std::cout << "Enter pnone number\n";
+            std::cin >> strPhoneNomber;
+            intPhoneNomber = strinfToInt (strPhoneNomber);
+            busyNumber = checkBusyNumber (phonebook, intPhoneNomber);
+            if (busyNumber)
+            {
+                std::cout << "This number busy already. Try again\n";
+            }
+        }
+
+        std::cout << "Enter surname \n";
+        std::cin >> surname;
+        addPair (phonebook, intPhoneNomber, surname);
+    }
+    else if (answer == 2)
+    {
+        while (!existNumber)
+        {
+            std::cout << "Enter pnone number\n";
+            std::cin >> intPhoneNomber;
+            existNumber = checkExistNumber(phonebook,intPhoneNomber);
+            if (!existNumber)
+            {
+                std::cout << "This number doesn't exist. Try again\n";
+            }
+        }
+
+        std::cout << "For your request there is subscriber:\n";
+        std::cout << phonebook [intPhoneNomber] << std::endl;
+    }
+    else if (answer == 3)
+    {
+        std::cout << "Enter surname \n";
+        std::cin >> surname;
+
+        std::cout << "This subscriber has next numbers:\n";
+
+        for (std::map <int, std::string>::iterator it = phonebook.begin();
+             it != phonebook.end (); ++it)
+        {
+            if (it->second == surname)
+                std::cout << it->first << std::endl;
+        }
     }
 
-
-
-    /*
-
-    std::string stringNumber = " ";
-
-    std::cout << "Input the phone number\n";
-    std::cin >> stringNumber;
-    vecNumber = strinfToInt(stringNumber);
-
-    for (int i = 0; i < vecNumber.size(); i++)
-    {
-        std::cout << vecNumber[i];
-    }
-
-        */
     return 0;
 }

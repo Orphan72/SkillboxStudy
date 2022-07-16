@@ -3,10 +3,6 @@
 #include <string>
 #include <vector>
 
-const std::vector<std::string> SURNAMELIST
-{
-    "Sido", "Yan", "Ivanov", "Petrov", "Ivanov", "Kozlov"
-};
 
 void sortVec (std::vector <std::string> &vec)
 {
@@ -38,20 +34,7 @@ int findKey (std::map <int, std::string> oMap, std::string str)
     for (std::map <int, std::string>::iterator it = oMap.begin();
          it != oMap.end (); ++it)
     {
-        if (it->second == str)
-        {
-            std::cout << "We've found " << it->second << std::endl;
-
-            return it->first;
-        }
-    }
-}
-
-void showVec (std::vector<std::string> vec)
-{
-    for (int i = 0; i < vec.size(); i++)
-    {
-        std::cout << vec [i] << std::endl;
+        if (it->second == str) return it->first;
     }
 }
 
@@ -66,53 +49,18 @@ void showMap (std::map<int, std::string> oMap)
 
 void showFirst (std::map <int, std::string> &oMap, std::vector<std::string> &vec)
 {
-
-    std::cout << "Vector:\n";
-    showVec(vec);
-    std::cout << "Sort vector:\n";
     sortVec (vec);
-    showVec(vec);
-
-    std::cout << "Map:\n";
-    showMap(oMap);
-
-    std::cout << "First is " << vec[0] << std::endl;
-
     int key = findKey(oMap, vec [0]);
-
-    std::cout << "Key is " << key  << std::endl;
-
-
     std::map <int, std::string>::iterator itf = oMap.find(key);
-
-
-            //findKey(oMap, vec[0]);
-
     std::cout << itf->second << std::endl;
-
     oMap.erase(itf);
-
-    std::cout << "New map:\n";
-
-    showMap (oMap);
-
 
     for (int i = 0; i < vec.size() - 1; i++)
     {
         vec [i] = vec [i + 1];
     }
     vec.pop_back();
-
-    showVec (vec);
-
 }
-
-
-
-
-
-
-
 
 int main()
 {
@@ -121,39 +69,28 @@ int main()
     std::string answer = " ";
     int num = 0;
 
+    std::cout << "Enter surname\nor\n";
+    std::cout << "For call first person enter \'Next\'\n";
+    std::cout << "For exit enter \'0\'\n";
+
     while (true)
     {
-        std::cout << "Enter surname\nor\n";
-        std::cout << "For call first person enter \'Next\'\n";
-        std::cout << "For show all map enter \'1\'\n";
-        std::cout << "For exit enter \'0\'\n";
+        std::cout << "=>";
         std::cin >> answer;
-        if (answer != "Next" && answer != "0" && answer != "1" && answer != "2")
+        if (answer != "Next" && answer != "0")
         {
             addPair (ownMap, num, answer, ownVec);
             num++;
         }
         else if (answer == "Next")
         {
-            showFirst (ownMap, ownVec);
+            if (ownMap.empty())
+                std::cout << "Map is empty!\n";
+            else
+                showFirst (ownMap, ownVec);
         }
-        else if  (answer == "1")
-        {
-            showMap(ownMap);
-        }
-        else if  (answer == "2")
-        {
-            showVec(ownVec);
-            std::cout << "Sort:\n";
-            sortVec (ownVec);
-            showVec(ownVec);
-        }
-
-        else break;
+         else break;
     }
-
-
-
 
     return 0;
 }
